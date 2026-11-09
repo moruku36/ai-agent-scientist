@@ -1,0 +1,162 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Experiment plan (design contract)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "project_id",
+    "hypothesis_id",
+    "protocol_revision",
+    "enabled",
+    "authorization_reference",
+    "expires_at",
+    "baseline_revision",
+    "candidate_revision",
+    "input_refs",
+    "evaluator_revision",
+    "seeds",
+    "limits",
+    "network_enabled",
+    "gpu_enabled",
+    "stop_rule"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "design-1"
+    },
+    "project_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "hypothesis_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "protocol_revision": {
+      "type": "string",
+      "minLength": 1
+    },
+    "enabled": {
+      "type": "boolean"
+    },
+    "authorization_reference": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "expires_at": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "baseline_revision": {
+      "type": "string",
+      "minLength": 1
+    },
+    "candidate_revision": {
+      "type": "string",
+      "minLength": 1
+    },
+    "input_refs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    },
+    "evaluator_revision": {
+      "type": "string",
+      "minLength": 1
+    },
+    "seeds": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "integer",
+        "minimum": 0
+      }
+    },
+    "limits": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "cpu_cores",
+        "memory_mib",
+        "scratch_mib",
+        "per_run_seconds",
+        "total_seconds",
+        "concurrency",
+        "incremental_api_usd"
+      ],
+      "properties": {
+        "cpu_cores": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "memory_mib": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "scratch_mib": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "per_run_seconds": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "total_seconds": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "concurrency": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "incremental_api_usd": {
+          "type": "number",
+          "minimum": 0
+        }
+      }
+    },
+    "network_enabled": {
+      "type": "boolean"
+    },
+    "gpu_enabled": {
+      "type": "boolean"
+    },
+    "stop_rule": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "enabled": {
+            "const": true
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "authorization_reference": {
+            "type": "string",
+            "minLength": 1
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+    }
+  ]
+}
