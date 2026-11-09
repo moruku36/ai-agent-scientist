@@ -69,3 +69,7 @@ Local worker outage leaves project state intact. A DOTS task can be replaced usi
 The minimum interface is file-based task/result manifests with existing client tools. A later MCP adapter may offer conceptual capabilities such as project snapshot, plan submission, run status, evidence paging and cancellation. These names are design concepts, not claims about tools installed in DOTS. A validator and runner enforce contracts regardless of the transport.
 
 A NUC-hosted registry and remote workers require accepted identity, encrypted transport, per-project authorization, quota enforcement and backup/restore. Introduce that only after the local loop works. The existing report MCP stays read-only and separate. No live wiring is created here.
+
+## Concrete implementation contracts
+
+[11 Ownership and handoffs](11-harness-boundaries.md) defines state authority, duplicate delivery, fencing, parent/child budgets and pinned schemas. [12 Evaluation and acceptance](12-protocol-and-acceptance.md) defines the frozen protocol, receipt binding and SCI-01–12. The old 1,800-second CPU sketch cannot reserve 72 attempts at up to 600 seconds each; reconcile the actual run manifest and total budget before launch. This update checks design/examples only, not runtime acceptance.

@@ -1,0 +1,24 @@
+{
+  "schema_version": "harness-handoff/1",
+  "synthetic": true,
+  "message_id": "synthetic-message-1",
+  "request_id": "synthetic-request-1",
+  "attempt_id": null,
+  "replicate_id": null,
+  "project_id": "synthetic-project",
+  "sender": "scientist",
+  "recipient": "sleep",
+  "kind": "request",
+  "in_reply_to": null,
+  "expected_revision": 0,
+  "authorization_ref": "synthetic-unresolvable-authorization",
+  "budget_reservation_ref": "synthetic-unresolvable-reservation",
+  "payload": {
+    "id": "synthetic-unresolvable-reviewed-lesson",
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "media_type": "application/json",
+    "classification": "synthetic"
+  },
+  "created_at": "2000-01-01T00:00:00Z",
+  "expires_at": "2000-01-01T00:01:00Z"
+}

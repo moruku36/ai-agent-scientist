@@ -1,0 +1,477 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Frozen evaluation protocol (design evaluation-protocol/1)",
+  "$comment": "Design contract only. Runtime semantic checks and authorization are required.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "enabled",
+    "protocol_id",
+    "project_id",
+    "mode",
+    "hypothesis",
+    "alternative_explanations",
+    "primary_metric",
+    "splits",
+    "conditions",
+    "execution",
+    "analysis",
+    "evaluator",
+    "candidate_selection_rule",
+    "freeze_record",
+    "stop_rule",
+    "authorization_ref",
+    "expires_at"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "evaluation-protocol/1"
+    },
+    "enabled": {
+      "type": "boolean"
+    },
+    "protocol_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "project_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "mode": {
+      "enum": [
+        "exploratory",
+        "confirmatory"
+      ]
+    },
+    "hypothesis": {
+      "type": "string",
+      "minLength": 1
+    },
+    "alternative_explanations": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1,
+      "uniqueItems": false
+    },
+    "primary_metric": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "direction",
+        "unit_of_analysis",
+        "aggregation",
+        "minimum_effect",
+        "missing_outcome_rule"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "direction": {
+          "enum": [
+            "maximize",
+            "minimize"
+          ]
+        },
+        "unit_of_analysis": {
+          "type": "string",
+          "minLength": 1
+        },
+        "aggregation": {
+          "type": "string",
+          "minLength": 1
+        },
+        "minimum_effect": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "missing_outcome_rule": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "splits": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "group_definition",
+        "development_manifest",
+        "final_manifest",
+        "final_exposure",
+        "exposure_record"
+      ],
+      "properties": {
+        "group_definition": {
+          "type": "string",
+          "minLength": 1
+        },
+        "development_manifest": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "sha256"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "sha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            }
+          }
+        },
+        "final_manifest": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "sha256"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "sha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            }
+          }
+        },
+        "final_exposure": {
+          "enum": [
+            "untouched",
+            "reused",
+            "unknown"
+          ]
+        },
+        "exposure_record": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "sha256"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "sha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            }
+          }
+        }
+      }
+    },
+    "conditions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "role",
+          "source",
+          "configuration",
+          "model_label",
+          "reasoning_label",
+          "tool_manifest"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "role": {
+            "enum": [
+              "baseline",
+              "candidate"
+            ]
+          },
+          "source": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "sha256"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            }
+          },
+          "configuration": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "sha256"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            }
+          },
+          "model_label": {
+            "type": "string",
+            "minLength": 1
+          },
+          "reasoning_label": {
+            "type": "string",
+            "minLength": 1
+          },
+          "tool_manifest": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "sha256"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            }
+          }
+        }
+      },
+      "minItems": 2,
+      "uniqueItems": false
+    },
+    "execution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "run_manifest",
+        "planned_attempts",
+        "max_retries",
+        "order_policy",
+        "per_attempt_seconds",
+        "total_worker_seconds",
+        "evaluation_cleanup_seconds"
+      ],
+      "properties": {
+        "run_manifest": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "sha256"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "sha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            }
+          }
+        },
+        "planned_attempts": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Initial attempts across all conditions, tasks and replicates; must equal the bound run manifest."
+        },
+        "max_retries": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Maximum additional attempts across the entire study, not per initial attempt."
+        },
+        "order_policy": {
+          "type": "string",
+          "minLength": 1
+        },
+        "per_attempt_seconds": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "total_worker_seconds": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Aggregate reserved/settled worker seconds including retries, evaluation and cleanup; separate from elapsed-time expiry."
+        },
+        "evaluation_cleanup_seconds": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "analysis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "method",
+        "interval_level",
+        "secondary_comparisons",
+        "invalid_measurement_rule"
+      ],
+      "properties": {
+        "method": {
+          "type": "string",
+          "minLength": 1
+        },
+        "interval_level": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "exclusiveMaximum": 1
+        },
+        "secondary_comparisons": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 0,
+          "uniqueItems": false
+        },
+        "invalid_measurement_rule": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "evaluator": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "sha256"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    },
+    "candidate_selection_rule": {
+      "type": "string",
+      "minLength": 1
+    },
+    "freeze_record": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "sha256"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    },
+    "stop_rule": {
+      "type": "string",
+      "minLength": 1
+    },
+    "authorization_ref": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "expires_at": {
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "mode": {
+            "const": "confirmatory"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "splits": {
+            "properties": {
+              "final_exposure": {
+                "const": "untouched"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "enabled": {
+            "const": true
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "authorization_ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "Z$"
+          }
+        }
+      }
+    }
+  ]
+}

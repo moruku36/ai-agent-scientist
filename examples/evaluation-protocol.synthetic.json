@@ -1,0 +1,103 @@
+{
+  "schema_version": "evaluation-protocol/1",
+  "enabled": false,
+  "protocol_id": "synthetic-protocol-1",
+  "project_id": "synthetic-evidence-handoff",
+  "mode": "exploratory",
+  "hypothesis": "An evidence-indexed handoff preserves more required items within the same task budget.",
+  "alternative_explanations": [
+    "A difference could arise from unequal input length or task difficulty."
+  ],
+  "primary_metric": {
+    "name": "required_item_completion",
+    "direction": "maximize",
+    "unit_of_analysis": "task_group",
+    "aggregation": "Average replicates within task, then pair conditions across tasks.",
+    "minimum_effect": 0.05,
+    "missing_outcome_rule": "Unsuccessful attempt for absent output or timeout; retain denominator."
+  },
+  "splits": {
+    "group_definition": "Variants and translations of the same task share one group.",
+    "development_manifest": {
+      "id": "synthetic-unresolvable-development",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "final_manifest": {
+      "id": "synthetic-unresolvable-final",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "final_exposure": "unknown",
+    "exposure_record": {
+      "id": "synthetic-unresolvable-exposure",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+    }
+  },
+  "conditions": [
+    {
+      "id": "baseline",
+      "role": "baseline",
+      "source": {
+        "id": "synthetic-unresolvable-baseline-source",
+        "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "configuration": {
+        "id": "synthetic-unresolvable-baseline-config",
+        "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "model_label": "RECORD_ACTUAL_LABEL",
+      "reasoning_label": "RECORD_ACTUAL_SETTING",
+      "tool_manifest": {
+        "id": "synthetic-unresolvable-tools",
+        "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+      }
+    },
+    {
+      "id": "candidate",
+      "role": "candidate",
+      "source": {
+        "id": "synthetic-unresolvable-candidate-source",
+        "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "configuration": {
+        "id": "synthetic-unresolvable-candidate-config",
+        "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "model_label": "RECORD_ACTUAL_LABEL",
+      "reasoning_label": "RECORD_ACTUAL_SETTING",
+      "tool_manifest": {
+        "id": "synthetic-unresolvable-tools",
+        "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+      }
+    }
+  ],
+  "execution": {
+    "run_manifest": {
+      "id": "synthetic-unresolvable-runs",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "planned_attempts": 4,
+    "max_retries": 0,
+    "order_policy": "Two owned fixture tasks, one attempt per condition; counterbalance order before execution.",
+    "per_attempt_seconds": 300,
+    "total_worker_seconds": 1800,
+    "evaluation_cleanup_seconds": 600
+  },
+  "analysis": {
+    "method": "Report all paired outcomes; two tasks are a plumbing pilot, not a population claim.",
+    "interval_level": 0.95,
+    "secondary_comparisons": [],
+    "invalid_measurement_rule": "Show all attempted outcomes and a separately identified valid subset."
+  },
+  "evaluator": {
+    "id": "synthetic-unresolvable-evaluator",
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "candidate_selection_rule": "One candidate fixed before final access.",
+  "freeze_record": {
+    "id": "synthetic-unresolvable-freeze",
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "stop_rule": "Stop on budget, expiry, cancellation or invalid measurement.",
+  "authorization_ref": null,
+  "expires_at": null
+}
