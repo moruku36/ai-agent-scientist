@@ -1,0 +1,14 @@
+# Private operational data never belongs in this design repository
+.env
+.env.*
+!.env.example
+private/
+runs/
+evidence/
+datasets/
+runtime/
+*.sqlite
+*.sqlite3
+*.db
+__pycache__/
+.venv/

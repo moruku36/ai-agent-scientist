@@ -1,0 +1,32 @@
+{
+  "schema_version": "design-1",
+  "project_id": "demo-evidence-handoff",
+  "hypothesis_id": "hypothesis-1",
+  "protocol_revision": "protocol-1",
+  "enabled": false,
+  "authorization_reference": null,
+  "expires_at": null,
+  "baseline_revision": "PIN_BASELINE_COMMIT",
+  "candidate_revision": "PIN_CANDIDATE_COMMIT",
+  "input_refs": [
+    "OWNED_SYNTHETIC_FIXTURE_HASH"
+  ],
+  "evaluator_revision": "PIN_PROTECTED_EVALUATOR",
+  "seeds": [
+    11,
+    23,
+    37
+  ],
+  "limits": {
+    "cpu_cores": 2,
+    "memory_mib": 4096,
+    "scratch_mib": 2048,
+    "per_run_seconds": 600,
+    "total_seconds": 1800,
+    "concurrency": 1,
+    "incremental_api_usd": 0
+  },
+  "network_enabled": false,
+  "gpu_enabled": false,
+  "stop_rule": "Stop on budget, expiry, cancellation, invalid evaluation or declared scientific stopping condition."
+}
