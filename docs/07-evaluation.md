@@ -46,3 +46,7 @@ Research progress is a ledger of uncertainty resolved: hypothesis supported/refu
 ## Release gate
 
 The first usable version must preserve traceable evidence, enforce resource/expiry limits, recover without duplicate work, reproduce its local fixture result, and report complete outcomes. Performance claims require matched experiments, not just those integration checks. General claims about autonomous science require broader tasks and independent review beyond this pilot.
+
+## Concrete implementation contracts
+
+[11 Ownership and handoffs](11-harness-boundaries.md) defines state authority, duplicate delivery, fencing, parent/child budgets and pinned schemas. [12 Evaluation and acceptance](12-protocol-and-acceptance.md) defines the frozen protocol, receipt binding and SCI-01–12. The old 1,800-second CPU sketch cannot reserve 72 attempts at up to 600 seconds each; reconcile the actual run manifest and total budget before launch. This update checks design/examples only, not runtime acceptance.

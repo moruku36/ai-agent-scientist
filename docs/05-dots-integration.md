@@ -51,3 +51,7 @@ The user can steer DOTS during work. A new instruction updates the current brief
 - DOTS pause/cancel: stop delegated work and runner jobs separately as applicable; verify actual cleanup. Pausing the coordinator alone is not assumed to stop every process.
 
 Sleep integration may later supply reviewed general methods. It does not write DOTS internal memory or inject evaluation answers. No active message, schedule, plugin or subscription is created by this design.
+
+## Concrete implementation contracts
+
+[11 Ownership and handoffs](11-harness-boundaries.md) defines state authority, duplicate delivery, fencing, parent/child budgets and pinned schemas. [12 Evaluation and acceptance](12-protocol-and-acceptance.md) defines the frozen protocol, receipt binding and SCI-01–12. The old 1,800-second CPU sketch cannot reserve 72 attempts at up to 600 seconds each; reconcile the actual run manifest and total budget before launch. This update checks design/examples only, not runtime acceptance.

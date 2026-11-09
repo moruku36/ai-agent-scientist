@@ -53,3 +53,7 @@ The [run record schema](../schemas/run-record.schema.json) is a design contract,
 Use owned synthetic data first. Public data still requires license and evaluation-split handling. Redact secrets and private source material before any model/cloud transfer where required. Keeping a dataset public does not make final-evaluation answers available to the tuning worker. Programmatically verify split hashes and evaluator identity at evaluation.
 
 Proposed examples are not runnable launch configurations. No experiment is executed by reading or committing a plan.
+
+## Concrete implementation contracts
+
+[11 Ownership and handoffs](11-harness-boundaries.md) defines state authority, duplicate delivery, fencing, parent/child budgets and pinned schemas. [12 Evaluation and acceptance](12-protocol-and-acceptance.md) defines the frozen protocol, receipt binding and SCI-01–12. The old 1,800-second CPU sketch cannot reserve 72 attempts at up to 600 seconds each; reconcile the actual run manifest and total budget before launch. This update checks design/examples only, not runtime acceptance.

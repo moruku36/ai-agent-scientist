@@ -59,3 +59,7 @@ This tree is planned; no runtime files are included. Start with the standard lib
 Record proposed / implemented / executed / independently verified separately. A passing unit test is not a live DOTS connection. A successful task is not proof of novel research. This repository's initial checks cover document links, language pairs, JSON structure/examples and status consistency only.
 
 At implementation, resolve the actual execution computer, spare capacity, private state destination, evaluator isolation and accepted client task route. Choose a first research question and the desired model-use budget then. These unknowns do not block publishing the design, and this update does not ask the user to decide them prematurely.
+
+## Concrete implementation contracts
+
+[11 Ownership and handoffs](11-harness-boundaries.md) defines state authority, duplicate delivery, fencing, parent/child budgets and pinned schemas. [12 Evaluation and acceptance](12-protocol-and-acceptance.md) defines the frozen protocol, receipt binding and SCI-01–12. The old 1,800-second CPU sketch cannot reserve 72 attempts at up to 600 seconds each; reconcile the actual run manifest and total budget before launch. This update checks design/examples only, not runtime acceptance.
