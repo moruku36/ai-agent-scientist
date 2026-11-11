@@ -27,3 +27,14 @@ Jobs stopped, budget settled, temporary access removed:
 Retention/deletion and reproducibility instructions:
 Selected public artifacts, license and authorization:
 No numerical gain or novelty claim without corresponding evidence.
+
+## Verification and knowledge disposition
+Contract/candidate/receipt bindings and authenticated verifier boundary:
+Per-claim outcome, scope, assumptions and empirical/formal evidence:
+Reproduction and scientific-review status separately:
+Objective cost versus research/verification expenditure:
+Checked result/component, reviewed idea or conditional negative result:
+Promotion/retention/quarantine decision; specification compatibility and exposure:
+Unavailable or revoked evidence and affected downstream entries:
+
+A passing scoped receipt is not a declaration that all claims are correct or novel.

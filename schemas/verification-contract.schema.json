@@ -1,0 +1,187 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "synthetic",
+    "contract_id",
+    "project_id",
+    "experiment_plan",
+    "evaluation_protocol",
+    "specification",
+    "dependency_closure",
+    "evaluator",
+    "toolchain",
+    "environment",
+    "allowed_replacements",
+    "cost_model",
+    "claim_obligations"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "verification-contract/1"
+    },
+    "synthetic": {
+      "type": "boolean"
+    },
+    "contract_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "project_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "experiment_plan": {
+      "$ref": "#/$defs/ref"
+    },
+    "evaluation_protocol": {
+      "$ref": "#/$defs/ref"
+    },
+    "specification": {
+      "$ref": "#/$defs/ref"
+    },
+    "dependency_closure": {
+      "$ref": "#/$defs/ref"
+    },
+    "evaluator": {
+      "$ref": "#/$defs/ref"
+    },
+    "toolchain": {
+      "$ref": "#/$defs/ref"
+    },
+    "environment": {
+      "$ref": "#/$defs/ref"
+    },
+    "allowed_replacements": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "component_id",
+          "interface"
+        ],
+        "properties": {
+          "component_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "interface": {
+            "$ref": "#/$defs/ref"
+          }
+        }
+      },
+      "minItems": 1
+    },
+    "cost_model": {
+      "$ref": "#/$defs/ref"
+    },
+    "claim_obligations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "claim_id",
+          "statement",
+          "scope",
+          "assurance_type"
+        ],
+        "properties": {
+          "claim_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "statement": {
+            "type": "string",
+            "minLength": 1
+          },
+          "scope": {
+            "type": "string",
+            "minLength": 1
+          },
+          "assurance_type": {
+            "enum": [
+              "empirical_check",
+              "formal_proof"
+            ]
+          }
+        }
+      },
+      "minItems": 1
+    },
+    "formal_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "theorem_manifest",
+        "assumption_manifest",
+        "axiom_policy",
+        "trusted_verifier"
+      ],
+      "properties": {
+        "theorem_manifest": {
+          "$ref": "#/$defs/ref"
+        },
+        "assumption_manifest": {
+          "$ref": "#/$defs/ref"
+        },
+        "axiom_policy": {
+          "$ref": "#/$defs/ref"
+        },
+        "trusted_verifier": {
+          "$ref": "#/$defs/ref"
+        }
+      }
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Frozen verification manifest (design only)",
+  "$comment": "Shape validation is not admission, authorization, hash verification, isolation or proof. Candidate replacements cannot redefine the trusted specification, dependency closure, evaluator, toolchain, environment or cost model. Runtime must enforce this against the resolved content.",
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "claim_obligations": {
+            "contains": {
+              "properties": {
+                "assurance_type": {
+                  "const": "formal_proof"
+                }
+              },
+              "required": [
+                "assurance_type"
+              ]
+            }
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "formal_policy"
+        ]
+      }
+    }
+  ],
+  "$defs": {
+    "ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "sha256"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    }
+  }
+}

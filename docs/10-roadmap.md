@@ -18,13 +18,13 @@ These are architectural choices, not claims of environment acceptance or authori
 | Package | Deliverable | Acceptance |
 |---|---|---|
 | P0: actual environment | Identify one connected Codex environment, resource ceiling, data eligibility, tool capabilities and project envelope | A harmless file/task handoff with returned evidence; no heavy benchmark |
-| P1: record contracts | Project/protocol/run records, atomic revision update, artifact hash/paging, request idempotency and budget reservation | Synthetic valid/invalid records, stale write, duplicate request and expired envelope behave correctly |
-| P2: offline vertical slice | One small deterministic CPU experiment, baseline/candidate artifacts, independent owner-run evaluator and report | Reproduction from a fresh workspace; failures and resource limits recorded; no model API call required for bookkeeping fixtures |
-| P3: DOTS/Codex loop | Brief → bounded assignment → candidate → verified receipt → next decision | Actual context and result retrieval accepted; interrupted task resumes without double execution |
+| P1: record contracts | Project/protocol/run records plus specification closure, verification bindings and knowledge eligibility; atomic revisions, hashes, idempotency and budgets | Valid/invalid records, stale writes, duplicate requests, mismatched bindings and expired envelopes rejected correctly |
+| P2: offline vertical slice | One deterministic CPU experiment, baseline/candidate artifacts, protected owner-run verification/evaluation and scoped receipts | Fresh reproduction; specification/dependency substitution and forged receipts rejected; bounded failures; no model API call for fixtures |
+| P3: DOTS/Codex loop | Brief → bounded assignment → candidate → scoped receipt → eligible knowledge → next decision | Actual context/result retrieval; no duplicate resume; reviewed ideas never self-promote; no final-answer leakage |
 | P4: pilot study | Raw-log versus evidence-indexed handoff research, or another owner-selected narrow question | Frozen development/final split and complete matched outcomes; no result prefilled |
 | P5: one adaptive extension | Archive first, then one search/role mechanism if justified | Same budget comparison against single-worker baseline; retain regressions |
 | P6: remote and long-running | Optional NUC registry/MCP/events, separate worker, backup and cancellation | Authentication, restart/lease reconciliation, quota, restore, expiry and end-to-end delivery accepted |
-| P7: wider research | New topics, optional GPU or independent specialist reviewer | Topic-specific protocol/data/resource acceptance and concrete user authorization where needed |
+| P7: wider research | New topics, optional formal-verifier adapter, GPU or independent specialist reviewer | Topic-specific proof assumptions/claim scope, data/resources and actual authorization; no claim of upstream library availability |
 
 ## Proposed runtime tree
 
@@ -34,7 +34,9 @@ src/ai_agent_scientist/
   admission/     # scope, budget, leases, expected revisions
   runners/       # accepted isolated CPU backend first
   evidence/      # hashes, provenance, bounded reads, export
-  evaluation/    # receipt contracts; protected execution is separate
+  evaluation/    # frozen empirical metrics; protected execution is separate
+  verification/  # specification closure, scoped receipts, optional adapters
+  knowledge/     # eligibility view; reviewed notes separate from checked results
   integration/   # task packets; optional MCP/events later
 tests/
   contracts/
@@ -63,3 +65,7 @@ At implementation, resolve the actual execution computer, spare capacity, privat
 ## Concrete implementation contracts
 
 [11 Ownership and handoffs](11-harness-boundaries.md) defines state authority, duplicate delivery, fencing, parent/child budgets and pinned schemas. [12 Evaluation and acceptance](12-protocol-and-acceptance.md) defines the frozen protocol, receipt binding and SCI-01–12. The old 1,800-second CPU sketch cannot reserve 72 attempts at up to 600 seconds each; reconcile the actual run manifest and total budget before launch. This update checks design/examples only, not runtime acceptance.
+
+## Revision sequence and rollback
+
+Implement [13](13-verified-discovery.md) as an extension of P1–P3, not a new research runtime. Accept the original SCI-01–12 plus applicable SCI-13–20 before using their guarantees. First prove the empirical/offline path; proof-assistant installation and multi-team services remain deferred. On incompatibility, disable new knowledge promotion/reuse, preserve immutable records and return to the accepted single-worker configuration. Never fall back to self-certified passes or enlarge the experiment budget.

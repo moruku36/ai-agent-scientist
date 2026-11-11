@@ -55,3 +55,9 @@ Sleep integration may later supply reviewed general methods. It does not write D
 ## Concrete implementation contracts
 
 [11 Ownership and handoffs](11-harness-boundaries.md) defines state authority, duplicate delivery, fencing, parent/child budgets and pinned schemas. [12 Evaluation and acceptance](12-protocol-and-acceptance.md) defines the frozen protocol, receipt binding and SCI-01–12. The old 1,800-second CPU sketch cannot reserve 72 attempts at up to 600 seconds each; reconcile the actual run manifest and total budget before launch. This update checks design/examples only, not runtime acceptance.
+
+## Verification-aware task packets
+
+Add the immutable verification-contract reference, the requested claim scope/assurance and eligible knowledge references to the existing packet. Candidate tasks receive only permitted specification/development views. A separate protected verification assignment resolves authoritative inputs itself; it never adopts an evaluator path from candidate output. Keep actual client/tool support explicit, with owner-operated verification where necessary.
+
+The return packet distinguishes candidate submission, verification receipt, scientific interpretation and proposed knowledge promotion. DOTS may request a check or summarize a receipt, but a chat completion cannot issue one. The registry verifies issuer/bindings before reuse. [13](13-verified-discovery.md) defines the boundary; no new transport, credentials or scheduled discussion is required.

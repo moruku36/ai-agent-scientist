@@ -96,3 +96,7 @@ wire版は明示した移行を受入するまで完全一致。移行は新obje
 5. 固定課題と総費用の計画で一つの接続の寄与を測り、三つ同時に複雑化しない。
 
 最初の到達点にlive DOTS API、新provider、REM、木探索、並列agentは不要。将来の実装PRではschema版、状態の管理主体、異常系の実測、資源上限、未受入を報告する。[評価と引継ぎ受入](12-protocol-and-acceptance.ja.md)へ続く。
+
+## 検証・知識の責務追加 — 2026-11-11
+
+[検証改訂](13-verified-discovery.ja.md)は `harness-handoff/1` のwire項目やrepo間権限を変更しません。契約／受領objectは、各側で互換性を受け入れてから内容固定payload参照として渡します。仕様freeze・知識利用資格はScientist台帳、範囲付き受領の発行は保護検証器が担当。sleepはレビュー済み教訓を提案できても検証・採用を成立させません。共有可変wikiや自動エージェント会議は導入しません。

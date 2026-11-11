@@ -57,3 +57,9 @@ Proposed examples are not runnable launch configurations. No experiment is execu
 ## Concrete implementation contracts
 
 [11 Ownership and handoffs](11-harness-boundaries.md) defines state authority, duplicate delivery, fencing, parent/child budgets and pinned schemas. [12 Evaluation and acceptance](12-protocol-and-acceptance.md) defines the frozen protocol, receipt binding and SCI-01–12. The old 1,800-second CPU sketch cannot reserve 72 attempts at up to 600 seconds each; reconcile the actual run manifest and total budget before launch. This update checks design/examples only, not runtime acceptance.
+
+## Verification execution contract
+
+Bind the experiment plan and evaluation protocol by hash through [verification-contract/1](../schemas/verification-contract.schema.json), described in [13](13-verified-discovery.md). A specification's transitive dependencies, candidate replacement surface and objective cost model are frozen inputs. A top-level metric name or a worker's lockfile alone cannot attest to them.
+
+Reserve verification, fresh reproduction and cleanup under the existing aggregate envelope before admission. Failed proofs, timeouts and invalid candidates still consume resources. The optional formal adapter gets no special spending or network rights. Its resource theorem concerns the candidate algorithm, not the worker-time budget. Receipts bind exact inputs and scope; missing receipt or ambiguous termination is unresolved work, not a pass.
