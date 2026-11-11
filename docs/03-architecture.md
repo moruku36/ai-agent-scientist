@@ -8,10 +8,11 @@
 |---|---|---|
 | Moruku | Research objective, acceptable resources/data, interpretation of significance, steering | Routine mechanical execution of every authorized step |
 | Existing DOTS | Maintain agenda, select next informative experiment, assign bounded work, integrate results | Unrecorded unlimited compute, fabricated evidence or implicit permission expansion |
-| Project registry | Canonical project/protocol revisions, job state, budgets and candidate lineage | Scientific conclusions inferred from task completion |
+| Project registry | Canonical project/protocol/specification revisions, job state, budgets, candidate lineage and knowledge eligibility | Scientific conclusions inferred from task completion or worker self-certification |
 | Codex implementation worker | Inspect permitted inputs, write code, execute accepted plan and report failures | Evaluator/holdout/permission mutation |
 | Experiment runner | Enforce workspace/resource/network limits, record environment and process outcomes | Research judgment or model self-score as ground truth |
-| Evaluation worker/service | Validate artifacts, calculate frozen metrics and repeat experiments | Tuning candidate code on final holdout answers |
+| Protected verifier/evaluator | Check pinned specification/dependency bindings, issue scoped receipts, calculate frozen metrics and repeat experiments | Candidate-controlled verifier policy or tuning on final answers |
+| Private knowledge index | Reuse eligible checked results/components and separately labeled reviewed notes | Direct promotion from discussion, hidden-answer export or new authority |
 | Reporting/export | Map claims to evidence and prepare a selected public report | Automatic export of private transcripts or raw datasets |
 
 DOTS is the coordinator already selected by the user, not a service this repository implements. Logical roles may run sequentially through the same client. Separation of evaluation is enforced by access control, not just by telling the same AI to “be a reviewer.”
@@ -21,13 +22,17 @@ DOTS is the coordinator already selected by the user, not a service this reposit
 ```mermaid
 flowchart LR
     U["Research brief"] --> D["DOTS"]
-    D --> P["Frozen experiment protocol"]
+    D --> P["Frozen plan + protocol + specification closure"]
     P --> J["Registry / bounded job admission"]
     J --> W["Codex workspace: candidate code"]
     W --> A["Artifacts + environment + logs"]
-    A --> Q["Protected evaluator"]
+    P --> Q["Protected verifier / evaluator"]
+    A --> Q
     Q --> M["Metric receipt + verification"]
     M --> D
+    M --> G["Registry promotion gate"]
+    G --> K["Eligible knowledge; notes stay labeled"]
+    K --> W
     D --> C["Claim-evidence ledger"]
     C --> O["Report candidate"]
 ```
@@ -45,12 +50,16 @@ project/
   brief.md
   sources/index.json
   protocols/<protocol-revision>.json
+  verification/contracts/<contract-id>.json
+  verification/reports/<report-id>.json
   state/project.json
   candidates/<candidate-id>/manifest.json
   runs/<run-id>/manifest.json
   runs/<run-id>/events.jsonl
   evidence/<sha256>
   claims/ledger.json
+  knowledge/index.json
+  notes/<note-id>.md
   reports/draft.md
 ```
 
@@ -73,3 +82,7 @@ A NUC-hosted registry and remote workers require accepted identity, encrypted tr
 ## Concrete implementation contracts
 
 [11 Ownership and handoffs](11-harness-boundaries.md) defines state authority, duplicate delivery, fencing, parent/child budgets and pinned schemas. [12 Evaluation and acceptance](12-protocol-and-acceptance.md) defines the frozen protocol, receipt binding and SCI-01–12. The old 1,800-second CPU sketch cannot reserve 72 attempts at up to 600 seconds each; reconcile the actual run manifest and total budget before launch. This update checks design/examples only, not runtime acceptance.
+
+## Specification and knowledge boundary
+
+[13](13-verified-discovery.md) defines the additive verification contract and report. The private paths above hold registry records or protected-verifier receipts; they do not grant a candidate write access. The actual protected specification, verifier, dependency locks and final data remain outside the worker domain. Knowledge is a filtered registry view, not an unrestricted feedback loop: only compatible development evidence can seed tuning. No extra service or fixed agent hierarchy is required.

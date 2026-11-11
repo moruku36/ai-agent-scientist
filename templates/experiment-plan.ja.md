@@ -16,3 +16,13 @@
 - 許可参照、返却先：
 
 確認的な実行前に固定。変更は新しい版として残す。
+
+## 追加の検証manifest
+- この計画と評価計画を結ぶ検証契約ID／ハッシュ：
+- 正本仕様と依存全体、コスト規約、差替え可能interface：
+- 受入検証器／toolchain／環境、範囲付き確認条件と証拠：
+- 形式証明の場合は定理・仮定・公理規約、独立checkerの境界：
+- 検証／再現／終了処理の予約、cacheと新試行の区別：
+- 改訂が基準比較と再利用知識へ及ぼす影響：
+
+[verification-contract/1](../schemas/verification-contract.schema.json)を使い、旧計画schemaへ未定義項目を追加しない。

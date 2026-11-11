@@ -1,0 +1,67 @@
+{
+  "schema_version": "verification-report/1",
+  "synthetic": true,
+  "report_id": "synthetic-report-1",
+  "project_id": "synthetic-project",
+  "contract": {
+    "id": "synthetic-unresolvable-contract",
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "candidate": {
+    "id": "synthetic-unresolvable-candidate",
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "configuration": {
+    "id": "synthetic-unresolvable-configuration",
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "run_id": "synthetic-not-executed-run",
+  "attempt_id": "synthetic-not-executed-attempt",
+  "inputs": [
+    {
+      "id": "synthetic-unresolvable-inputs",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+    }
+  ],
+  "dependency_closure": {
+    "id": "synthetic-unresolvable-dependency_closure",
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "evaluator": {
+    "id": "synthetic-unresolvable-evaluator",
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "toolchain": {
+    "id": "synthetic-unresolvable-toolchain",
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "environment": {
+    "id": "synthetic-unresolvable-environment",
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "issuer_id": "synthetic-not-authenticated",
+  "issued_at": "2000-01-01T00:00:00Z",
+  "outcome": "inconclusive",
+  "evidence": [],
+  "claims": [
+    {
+      "claim_id": "claim-correctness",
+      "statement": "Candidate satisfies the pinned synthetic integer-function specification.",
+      "scope": "Only the pinned synthetic domain and assumptions; no empirical science claim.",
+      "assurance_type": "formal_proof",
+      "outcome": "inconclusive",
+      "evidence": []
+    },
+    {
+      "claim_id": "claim-cost",
+      "statement": "Candidate meets the frozen synthetic execution-latency objective.",
+      "scope": "Only the specified candidate workload and measurement procedure; separate from research, verification and cleanup budgets.",
+      "assurance_type": "empirical_check",
+      "outcome": "inconclusive",
+      "evidence": []
+    }
+  ],
+  "limitations": [
+    "Inert shape fixture only. No artifacts resolve, no run or proof checker executed, no cost measured and no issuer authenticated."
+  ]
+}

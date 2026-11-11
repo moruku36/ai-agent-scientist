@@ -96,3 +96,7 @@ Wire versions are exact-match until an explicit migration is accepted. Migration
 5. Measure one integration's contribution under a fixed task and total-cost protocol before connecting all three.
 
 The first milestone does not require a live DOTS API, a new model provider, REM, tree search or parallel agents. A future implementation PR must report the schema version, state ownership, tested failure cases, measured limits and unaccepted behaviors. See [evaluation and handoff acceptance](12-protocol-and-acceptance.md).
+
+## Additive verification/knowledge ownership — 2026-11-11
+
+The [verification revision](13-verified-discovery.md) changes no `harness-handoff/1` wire fields or cross-repository permissions. Its contract/report objects travel as content-pinned payload references only after local compatibility acceptance. Scientist registry owns specification freeze and knowledge eligibility; the protected verifier owns issuance of scoped receipts. Sleep may propose a reviewed lesson but cannot confer verification or promotion. No shared mutable wiki or automatic inter-agent conference is introduced.

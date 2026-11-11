@@ -74,3 +74,9 @@ Read README → docs/03–07 → this document → docs/11. Implement P1 records
 Deliver each work package with: schema/source versions, implemented invariants, fixture IDs and actual outcomes, commands/environment needed to reproduce, failures, resource measurements, migration/rollback notes and unresolved dependencies. Preserve English/Japanese status statements. No package is accepted because its code compiles or a model says it worked.
 
 Only after the standalone loop passes should DOTS transport, optional memory or CTF adapters be connected. These design changes do not request another user decision about already authorized repository publication.
+
+## Additive verification acceptance — 2026-11-11
+
+[13](13-verified-discovery.md) adds `verification-contract/1` and `verification-report/1` without changing `evaluation-protocol/1`. Bind the existing protocol and experiment plan by hash; include specification/dependency closure, permitted candidate replacements and scoped check obligations. Preserve every scientific, budget and contamination rule above. Structural checks cannot resolve immutable objects, authenticate an issuer or validate an empirical/proof claim.
+
+Add SCI-13–20 to the implementation acceptance plan: indirect definition mutation, verifier substitution, proof-policy violations, specification migration, forged promotion, invalid reuse, final-answer leakage and verification recovery. These cases remain unexecuted. Use [design checks](../scripts/README.md) for documentation/schema consistency only, then report actual runtime case outcomes separately during implementation.

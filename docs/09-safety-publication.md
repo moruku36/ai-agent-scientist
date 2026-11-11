@@ -43,3 +43,9 @@ The public design includes no real callbacks, credentials, private mailbox paths
 Define per-project retention, owner access and deletion before collecting real data. Preserve a recoverable private registry/evidence backup before remote or long-duration operation. Verify restore using synthetic fixtures. Do not claim that keeping a Git copy backs up uncommitted evidence, sealed evaluation data or external datasets.
 
 On cancellation, stop actual delegated jobs and subprocesses, settle reserved budget conservatively, preserve permitted evidence and remove temporary access. Review cleanup receipts; a coordinator stop message alone is insufficient.
+
+## Specification and knowledge integrity
+
+Treat candidate bundles, proof files, build hooks and discussion notes as untrusted inputs. Protect the verifier's dependency resolution and policy, not only its source directory. Claims gain only the assurance that the accepted verifier actually checks. A worker-authored or replayed receipt cannot authorize promotion.
+
+Knowledge classification carries forward source access, evaluation exposure and publication limits. A verified result is not automatically public; a reviewed summary is not automatically de-identified. Quarantine entries whose receipt, dependency or access is invalidated, and prevent downstream reuse. An optional proof checker, shared knowledge service or additional team still needs its own accepted environment and actual action authorization. See [13](13-verified-discovery.md).

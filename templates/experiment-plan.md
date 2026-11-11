@@ -16,3 +16,13 @@
 - Authorization reference and permitted output destinations:
 
 Freeze before confirmatory execution. Later deviations remain visible under a new revision.
+
+## Supplemental verification manifest
+- Verification-contract ID/hash binding this plan and evaluation protocol:
+- Trusted specification/dependency closure, cost model and allowed replacement interfaces:
+- Accepted verifier/toolchain/environment; scoped obligations and required evidence:
+- If formal: theorem/assumption/axiom policy and independent checker boundary:
+- Verification/reproduction/cleanup reservation; cache versus fresh-attempt policy:
+- Revision impact on baseline comparisons and reusable knowledge:
+
+Use [verification-contract/1](../schemas/verification-contract.schema.json); do not add unknown fields to the older plan schema.

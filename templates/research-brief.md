@@ -16,3 +16,11 @@
 - Review milestone and publication scope:
 
 Status: proposed / accepted protocol / executed / independently checked. Do not prefill a result.
+
+## Verification and reuse design
+- Which claims are empirical, formally expressible, or still conjectures; explicit assumptions:
+- Specification owner, frozen dependency/cost-model boundary and permitted candidate changes:
+- Eligible prior results/components versus reviewed ideas; access and final-exposure limits:
+- Verification cost within the total budget; knowledge promotion and rollback rule:
+
+See [the verification design](../docs/13-verified-discovery.md). No assurance is prefilled.

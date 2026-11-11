@@ -2,7 +2,7 @@
 
 [日本語](08-adaptive-improvement.ja.md) | [Home](../README.md)
 
-All mechanisms in this document are optional, disabled initially, and evaluated against a single-worker baseline. They improve the external research procedure; they do not train DOTS or alter its internal implementation.
+Search and team extensions in this document are optional, disabled initially, and evaluated against a single-worker baseline. The basic receipt/knowledge distinction in [13](13-verified-discovery.md) is a record invariant, not an enabled search algorithm. They improve the external research procedure; they do not train DOTS or alter its internal implementation.
 
 ## Candidate archive: DGM-inspired
 
@@ -38,4 +38,10 @@ Unverified hypotheses remain tagged as hypotheses. No memory consolidation step 
 
 Promote an extension only if matched-budget experiments show useful gains or a clearly documented operational benefit without validity loss. Revert to the simpler accepted configuration on flat, noisy or regressed outcomes. Keep all failed extension results.
 
-These mechanisms are this project's adaptations of the [six sources](02-research-foundations.md). They are not evidence of recursive self-acceleration, automatic scientific discovery, or guaranteed improvement on Moruku's tasks.
+These mechanisms are this project's adaptations of the [seven sources](02-research-foundations.md). They are not evidence of recursive self-acceleration, automatic scientific discovery, or guaranteed improvement on Moruku's tasks.
+
+## Knowledge promotion before wider search
+
+A candidate archive stores all attempts; the eligible knowledge index is a stricter view. Promote checked results/components only under their contract and receipt bindings; retain reviewed ideas and conditional dead ends as separate note kinds. Newly generated teams or branches may reuse only permitted compatible entries. They cannot inherit a claim merely by citing its title.
+
+A specification, dependency or cost-model revision invalidates affected comparisons and reuse eligibility until rechecked. Keep verification cost in the fixed search budget. Prefer targeted checks for unchanged objects, but do not reuse a development cache as final confirmation or as an intentional replicate. Adopt wider discussion only if it resolves a concrete bottleneck; no conference schedule is part of this design.

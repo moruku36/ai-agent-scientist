@@ -50,3 +50,9 @@ The first usable version must preserve traceable evidence, enforce resource/expi
 ## Concrete implementation contracts
 
 [11 Ownership and handoffs](11-harness-boundaries.md) defines state authority, duplicate delivery, fencing, parent/child budgets and pinned schemas. [12 Evaluation and acceptance](12-protocol-and-acceptance.md) defines the frozen protocol, receipt binding and SCI-01–12. The old 1,800-second CPU sketch cannot reserve 72 attempts at up to 600 seconds each; reconcile the actual run manifest and total budget before launch. This update checks design/examples only, not runtime acceptance.
+
+## Verification does not replace scientific evaluation
+
+The [verification layer](13-verified-discovery.md) strengthens the artifact/specification boundary beneath these four gates. Match not only the evaluator's main file but the trusted definitions, preprocessing, units, tolerances and dependency closure. Known-bad fixtures must include indirect definition changes and forged receipts. Validate objective correctness before comparing objective cost.
+
+Record empirical checking, formal proof, reproduction and research review separately with their actual scope and assumptions. A proof is about a stated proposition; a test is about tested conditions. Neither validates the choice of scientific model automatically. A clean verifier process is not an independent scientist. Keep the candidate-selection and knowledge-promotion decision on development evidence; frozen final evaluation remains a distinct event. SCI-13–20 extend, rather than replace, the original acceptance cases.

@@ -12,18 +12,21 @@ stateDiagram-v2
     Protocol --> Baseline
     Baseline --> Candidate
     Candidate --> Running
-    Running --> Evaluating
+    Running --> Verifying
+    Verifying --> Evaluating
+    Verifying --> Interrupted
     Evaluating --> Candidate: 次の観測に情報価値がある
     Evaluating --> Review: 終了条件または節目
     Review --> Protocol: 問い・計画の改訂
     Review --> Report
     Report --> Closed
     Running --> Interrupted
-    Interrupted --> Running: 実行状態と期限を照合
+    Interrupted --> Running: 中断した実験を照合
+    Interrupted --> Verifying: 中断した検証を照合
     Interrupted --> Closed: 取消・期限切れ
 ```
 
-研究全体と個別ジョブを分けます。ジョブは `queued→leased→running→completed／failed／cancelled／expired`。completedは証拠回収で、仮説の成功ではありません。保留時は具体的依存を記録し、独立に終えた作業を維持します。
+研究全体と個別ジョブを分けます。ジョブは `queued→leased→running→completed／failed／cancelled／expired`。completedは証拠回収で、仮説の成功ではありません。保留時は具体的依存を記録し、独立に終えた作業を維持します。中断した工程とジョブ／試行IDを保持し、その期限・実プロセス・受領を照合して同じ工程へ戻ります。検証結果の喪失で実験を再起動しません。
 
 ## 1. 問いを狭める
 
@@ -37,6 +40,8 @@ DOTSがブリーフと出典を読み、最初は仮説を最大3案に絞りま
 
 結果を見た後の仮説・指標・除外・終了規則の変更は別の計画版。旧版を残し、新分析は探索的と明示。後から黙って成功条件を変えません。
 
+freezeには[検証契約](13-verified-discovery.ja.md)も結び、正本仕様の依存全体、候補の差替え範囲、検証器／環境、主張の確認条件、目的コスト規約を固定します。既存計画に追加するmanifestであり、別の編集可能な定義ではありません。改善の解釈前に、同じ契約で基準も記録します。
+
 ## 3. 基準を成立させる
 
 最も単純な基準を実装・実行し、出力、測定の負荷、資源を確認。改善を測る前に、合成試料で期待結果との一致を確かめます。壊れた基準は履歴を残して修正してから比較します。
@@ -46,6 +51,8 @@ DOTSがブリーフと出典を読み、最初は仮説を最大3案に絞りま
 コード・設定の不変な版を計画で指定。ランナーが枠を検証・資源予約して起動します。エラー、中間保存、試した全設定を記録。時間超過も資源消費と失敗として残し、履歴から除きません。
 
 作業上の短い判断・観測・次作業を残し、非公開の内部思考は要求しません。方法変更は候補系譜へ紐付けます。
+
+結果解釈の前に保護検証器が不変候補を固定契約と照合し、範囲付き受領を発行します。不合格・保証非対応・timeoutを明示し、局所試験やAIレビューで受領を代用しません。その後は既存4軸の研究評価。検査済み開発結果・部品を再利用候補にし、レビュー済み案は提案のまま保持。最終feedbackを次候補へ使う場合は接触記録と評価集合の確認的利用終了が必要です。
 
 ## 5. 次の実験を選ぶ
 

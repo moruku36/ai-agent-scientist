@@ -1,0 +1,79 @@
+{
+  "schema_version": "verification-contract/1",
+  "synthetic": true,
+  "contract_id": "synthetic-contract-1",
+  "project_id": "synthetic-project",
+  "experiment_plan": {
+    "id": "synthetic-unresolvable-experiment_plan",
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "evaluation_protocol": {
+    "id": "synthetic-unresolvable-evaluation_protocol",
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "specification": {
+    "id": "synthetic-unresolvable-specification",
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "dependency_closure": {
+    "id": "synthetic-unresolvable-dependency_closure",
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "evaluator": {
+    "id": "synthetic-unresolvable-evaluator",
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "toolchain": {
+    "id": "synthetic-unresolvable-toolchain",
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "environment": {
+    "id": "synthetic-unresolvable-environment",
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "cost_model": {
+    "id": "synthetic-unresolvable-cost_model",
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "allowed_replacements": [
+    {
+      "component_id": "candidate_implementation",
+      "interface": {
+        "id": "synthetic-unresolvable-interface",
+        "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+      }
+    }
+  ],
+  "claim_obligations": [
+    {
+      "claim_id": "claim-correctness",
+      "statement": "Candidate satisfies the pinned synthetic integer-function specification.",
+      "scope": "Only the pinned synthetic domain and assumptions; no empirical science claim.",
+      "assurance_type": "formal_proof"
+    },
+    {
+      "claim_id": "claim-cost",
+      "statement": "Candidate meets the frozen synthetic execution-latency objective.",
+      "scope": "Only the specified candidate workload and measurement procedure; separate from research, verification and cleanup budgets.",
+      "assurance_type": "empirical_check"
+    }
+  ],
+  "formal_policy": {
+    "theorem_manifest": {
+      "id": "synthetic-unresolvable-theorem_manifest",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "assumption_manifest": {
+      "id": "synthetic-unresolvable-assumption_manifest",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "axiom_policy": {
+      "id": "synthetic-unresolvable-axiom_policy",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "trusted_verifier": {
+      "id": "synthetic-unresolvable-trusted_verifier",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+    }
+  }
+}
