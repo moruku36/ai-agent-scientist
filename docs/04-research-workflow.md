@@ -66,6 +66,10 @@ Stop on any hard budget/expiry, invalid scope, missing trusted evaluation, repea
 
 The owner reviews scientific relevance at milestones; routine work within the authorized envelope continues without repeated blanket permission. Publication and external correspondence are separate actions, governed by the actual authorization.
 
+## Typed exploration and frozen confirmation
+
+Apply [14](14-sakana-lifecycle.md) inside the state machine above. A read-only idea names a falsifier, parent and rubric before an admitted implementation. Each sequential node records purpose and all attempt costs. Check correctness before interpreting rubric completion or applying the independent development selection rule. Freeze the selected candidate before controlled baseline/ablation/replication; post-hoc diagnostics are exploratory, not silent reselection. Aggregation launches no experiment. Claim/figure maps and a read-only evidence audit precede authorized export. Budget exhaustion, negative results and unknown outcomes remain reportable; unknown execution reconciles the original attempt before retry.
+
 ## Example first research question
 
 Compare **raw-log-only handoffs** with **bounded evidence-indexed handoffs** on owned synthetic multi-step tasks, holding model/client, inputs and call/time budgets fixed. Measure lost requirements, repeated work, unsupported claims, completion and handoff size. First validate the bookkeeping without any model calls; then authorize a small matched model experiment. This tests one part of the harness without requiring GPU training.

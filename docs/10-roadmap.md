@@ -26,6 +26,10 @@ These are architectural choices, not claims of environment acceptance or authori
 | P6: remote and long-running | Optional NUC registry/MCP/events, separate worker, backup and cancellation | Authentication, restart/lease reconciliation, quota, restore, expiry and end-to-end delivery accepted |
 | P7: wider research | New topics, optional formal-verifier adapter, GPU or independent specialist reviewer | Topic-specific proof assumptions/claim scope, data/resources and actual authorization; no claim of upstream library availability |
 
+## Sakana integration slices — still unimplemented
+
+[14](14-sakana-lifecycle.md) refines P1 with explicit proposal/node/decision/claim record gaps; P2–P3 with one sequential CPU loop and evidence-to-report audit; and P5 with typed bounded branching. Implement those slices without changing existing schema versions. New runtime checks and experiments need their own small, explicit case/resource budget; none run in this documentation revision. P6 concurrency requires atomic shared reservations/fencing and measured benefit first. Defer multi-worker trees, VLM critique and automatic manuscript generation. Roll back optional mechanisms while preserving evidence and unresolved reservations.
+
 ## Proposed runtime tree
 
 ```text

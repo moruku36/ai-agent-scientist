@@ -6,7 +6,11 @@
 
 DOTS coordinates the research. Codex implements and runs bounded experiments. External project records preserve the facts. Frozen specifications, protected verification and scoped knowledge reuse connect each candidate to checked evidence. The goal is useful research progress, not simply generating papers or maximizing an AI review score.
 
-**Status: detailed design revised 2026-11-11 JST.** No research runtime, DOTS connection, experiment execution, paid API/GPU use, or performance improvement is delivered by this repository. Examples are inactive design fixtures.
+**Status: detailed design revised 2026-11-14 JST.** No research runtime, DOTS connection, experiment execution, paid API/GPU use, or performance improvement is delivered by this repository. Examples are inactive design fixtures.
+
+## Sakana lifecycle integration — 2026-11-14
+
+The [section-grounded design](docs/14-sakana-lifecycle.md) integrates AI Scientist v1/v2 and The Agentic Scientist: read-only ideation, typed sequential search, separate correctness/rubric/selection gates, frozen confirmation and raw-evidence-grounded reporting. It preserves DOTS, existing schemas and verified knowledge. Complete papers/appendices were not fully read; no runtime or improvement is claimed.
 
 ## The proposed fit for Moruku's environment
 

@@ -39,6 +39,10 @@ flowchart LR
 
 A submitted plan is not an accepted job; an accepted job is not a successful process; a successful process is not a valid result; a valid result is not novel science.
 
+## Lifecycle artifacts and decision ownership
+
+The [Sakana integration](14-sakana-lifecycle.md) maps TaskSpec onto existing frozen manifests and introduces conceptual IdeaContract, SearchNode, DecisionReceipt and claim/figure records for later implementation. They are private registry objects, not fields added to closed wire schemas. Proposal workers cannot execute; implementation workers cannot issue correctness receipts. Registry decisions record rubric completion separately from incumbent selection and knowledge promotion. Reporting resolves numbers to raw artifacts; a read-only audit cannot mutate the protocol or manufacture receipts.
+
 ## Storage proposal
 
 For the first local implementation: Python 3.12-compatible code after version acceptance, SQLite for a single-host registry, append-only JSONL event records, filesystem blobs identified by SHA-256, Markdown for human review. These are proposed choices, not installed dependencies. No extra agent framework, vector DB or distributed queue is required initially.
