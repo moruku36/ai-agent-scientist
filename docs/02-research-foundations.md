@@ -14,6 +14,10 @@ The first six studies were saved in the research-notes repository and consulted 
 | [AB-MCTS](https://arxiv.org/html/2503.04412v5), [Sakana article](https://sakana.ai/ab-mcts/) | Allocates search between new candidates and refinements with external feedback. | Optional budgeted branching and distinct candidate-discovery versus final-selection metrics. | Requires informative evaluation. Noisy scientific judgments are not automatically calibrated tree rewards; more generations have costs. |
 | [Discovering formally verified quantum programs with AI](https://arxiv.org/abs/2611.09822v2) | [Source locations and interpretation](13-verified-discovery.md). | Bind candidate checks to complete frozen specifications; separate checked knowledge from discussion. | Domain-specific proof results do not establish general scientific validity or gains for this harness. |
 
+## Additional Sakana methodology — 2026-11-14
+
+[14](14-sakana-lifecycle.md) adds versioned source-to-design traceability for AI Scientist v1 §§3–4, v2 §§3.1–3.4 and The Agentic Scientist §§3.1–3.6. These are additional primary-source inspections, not pre-existing saved notes or full-paper reading. The original seven-source mapping remains intact; v2 and Agentic Scientist are distinct additional studies. Human selection/intervention and withdrawn-manuscript context constrain autonomy/acceptance claims.
+
 ## Saved notes
 
 All links below point to existing Japanese notes in `moruku36/independent-tech-research-notes`:

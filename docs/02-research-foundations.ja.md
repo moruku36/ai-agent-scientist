@@ -14,6 +14,10 @@
 | [AB-MCTS](https://arxiv.org/html/2503.04412v5)、[記事](https://sakana.ai/ab-mcts/) | 外部評価で新候補生成と既存案改善に計算を配分。 | 予算内の任意分岐、候補発見と最終選択の指標分離。 | 有用な評価が必要。研究上の価値はそのまま探索報酬にできず、生成追加にも費用がある。 |
 | [Discovering formally verified quantum programs with AI](https://arxiv.org/abs/2611.09822v2) | [出典箇所と解釈](13-verified-discovery.ja.md)。 | 完全な固定仕様に候補検証を結び、検査済み知識と議論を分離。 | 分野固有の証明結果は一般的な科学妥当性や本ハーネスの改善を保証しない。 |
 
+## Sakana方法論の追加確認 — 2026-11-14
+
+[14](14-sakana-lifecycle.ja.md)にAI Scientist v1 §§3–4、v2 §§3.1–3.4、The Agentic Scientist §§3.1–3.6の版付き出典と設計対応を追加。新しい一次資料確認で、既存保存ノートや全文読了ではありません。元の7資料は維持し、v2とAgentic Scientistは別の追加研究として扱います。人による選択・介入、原稿取下げの文脈を踏まえ、自律性・受入の主張を限定します。
+
 ## 保存済みノート
 
 `moruku36/independent-tech-research-notes` 内の日本語版です。
