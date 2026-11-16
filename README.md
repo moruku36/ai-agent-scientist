@@ -6,7 +6,7 @@
 
 DOTS coordinates the research. Codex implements and runs bounded experiments. External project records preserve the facts. Frozen specifications, protected verification and scoped knowledge reuse connect each candidate to checked evidence. The goal is useful research progress, not simply generating papers or maximizing an AI review score.
 
-**Status: detailed design revised 2026-11-16 JST.** Except for the two offline helpers described below (arithmetic preflight and exact-byte blob storage), no research runtime, DOTS connection, experiment execution, paid API/GPU use, or performance improvement is delivered by this repository. Examples are inactive design fixtures.
+**Status: detailed design revised 2026-11-16 JST.** Except for the three offline helpers described below (arithmetic preflight, exact-byte blob storage and strict JSON blob reads), no research runtime, DOTS connection, experiment execution, paid API/GPU use, or performance improvement is delivered by this repository. Examples are inactive design fixtures.
 
 ## First offline implementation — 2026-11-17
 
@@ -15,6 +15,10 @@ The [pure worker-budget preflight](docs/17-budget-preflight.md) implements only 
 ## Second offline helper — 2026-11-17
 
 The [immutable exact-byte blob helper](docs/18-immutable-blob-helper.md) stores and verifies opaque bytes by SHA-256 in a trusted local directory (P1 hash/persistence prerequisite). Its twelve E01–E12 cases passed once offline on Python 3.15.2. It is not a registry, canonicalization (JCS), authorization or receipt issuer.
+
+## Third offline helper — 2026-11-17
+
+The [strict JSON blob reader](docs/19-json-blob-reader.md) connects verified bounded blob reads to UTF-8 JSON decoding with duplicate-key and non-finite rejection. Eight J01–J08 cases passed once offline on Python 3.15.2. It is not schema validation, admission, JCS or a registry.
 
 ## Kaggle competition support — 2026-11-16
 
@@ -93,6 +97,7 @@ The harness is the project/state/experiment/evaluation layer around existing age
 | [16 Kaggle knowledge and OSS](docs/16-kaggle-knowledge-oss.md) | Evaluation-design knowledge, per-competition methods and OSS candidates |
 | [17 Budget preflight](docs/17-budget-preflight.md) | Implemented pure arithmetic helper; ten cases passed once offline, not admission |
 | [18 Immutable blob helper](docs/18-immutable-blob-helper.md) | Implemented exact-byte local blob helper; twelve cases passed once offline, not a registry |
+| [19 Strict JSON blob reader](docs/19-json-blob-reader.md) | Verified blob reads followed by strict decoding; eight cases passed once offline, not record acceptance |
 
 Start a project using the [research brief](templates/research-brief.md), [experiment plan](templates/experiment-plan.md), and [run report](templates/run-report.md). For a Kaggle competition, add the [competition brief](templates/competition-brief.md). The [inactive CPU pilot](examples/cpu-pilot.json) illustrates the proposed contract. A [DOTS handoff](examples/dots-handoff.md) shows the minimum assignment.
 
