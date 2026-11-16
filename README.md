@@ -6,7 +6,11 @@
 
 DOTS coordinates the research. Codex implements and runs bounded experiments. External project records preserve the facts. Frozen specifications, protected verification and scoped knowledge reuse connect each candidate to checked evidence. The goal is useful research progress, not simply generating papers or maximizing an AI review score.
 
-**Status: detailed design revised 2026-11-16 JST.** No research runtime, DOTS connection, experiment execution, paid API/GPU use, or performance improvement is delivered by this repository. Examples are inactive design fixtures.
+**Status: detailed design revised 2026-11-16 JST.** Except for the offline arithmetic helper described below, no research runtime, DOTS connection, experiment execution, paid API/GPU use, or performance improvement is delivered by this repository. Examples are inactive design fixtures.
+
+## First offline implementation — 2026-11-17
+
+The [pure worker-budget preflight](docs/17-budget-preflight.md) implements only the arithmetic portion of P1 / SCI-05. Ten canonical cases passed once offline. It is not admission, a runner, authorization or live research runtime; the remaining design and disabled examples are unchanged.
 
 ## Kaggle competition support — 2026-11-16
 
@@ -83,6 +87,7 @@ The harness is the project/state/experiment/evaluation layer around existing age
 | [14 Sakana lifecycle](docs/14-sakana-lifecycle.md) | Ideation, sequential search, separate gates and evidence-grounded reporting |
 | [15 Kaggle competitions](docs/15-kaggle-competitions.md) | Profiles for three competitions, the submission boundary and KGL-01–10 |
 | [16 Kaggle knowledge and OSS](docs/16-kaggle-knowledge-oss.md) | Evaluation-design knowledge, per-competition methods and OSS candidates |
+| [17 Budget preflight](docs/17-budget-preflight.md) | Implemented pure arithmetic helper; ten cases passed once offline, not admission |
 
 Start a project using the [research brief](templates/research-brief.md), [experiment plan](templates/experiment-plan.md), and [run report](templates/run-report.md). For a Kaggle competition, add the [competition brief](templates/competition-brief.md). The [inactive CPU pilot](examples/cpu-pilot.json) illustrates the proposed contract. A [DOTS handoff](examples/dots-handoff.md) shows the minimum assignment.
 
