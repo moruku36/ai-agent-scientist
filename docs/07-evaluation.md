@@ -56,3 +56,20 @@ The first usable version must preserve traceable evidence, enforce resource/expi
 The [verification layer](13-verified-discovery.md) strengthens the artifact/specification boundary beneath these four gates. Match not only the evaluator's main file but the trusted definitions, preprocessing, units, tolerances and dependency closure. Known-bad fixtures must include indirect definition changes and forged receipts. Validate objective correctness before comparing objective cost.
 
 Record empirical checking, formal proof, reproduction and research review separately with their actual scope and assumptions. A proof is about a stated proposition; a test is about tested conditions. Neither validates the choice of scientific model automatically. A clean verifier process is not an independent scientist. Keep the candidate-selection and knowledge-promotion decision on development evidence; frozen final evaluation remains a distinct event. SCI-13–20 extend, rather than replace, the original acceptance cases.
+
+## An external leaderboard is development feedback — 2026-11-16
+
+On Kaggle the host owns the final evaluation. Following [15](15-kaggle-competitions.md), the four questions apply as follows.
+
+| Decision | Question in a competition | Basis |
+|---|---|---|
+| Execution | Did the submission complete within format, time and size limits? | Pre-submission checks, offline rerun, scoring success or failure |
+| Validity | Does local evaluation imitate how the test was built? | Group split (`prompt_id`, repository, task), leakage checks |
+| Reproducibility | Does the difference survive other seeds and replicates? | Replicate variation, per-task paired differences |
+| Research contribution | Can the reason for the improvement be explained? | Single-change ablations, failure counts by type |
+
+The public LB is a small-sample evaluator that leaks information with every submission. Decide the number of submissions beforehand as evaluator-call budget, and record LB exposure on any candidate changed after seeing an LB value. When local evaluation and the LB disagree, examine differences in split, preprocessing and runtime environment before submitting more.
+
+Private LB and Stage 2 results are a one-time confirmation after candidates are frozen. Analysis after seeing them is labeled exploratory and is not used for confirmatory claims in the same competition. Rank is not a proxy for research contribution; record what worked, with evidence.
+
+Compute the expected sampling error beforehand and write it into the plan. For example, PASS/FAIL on about 60 tasks at a 30% pass rate has a standard error of about 6 points. Scores from 0 to 1 on 29 tasks vary widely between tasks, so compare with per-task paired differences.

@@ -73,3 +73,21 @@ At implementation, resolve the actual execution computer, spare capacity, privat
 ## Revision sequence and rollback
 
 Implement [13](13-verified-discovery.md) as an extension of P1–P3, not a new research runtime. Accept the original SCI-01–12 plus applicable SCI-13–20 before using their guarantees. First prove the empirical/offline path; proof-assistant installation and multi-team services remain deferred. On incompatibility, disable new knowledge promotion/reuse, preserve immutable records and return to the accepted single-worker configuration. Never fall back to self-certified passes or enlarge the experiment budget.
+
+## Kaggle implementation slices — not implemented (2026-11-16)
+
+[15](15-kaggle-competitions.md) and [16](16-kaggle-knowledge-oss.md) map onto the existing work packages. No new runtime is created; the competitions are the first application of P1–P4. This change is documentation only: no joining, download, training or submission.
+
+| Slice | Existing package | Deliverable | Acceptance |
+|---|---|---|---|
+| K0 Competition briefs | P0 | [Competition briefs](../templates/competition-brief.md) for the three competitions; the owner fills in participation, resource envelope, and submission/publication authorization | Unknowns, Rules included, are resolved or stated |
+| K1 Records | P1 | Versioned records for CompetitionProfile, submission ledger, offline bundle and final selection | Valid/invalid fixtures for KGL-04, 05, 08, 10 |
+| K2 Pre-submission checks | P2 | Format check, no-internet rerun, resource estimate | KGL-01–03 on synthetic data, without connecting to Kaggle |
+| K3 Name That LLM CPU loop | P2–P4 | Group-split CV, character n-gram baseline, out-of-fold predictions, confusion matrix | Reproduced in a fresh workspace. One submission if authorized; local and LB values recorded in the ledger |
+| K4 Gemma loop within the deadline | P3–P4 | Local reproduction of sample_submission, repository holdout, comparison of prompt/Skill candidates | Results and failure types for all tasks retained. Final submissions frozen by 2026-12-02 |
+| K5 PLE harness | P3–P5 | Submission in a separate repository, dev ablations, score versus cost, failure breakdown | `kit check` and `kit artifacts` pass. Every Writeup number resolves to evidence (KGL-09) |
+| K6 GPU training | P7 | LoRA or encoder fine-tuning | Separate GPU envelope and training-data authorization. Compared with non-trained candidates on the same split |
+
+Proposed order, counted back from deadlines: K0 (before the Gemma entry deadline, 2026-11-25) → K1 and K2 → K3 and K4 (by 2026-12-02) → K5 (by 2027-01-05) → extensions of K3 (by 2027-01-13). Because K4's window is short, starting it with manual records before K1 and K2 is a possible decision; if so, state it as a procedural boundary and import the records into the registry afterwards.
+
+Add `competition/` (profile, pre-submission checks, submission ledger, offline bundle) to the proposed implementation layout. Competition-specific code stays in the private project; the public repository keeps only generic checks and templates.

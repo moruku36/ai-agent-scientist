@@ -206,9 +206,18 @@ def check():
         body = (ROOT / 'docs' / name).read_text()
         assert marker in body, f"Missing unexecuted verification status: {name}"
         assert all(f'SCI-{n:02}' in body for n in range(13, 21))
-    print('PASS: inactive examples and limited design/unexecuted-status guards (SCI-01–20)')
+    for name, marker in [('15-kaggle-competitions.md', 'not executed'),
+                         ('15-kaggle-competitions.ja.md', '未実施')]:
+        body = (ROOT / 'docs' / name).read_text()
+        assert marker in body, f"Missing unexecuted competition status: {name}"
+        assert all(f'KGL-{n:02}' in body for n in range(1, 11))
+    for name, marker in [('16-kaggle-knowledge-oss.md', 'candidate lists'),
+                         ('16-kaggle-knowledge-oss.ja.md', '候補の一覧')]:
+        assert marker in (ROOT / 'docs' / name).read_text(), f"Missing OSS candidate status: {name}"
+    print('PASS: inactive examples and limited design/unexecuted-status guards (SCI-01–20, KGL-01–10)')
     print('NOT RUN: scientific experiments, SCI runtime acceptance, artifact/hash resolution,')
     print('issuer authentication, sandbox enforcement, formal proof checking or cost measurement.')
+    print('NOT RUN: Kaggle access, competition-fact freshness, submission checks or OSS license/version review.')
 
 
 if __name__ == '__main__':

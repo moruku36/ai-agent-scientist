@@ -39,3 +39,16 @@ Within a future authorized project envelope, ordinary implementation and experim
 - [Mattermost DOTS PoC](https://github.com/moruku36/mattermost-dots-poc): one finite event trial is not continuous integration.
 
 OpenAI product capabilities are sourced separately in [05](05-dots-integration.md). Actual connection names, tokens, host addresses and private paths are intentionally absent.
+
+## Execution environments added by Kaggle competitions — 2026-11-16
+
+The three competitions in [15](15-kaggle-competitions.md) bring execution environments other than the local computers. None was connected or used in this change.
+
+| Environment | Conditions stated on the competition pages | Role / to confirm |
+|---|---|---|
+| Kaggle Notebook | Name That LLM: ≤ 9 hours CPU or GPU, no internet. The Gemma competition offers L4×4 (96 GB GPU memory) at twice the quota rate, restricted to that competition, no internet | Rerun environment for submissions and a candidate for GPU training. Actual weekly quota and remaining balance are unverified |
+| Gemma scoring sandbox | Python 3.13 Docker container, bundled wheels only, 12 hours total for all tasks | Reproduce locally from the published `docker/`. Whether Gemma 4 runs on local hardware is unverified |
+| PLE task container | 2 CPUs, 4 GB RAM, 6 hours, no network except the model API | Reproduce locally with Docker, uv and Harbor. Dev runs need a model API or a self-hosted model |
+| Local Windows (RTX 3070 8 GB on record) | — | Candidate for CPU baselines, format checks and small evaluations. LoRA training of the 31B/12B variants is not expected to fit in 8 GB, and whether E2B/E4B runs needs measurement |
+
+Kaggle credentials, Hugging Face tokens and model API keys are new secrets. Keep them outside the implementation worker's workspace and the public repository. GPU and API use does not change the "one CPU loop first" policy; each competition gets its own separately authorized resource envelope.

@@ -36,3 +36,15 @@ Start with the pipeline and external evidence, not with seven simultaneous frame
 Compare each additional layer against the same model, tasks, resources and stopping rule. Use an archive and tree search only when a cheap, repeatable development metric exists. Scientific importance and novelty remain explicitly reviewed judgments. Negative results, failed replications and rejected hypotheses are first-class outputs.
 
 Pin a source revision, dependencies, license and compatibility before adopting code. Names and results in the papers identify their experimental context, not currently recommended model versions or hardware purchases.
+
+## Kaggle competitions are tasks, not research foundations — 2026-11-16
+
+The three competitions in [15](15-kaggle-competitions.md) have a different standing from the research sources above. They are external tasks the harness is applied to, not grounds for its design. What was inspected is the public competition pages and the PLE repository README; the body of the [PLE paper (arXiv:2610.30537)](https://arxiv.org/abs/2610.30537) was not read.
+
+Relation to existing policy:
+
+- "Use a simple single worker as the baseline" corresponds to recording each competition's sample submission or a simple method first.
+- "Separate implementation completion from research contribution" corresponds to separating a submission that scores from a score that improves.
+- PLE asks participants to build an agent harness and report failure analysis, ablations and cost versus performance. This design's comparison and evidence handling apply, but the PLE submission is an artifact separate from this repository.
+
+Methods in [16](16-kaggle-knowledge-oss.md) are general knowledge, not based on saved research notes or inspected primary sources.

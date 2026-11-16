@@ -90,3 +90,30 @@ A NUC-hosted registry and remote workers require accepted identity, encrypted tr
 ## Specification and knowledge boundary
 
 [13](13-verified-discovery.md) defines the additive verification contract and report. The private paths above hold registry records or protected-verifier receipts; they do not grant a candidate write access. The actual protected specification, verifier, dependency locks and final data remain outside the worker domain. Knowledge is a filtered registry view, not an unrestricted feedback loop: only compatible development evidence can seed tuning. No extra service or fixed agent hierarchy is required.
+
+## Competition adapter layer — 2026-11-16
+
+[15](15-kaggle-competitions.md) adds an optional competition adapter to the existing flow. Responsibilities are not reassigned.
+
+| Layer | Added responsibility | Does not own |
+|---|---|---|
+| Moruku | Joining and accepting rules, authorizing submission and publication, team decisions | Manual format checks or ledger entry |
+| Existing DOTS | Freezing the CompetitionProfile, choosing the next candidate from local evaluation, deciding leaderboard use | Acceptance on LB rank alone; unauthorized submission |
+| Research registry | Profile revisions, submission ledger, final selection, offline-bundle list | Treating an LB value as a protected verification receipt |
+| Codex implementer | Building candidates and submission packages, running pre-submission checks | Changing or obtaining the evaluation split, checker, submission quota or credentials |
+| Submission gate | Format check, offline rerun, resource estimate, authorization and quota check, sending and recording the outcome | Submissions that fail checks; resends while an outcome is unknown |
+| Host evaluator | Public LB value, final ranking | Scientific judgment inside the harness |
+
+Add the following to the proposed private project layout.
+
+```text
+project/
+  competition/profile.<revision>.json   # inspected specification and dates
+  competition/sources/                  # page copies and rule summaries (not published)
+  bundles/<bundle-id>/manifest.json     # offline bundle: weight/wheel/data hashes and licenses
+  submissions/<submission-id>/manifest.json   # candidate digest, checks, time, LB value
+  submissions/ledger.jsonl
+  selection/final.json
+```
+
+Competition data, rule text and other participants' non-public information do not go into the public repository. The PLE submission lives in a separate GitHub repository; this repository's registry refers to its commit SHA and `artifacts/` as the candidate digest. The submission gate may begin as a human-started procedure, stated as a procedural boundary.

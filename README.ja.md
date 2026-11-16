@@ -6,7 +6,11 @@
 
 DOTSが研究を統括し、Codexが実装・上限付き実験を担当します。会話の外に事実を残し、固定仕様・保護した検証・範囲を明示した知識再利用で、候補と証拠を結びます。目的は研究を前進させることであり、論文の体裁やAI査読点だけを成果にしません。
 
-**2026-11-14 JSTに改訂した詳細設計です。** ランタイム実装、DOTS接続、実験、有料API／GPU利用、性能改善の実測は行っていません。設定例も無効です。
+**2026-11-16 JSTに改訂した詳細設計です。** ランタイム実装、DOTS接続、実験、有料API／GPU利用、性能改善の実測は行っていません。設定例も無効です。
+
+## Kaggleコンペ対応 — 2026-11-16
+
+[競技プロファイルと提出境界](docs/15-kaggle-competitions.ja.md)で、Kaggleを「主催者が評価器と最終評価を所有する研究課題」として既存設計へ接続。対象はGemma 4 Developer Agent、Name That LLM、Physical-Engineering's Last Examの3件です。ローカル評価を選択の根拠にし、Public LBは提出枠付きの外部フィードバック、提出・規則同意・公開は利用者の許可が要る外部行為として扱います。[知識とOSS候補](docs/16-kaggle-knowledge-oss.ja.md)は一覧であり、導入・検証はしていません。コンペへの参加、データ取得、学習、提出は行っていません。
 
 ## Sakana研究工程の統合 — 2026-11-14
 
@@ -40,6 +44,7 @@ flowchart TB
     D --> R["証拠付き主張・限界・否定的結果"]
     R --> H
     D -. "必要性を測ってから追加" .-> S["レビュー役・適応探索・確認済み記憶"]
+    D -. "任意の競技プロファイル" .-> G["Kaggle: 提出前検査・提出台帳・外部LB"]
 ```
 
 ハーネスは、既存エージェントを支える状態・実験・評価の仕組みです。MCPは接続方式の候補で、ハーネス全体を意味しません。
@@ -75,8 +80,11 @@ flowchart TB
 | [11 ハーネス境界](docs/11-harness-boundaries.ja.md) | 正本の分担、任意の参照型受け渡し |
 | [12 計画と受入](docs/12-protocol-and-acceptance.ja.md) | 固定した研究比較、SCI-01〜12 |
 | [13 検証を中心とする発見](docs/13-verified-discovery.ja.md) | 仕様の依存全体、検証adapter、知識採用、SCI-13〜20 |
+| [14 Sakana研究工程](docs/14-sakana-lifecycle.ja.md) | 着想・逐次探索・判定の分離・証拠付き報告 |
+| [15 Kaggleコンペ対応](docs/15-kaggle-competitions.ja.md) | 3コンペの競技プロファイル、提出境界、KGL-01〜10 |
+| [16 Kaggleの知識とOSS](docs/16-kaggle-knowledge-oss.ja.md) | 評価設計の知識、コンペ別の手法とOSS候補 |
 
-[研究ブリーフ](templates/research-brief.ja.md)、[実験計画](templates/experiment-plan.ja.md)、[実験レポート](templates/run-report.ja.md)を雛形として使います。[無効のCPU設定例](examples/cpu-pilot.json)と[DOTSへの引継ぎ例](examples/dots-handoff.ja.md)も用意しました。
+[研究ブリーフ](templates/research-brief.ja.md)、[実験計画](templates/experiment-plan.ja.md)、[実験レポート](templates/run-report.ja.md)を雛形として使います。Kaggleコンペでは[競技ブリーフ](templates/competition-brief.ja.md)を追加します。[無効のCPU設定例](examples/cpu-pilot.json)と[DOTSへの引継ぎ例](examples/dots-handoff.ja.md)も用意しました。
 
 最初は **ブリーフ→基準実装→候補→反復可能な評価→証拠付き報告→終了処理** を一周させます。今回、定期実行や他エージェントへの依頼は作成しません。
 

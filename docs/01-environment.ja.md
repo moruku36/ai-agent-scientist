@@ -39,3 +39,16 @@ PCが停止したら保存して止め、別PCへ黙って移しません。事�
 - [Mattermost DOTS PoC](https://github.com/moruku36/mattermost-dots-poc)：有限の通知試験と常時連携を分ける。
 
 OpenAI製品仕様は[05](05-dots-integration.ja.md)に一次出典を置きます。実接続名、トークン、アドレス、私的パスは記載しません。
+
+## Kaggleコンペで加わる実行環境 — 2026-11-16
+
+[15](15-kaggle-competitions.ja.md)の3コンペは、手元のPCとは別の実行環境を持ちます。いずれも今回は接続・利用していません。
+
+| 環境 | コンペのページに記載された条件 | 役割・確認事項 |
+|---|---|---|
+| Kaggle Notebook | Name That LLMはCPU／GPUとも9時間以内・ネットなし。GemmaコンペはL4×4（GPUメモリ96 GB）を提供、クォータ2倍消費、当該コンペ専用、ネットなし | 提出の再実行環境。GPU学習の候補でもある。週次クォータの実枠と残量は未確認 |
+| Gemmaの採点sandbox | Python 3.13のDockerコンテナ、同梱wheelのみ、全課題合計12時間 | 公開の`docker/`でローカル再現する。手元でGemma 4を動かせるかは未確認 |
+| PLEの課題コンテナ | 2 CPU・4 GB RAM・6時間、モデルAPI以外の通信なし | ローカルではDocker・uv・Harborで再現。dev実行にはモデルAPIか自前モデルが要る |
+| 手元のWindows（記録上RTX 3070 8 GB） | — | CPUでの基準実装、形式検査、小規模評価の候補。8 GBのGPUで31B／12BのLoRA学習は見込めず、E2B／E4Bが動くかも実測が必要 |
+
+Kaggleの認証情報、Hugging Faceトークン、モデルAPIキーは新しい秘密情報です。実装ワーカーの作業領域と公開リポジトリの外に置きます。GPUやAPIの利用は「最初はCPU一周」の方針を変えず、競技ごとの資源枠として別に許可を受けます。

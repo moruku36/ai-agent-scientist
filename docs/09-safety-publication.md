@@ -49,3 +49,21 @@ On cancellation, stop actual delegated jobs and subprocesses, settle reserved bu
 Treat candidate bundles, proof files, build hooks and discussion notes as untrusted inputs. Protect the verifier's dependency resolution and policy, not only its source directory. Claims gain only the assurance that the accepted verifier actually checks. A worker-authored or replayed receipt cannot authorize promotion.
 
 Knowledge classification carries forward source access, evaluation exposure and publication limits. A verified result is not automatically public; a reviewed summary is not automatically de-identified. Quarantine entries whose receipt, dependency or access is invalidated, and prevent downstream reuse. An optional proof checker, shared knowledge service or additional team still needs its own accepted environment and actual action authorization. See [13](13-verified-discovery.md).
+
+## Competition rules, submissions and credentials — 2026-11-16
+
+Kaggle support in [15](15-kaggle-competitions.md) adds external acts. Each follows its specific authorization.
+
+| Act | Handling |
+|---|---|
+| Joining a competition, accepting rules, merging teams | Done by the owner in person. The harness does not act on the owner's behalf |
+| Submitting (notebook, zip, Writeup) | External transmission. Performed only when the authorized envelope names the competition and a daily limit, and recorded in the submission ledger |
+| Visibility of notebooks, Datasets and Models | Private by default. Making them public needs separate authorization |
+| Making the PLE repository public; installing the GitHub App | Separate authorization. The submitted commit contains no credentials, code texts or dev answers |
+| Generating data through external model APIs | Only after checking cost and whether the Rules permit it. Not done while unverified |
+
+The three storage classes apply as follows. Public design: the competition-brief template and summaries of inspected public facts. Private evidence: competition data, copies of rule text, the submission ledger, LB values and trained weights. Protected evaluation: the local confirmation split and checkers. The host's hidden test belongs to none of them.
+
+During a competition, privately passing code or solutions outside the team can violate the rules. Check that competition's Rules before sending candidate code through agent communication or to a public repository. In some competitions the only permitted sharing during the event is public sharing on Kaggle for all participants.
+
+Kaggle, Hugging Face and model API credentials are not given to the implementation worker; only the submission gate and data-download procedures use them. Before submitting, check that no key or token remains in logs, notebook output or `artifacts/`.

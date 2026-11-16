@@ -6,7 +6,11 @@
 
 DOTS coordinates the research. Codex implements and runs bounded experiments. External project records preserve the facts. Frozen specifications, protected verification and scoped knowledge reuse connect each candidate to checked evidence. The goal is useful research progress, not simply generating papers or maximizing an AI review score.
 
-**Status: detailed design revised 2026-11-14 JST.** No research runtime, DOTS connection, experiment execution, paid API/GPU use, or performance improvement is delivered by this repository. Examples are inactive design fixtures.
+**Status: detailed design revised 2026-11-16 JST.** No research runtime, DOTS connection, experiment execution, paid API/GPU use, or performance improvement is delivered by this repository. Examples are inactive design fixtures.
+
+## Kaggle competition support — 2026-11-16
+
+[Competition profiles and the submission boundary](docs/15-kaggle-competitions.md) connect Kaggle to the existing design as "a research task whose evaluator and final holdout belong to the host". Three competitions are covered: Gemma 4 Developer Agent, Name That LLM and Physical-Engineering's Last Exam. Local evaluation is the basis for selection; the public leaderboard is quota-limited external feedback; submitting, accepting rules and publishing are external acts that need the owner's authorization. [Knowledge and OSS candidates](docs/16-kaggle-knowledge-oss.md) are a list, not installed or tested. No competition was joined and no data download, training or submission took place.
 
 ## Sakana lifecycle integration — 2026-11-14
 
@@ -40,6 +44,7 @@ flowchart TB
     D --> R["Claims linked to evidence; limitations and negative results"]
     R --> H
     D -. "optional, after measured need" .-> S["Reviewer / adaptive search / reviewed memory"]
+    D -. "optional competition profile" .-> G["Kaggle: pre-submission checks, submission ledger, external LB"]
 ```
 
 The harness is the project/state/experiment/evaluation layer around existing agents. MCP is one optional interface to that layer, not the whole harness.
@@ -75,8 +80,11 @@ The harness is the project/state/experiment/evaluation layer around existing age
 | [11 Harness boundaries](docs/11-harness-boundaries.md) | State ownership and optional reference-only exchange |
 | [12 Protocol and acceptance](docs/12-protocol-and-acceptance.md) | Frozen scientific comparison and SCI-01–12 |
 | [13 Verified discovery](docs/13-verified-discovery.md) | Specification closure, verifier adapters, knowledge promotion and SCI-13–20 |
+| [14 Sakana lifecycle](docs/14-sakana-lifecycle.md) | Ideation, sequential search, separate gates and evidence-grounded reporting |
+| [15 Kaggle competitions](docs/15-kaggle-competitions.md) | Profiles for three competitions, the submission boundary and KGL-01–10 |
+| [16 Kaggle knowledge and OSS](docs/16-kaggle-knowledge-oss.md) | Evaluation-design knowledge, per-competition methods and OSS candidates |
 
-Start a project using the [research brief](templates/research-brief.md), [experiment plan](templates/experiment-plan.md), and [run report](templates/run-report.md). The [inactive CPU pilot](examples/cpu-pilot.json) illustrates the proposed contract. A [DOTS handoff](examples/dots-handoff.md) shows the minimum assignment.
+Start a project using the [research brief](templates/research-brief.md), [experiment plan](templates/experiment-plan.md), and [run report](templates/run-report.md). For a Kaggle competition, add the [competition brief](templates/competition-brief.md). The [inactive CPU pilot](examples/cpu-pilot.json) illustrates the proposed contract. A [DOTS handoff](examples/dots-handoff.md) shows the minimum assignment.
 
 The first implementation should complete one loop: **brief → baseline → candidate → repeatable evaluation → evidence-backed report → clean shutdown**. No schedules or live agent requests are created by this design update.
 
