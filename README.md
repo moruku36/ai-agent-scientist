@@ -6,7 +6,7 @@
 
 DOTS coordinates the research. Codex implements and runs bounded experiments. External project records preserve the facts. Frozen specifications, protected verification and scoped knowledge reuse connect each candidate to checked evidence. The goal is useful research progress, not simply generating papers or maximizing an AI review score.
 
-**Status: detailed design revised 2026-11-16 JST.** Except for the six offline helpers described below (arithmetic preflight, exact-byte blob storage, strict JSON blob reads, request preflight, payload binding and local durable receipts), no research runtime, DOTS connection, experiment execution, paid API/GPU use, or performance improvement is delivered by this repository. Examples are inactive design fixtures. The sixth helper passed ten new offline scenarios once (1.172s); coordinator source review completed.
+**Status: detailed design revised 2026-11-16 JST.** Except for the offline helpers described below (arithmetic preflight, exact-byte blob storage, strict JSON blob reads, request preflight, payload binding, local durable receipts and their worker-seconds reservation extension), no research runtime, DOTS connection, experiment execution, paid API/GPU use, or performance improvement is delivered by this repository. Examples are inactive design fixtures. The sixth helper's receipt-only scenarios passed once (1.172s); the reservation extension is implemented with scenarios passed once offline (0.082s); coordinator diff review completed.
 
 ## First offline implementation — 2026-11-17
 
@@ -30,7 +30,11 @@ The [handoff payload binding](docs/21-handoff-payload-binding.md) composes reque
 
 ## Sixth offline helper — 2026-11-17
 
-The [durable byte-bound handoff receipt](docs/22-durable-handoff-receipt.md) connects fresh request/payload verification to receiver-owned local SQLite persistence and one unresolved CAS transition. Implemented; ten new D01–D10 scenarios passed once offline (1.172s); coordinator source review completed. This partial docs11 profile uses exact envelope bytes; full logical/JCS identity remains missing. It grants no admission, reservation or dispatch authority.
+The [durable byte-bound handoff receipt](docs/22-durable-handoff-receipt.md) connects fresh request/payload verification to receiver-owned local SQLite persistence and one unresolved CAS transition. Implemented; ten new D01–D10 scenarios passed once offline (1.172s); coordinator source review completed. This partial docs11 profile uses exact envelope bytes; full logical/JCS identity remains missing. Its original `record` API grants no admission, reservation or dispatch authority.
+
+## Local reservation prerequisite — 2026-11-17
+
+The [local worker-seconds reservation prerequisite](docs/23-local-budget-reservation.md) extends the receipt transaction with current caller-owned authority and one fixed shared envelope. Implemented; ten R01–R10 scenarios passed once offline (0.082s); coordinator diff review completed. It provides no dispatch or full admission acceptance.
 
 ## Kaggle competition support — 2026-11-16
 
@@ -113,6 +117,7 @@ The harness is the project/state/experiment/evaluation layer around existing age
 | [19 Strict JSON blob reader](docs/19-json-blob-reader.md) | Verified blob reads followed by strict decoding; eight cases passed once offline, not record acceptance |
 | [21 Handoff payload binding](docs/21-handoff-payload-binding.md) | Current trusted local binding before verified payload read; ten scenarios passed once offline |
 | [22 Durable handoff receipt](docs/22-durable-handoff-receipt.md) | Local SQLite exact-byte receipts and unresolved CAS; ten scenarios passed once offline |
+| [23 Local budget reservation](docs/23-local-budget-reservation.md) | Connected fixed-envelope worker-seconds reservations; implemented, ten scenarios passed once offline |
 
 Start a project using the [research brief](templates/research-brief.md), [experiment plan](templates/experiment-plan.md), and [run report](templates/run-report.md). For a Kaggle competition, add the [competition brief](templates/competition-brief.md). The [inactive CPU pilot](examples/cpu-pilot.json) illustrates the proposed contract. A [DOTS handoff](examples/dots-handoff.md) shows the minimum assignment.
 

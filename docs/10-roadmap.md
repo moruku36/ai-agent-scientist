@@ -2,6 +2,8 @@
 
 [日本語](10-roadmap.ja.md) | [Home](../README.md)
 
+[23 local worker-seconds reservation](23-local-budget-reservation.md) is a narrow P1 extension at the durable receipt transaction seam: current independent caller authority, one immutable shared envelope/allocation and atomic receipt/reservation/accounting. Implemented; ten R01–R10 scenarios passed once offline (0.082s); coordinator diff review completed. Original receipt-only behavior remains unchanged. Full reservation/admission acceptance, other resource dimensions, protocol/plan resolution, JCS and dispatch remain missing. Earlier receipt-only status below is historical.
+
 ## Decisions for this design
 
 - Name: `ai-agent-scientist`; English default and Japanese counterparts.

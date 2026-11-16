@@ -2,6 +2,8 @@
 
 [日本語](22-durable-handoff-receipt.ja.md) | [Home](../README.md)
 
+**Reservation extension:** [23](23-local-budget-reservation.md) adds connected `reserve` in the same module, implemented with ten scenarios passed once offline (0.082s); coordinator diff review completed. Receipt-only limits and historical D01–D10 results below describe the original `record` path and do not validate this extension. `record` still creates no reservation. Constructor initialization also creates empty internal reservation/accounting tables; only `reserve` writes those rows. No dispatch or full admission authority is added.
+
 **Status (2026-11-17): implemented; ten new D01–D10 scenarios passed once offline (1.172s).** The implementer ran no tests, design checker, imports of the implementation for execution, research or dispatch. Coordinator source review and one targeted invocation completed; required design-check results are recorded separately. No reproduction, independent review, runtime acceptance or power-loss result is claimed. Python 3.12 compatibility is a source target only.
 
 This is a narrow connected seam within [P1](10-roadmap.md), composing the actual [21 binding loader](21-handoff-payload-binding.md), [20 request preflight](20-handoff-request-preflight.md), [19 strict reader](19-json-blob-reader.md) and [18 BlobStore](18-immutable-blob-helper.md) with stdlib SQLite. Architecture and the canonical [harness-handoff/1 schema](../schemas/handoff.schema.json) are unchanged.

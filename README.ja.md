@@ -6,7 +6,7 @@
 
 DOTSが研究を統括し、Codexが実装・上限付き実験を担当します。会話の外に事実を残し、固定仕様・保護した検証・範囲を明示した知識再利用で、候補と証拠を結びます。目的は研究を前進させることであり、論文の体裁やAI査読点だけを成果にしません。
 
-**2026-11-16 JSTに改訂した詳細設計です。** 以下の6つのオフライン補助（算術preflight・厳密バイトのblob保存・厳格なJSON blob読取・依頼preflight・payload束縛・ローカル永続受領）を除き、研究ランタイム実装、DOTS接続、実験、有料API／GPU利用、性能改善の実測は行っていません。設定例も無効です。6つ目は新規10シナリオが1回オフライン成功（1.172秒）し、coordinatorのソースレビュー完了です。
+**2026-11-16 JSTに改訂した詳細設計です。** 以下のオフライン補助（算術preflight・厳密バイトのblob保存・厳格なJSON blob読取・依頼preflight・payload束縛・ローカル永続受領とworker-seconds予約拡張）を除き、研究ランタイム実装、DOTS接続、実験、有料API／GPU利用、性能改善の実測は行っていません。設定例も無効です。6つ目の受領のみのシナリオは1回オフライン成功（1.172秒）です。予約拡張は実装済み、新規10シナリオが1回オフライン成功（0.082秒）です。
 
 ## 最初のオフライン実装 — 2026-11-17
 
@@ -30,7 +30,11 @@ DOTSが研究を統括し、Codexが実装・上限付き実験を担当しま�
 
 ## 6つ目のオフライン補助 — 2026-11-17
 
-[厳密バイト束縛の永続ハンドオフ受領](docs/22-durable-handoff-receipt.ja.md)は、毎回の依頼／payload検証を受信者所有のローカルSQLite保存と未解決CAS遷移1つへ接続します。実装済み、新規D01〜D10の10シナリオが1回オフライン成功（1.172秒）し、coordinatorのソースレビュー完了です。docs11の部分実装で元のenvelopeバイトを使い、全体の論理／JCS同一性は未実装です。受付・予約・dispatch権限は付与しません。
+[厳密バイト束縛の永続ハンドオフ受領](docs/22-durable-handoff-receipt.ja.md)は、毎回の依頼／payload検証を受信者所有のローカルSQLite保存と未解決CAS遷移1つへ接続します。実装済み、新規D01〜D10の10シナリオが1回オフライン成功（1.172秒）し、coordinatorのソースレビュー完了です。docs11の部分実装で元のenvelopeバイトを使い、全体の論理／JCS同一性は未実装です。元の`record` APIは受付・予約・dispatch権限を付与しません。
+
+## ローカル予約の前提部品 — 2026-11-17
+
+[ローカルworker-seconds予約の前提部品](docs/23-local-budget-reservation.ja.md)は、現在のcaller所有権限と固定共有envelopeを受領transactionへ接続します。実装済み、R01〜R10の10シナリオは1回オフライン成功（0.082秒）し、coordinatorの差分レビュー完了です。dispatchや完全な受付受入は提供しません。
 
 ## Kaggleコンペ対応 — 2026-11-16
 
@@ -113,6 +117,7 @@ flowchart TB
 | [20 ハンドオフ依頼preflight](docs/20-handoff-request-preflight.ja.md) | 依頼限定の構造・期限確認。8ケースが1回オフライン成功。受付ではない |
 | [21 ハンドオフpayload束縛](docs/21-handoff-payload-binding.ja.md) | 検証済みpayload読取前に現在の信頼するローカル束縛を確認。新規10シナリオが1回オフライン成功 |
 | [22 永続ハンドオフ受領](docs/22-durable-handoff-receipt.ja.md) | ローカルSQLiteの厳密バイト受領・未解決CAS。10シナリオが1回オフライン成功 |
+| [23 ローカル予算予約](docs/23-local-budget-reservation.ja.md) | 固定envelopeの接続worker-seconds予約。実装済み、10シナリオが1回オフライン成功 |
 
 [研究ブリーフ](templates/research-brief.ja.md)、[実験計画](templates/experiment-plan.ja.md)、[実験レポート](templates/run-report.ja.md)を雛形として使います。Kaggleコンペでは[競技ブリーフ](templates/competition-brief.ja.md)を追加します。[無効のCPU設定例](examples/cpu-pilot.json)と[DOTSへの引継ぎ例](examples/dots-handoff.ja.md)も用意しました。
 
