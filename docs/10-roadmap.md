@@ -48,7 +48,7 @@ tests/
   reproducibility/
 ```
 
-The full tree remains planned. The [17 budget preflight](17-budget-preflight.md) pure arithmetic helper (ten historical offline cases) and [18 immutable blob helper](18-immutable-blob-helper.md) (E01–E12 passed once offline) are implemented. The [19 strict JSON blob reader](19-json-blob-reader.md) connects verified bytes to strict decoding (J01–J08 passed once offline); it accepts no records. No runner, admission service or research runtime is delivered. Start with the standard library where practical, adding pinned libraries only for a measured need. Validate supported schema keywords explicitly; the sample schemas do not implement policy.
+The full tree remains planned. The [17 budget preflight](17-budget-preflight.md) pure arithmetic helper (ten historical offline cases) and [18 immutable blob helper](18-immutable-blob-helper.md) (E01–E12 passed once offline) are implemented. The [19 strict JSON blob reader](19-json-blob-reader.md) connects verified bytes to strict decoding (J01–J08 passed once offline); it accepts no records. The [20 request preflight](20-handoff-request-preflight.md) adds a fixed request-only structure/expiry check (H01–H08 passed once offline), not authorization or dispatch. No runner, admission service or research runtime is delivered. Start with the standard library where practical, adding pinned libraries only for a measured need. Validate supported schema keywords explicitly; the sample schemas do not implement policy.
 
 ## First pilot in concrete terms
 
