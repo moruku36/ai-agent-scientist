@@ -52,6 +52,8 @@ The full tree remains planned. The [17 budget preflight](17-budget-preflight.md)
 
 The [21 handoff payload binding](21-handoff-payload-binding.md) seam is implemented with ten new P01–P10 scenarios passed once offline (0.074s); coordinator source review is complete. It binds current caller-owned local metadata/access before the actual bounded BlobStore payload read, without admission, dispatch or new authority.
 
+The [22 durable byte-bound handoff receipt](22-durable-handoff-receipt.md) connects that actual loader to receiver-owned local SQLite persistence under an independently trusted principal/project/recipient scope. Implemented; ten D01–D10 scenarios passed once offline (1.172s); coordinator source review completed. Required design-check results are recorded separately. Exact envelope replay returns the current durable unresolved receipt; changed bytes conflict; one receiver-local revision CAS marks reconciliation required. This is a partial docs11 profile: full logical/JCS identity, admission, reservation/budget authority, outbox, dispatch and retry remain missing. No architecture or canonical wire/schema change.
+
 ## First pilot in concrete terms
 
 1. Define one falsifiable question with the [brief](../templates/research-brief.md).

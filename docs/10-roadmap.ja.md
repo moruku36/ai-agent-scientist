@@ -52,6 +52,8 @@ tests/
 
 [21 ハンドオフpayload束縛](21-handoff-payload-binding.ja.md)の接続は実装済みで、新規P01〜P10の10シナリオが1回オフライン成功（0.074秒）、coordinatorのソースレビューは完了です。呼出側が所有する現在のローカルmetadata／アクセスを確認してから実際の上限付きBlobStore payload読取へ接続し、受付・dispatch・新しい権限は追加しません。
 
+[22 厳密バイト束縛の永続ハンドオフ受領](22-durable-handoff-receipt.ja.md)は、その実loaderを、独立して信頼するprincipal／project／recipient scopeの受信者所有ローカルSQLiteへ接続します。実装済み、D01〜D10の10シナリオが1回オフライン成功（1.172秒）し、coordinatorのソースレビュー完了です。必須の設計検査結果は別途記録します。同一envelope再送は現在の永続未解決受領を返し、別バイトは衝突、受信者ローカルのrevision CAS1つで照合必要を記録します。docs11の部分実装であり、全体の論理／JCS同一性・受付・予約／予算権限・outbox・dispatch・retryは未実装です。アーキテクチャ・正本wire／schemaは変更しません。
+
 ## 最初の試行
 
 1. [ブリーフ](../templates/research-brief.ja.md)で反証可能な問いを一つ定義。
