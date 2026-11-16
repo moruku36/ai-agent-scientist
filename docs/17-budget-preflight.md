@@ -94,7 +94,7 @@ Do not raise caps/retries, drop cleanup or silently shrink a study to obtain a f
 
 ## Verification status
 
-The command above passed all ten B01–B10 cases in one invocation on 2026-11-17 (unittest reported 0.000 seconds, within the 30-second cap). No rerun. The coordinator also retains execution evidence. No dependency install, build, full suite, CI, network, model/API/GPU or experiment process is included. Prior budgets and UNKNOWNs remain unchanged. The repository design checker was **NOT RUN** for this documentation change; no design-checker success or runtime acceptance is claimed.
+The command above passed all ten B01–B10 cases in one invocation on 2026-11-17 (unittest reported 0.000 seconds, within the 30-second cap). No rerun. The coordinator also retains execution evidence. No dependency install, build, full suite, CI, network, model/API/GPU or experiment process is included. Prior budgets and UNKNOWNs remain unchanged. The parent attempted `python3 scripts/check_design.py`, but it stopped before checks because the environment lacks `jsonschema` (`ModuleNotFoundError`). Design validation remains blocked; no design-checker success or runtime acceptance is claimed.
 
 ## Design sources
 
