@@ -2,7 +2,7 @@
 
 This repository is a DOTS-centered design scaffold, not a deployed scientist.
 
-- Read README and docs/01–13 before changing the architecture.
+- Read README and docs/01–16 before changing the architecture.
 - Keep English default and Japanese counterparts with reciprocal links.
 - Preserve the user's existing DOTS/ChatGPT/Codex runtime and client constraints.
 - Distinguish proposed, implemented, executed, reproduced and independently reviewed.
@@ -13,5 +13,6 @@ This repository is a DOTS-centered design scaffold, not a deployed scientist.
 - New publication or external communication must follow its actual authorization.
 - Document changes require links, language pairs, JSON examples and status consistency checks. Runtime implementation requires meaningful contract, behavior, recovery and reproducibility checks.
 - Numerical or novelty claims require traceable evidence, complete outcomes and stated limitations.
+- Kaggle work follows docs/15–16: never join a competition, accept rules, submit, publish a notebook/Writeup or use Kaggle/Hugging Face credentials merely to edit this design. Leaderboard values are external feedback, not protected verification receipts. Re-check host pages before relying on recorded competition facts.
 
 Verification-centered design checks: run `python scripts/check_design.py` with an available JSON Schema 2020-12 validator. These are offline document/schema checks, not runtime acceptance. Preserve existing wire versions; specification, evaluator and knowledge-promotion authority remain outside candidate control.
