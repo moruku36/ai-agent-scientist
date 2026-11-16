@@ -6,7 +6,7 @@
 
 DOTS coordinates the research. Codex implements and runs bounded experiments. External project records preserve the facts. Frozen specifications, protected verification and scoped knowledge reuse connect each candidate to checked evidence. The goal is useful research progress, not simply generating papers or maximizing an AI review score.
 
-**Status: detailed design revised 2026-11-16 JST.** Except for the four offline helpers described below (arithmetic preflight, exact-byte blob storage, strict JSON blob reads and request preflight), no research runtime, DOTS connection, experiment execution, paid API/GPU use, or performance improvement is delivered by this repository. Examples are inactive design fixtures.
+**Status: detailed design revised 2026-11-16 JST.** Except for the five offline helpers described below (arithmetic preflight, exact-byte blob storage, strict JSON blob reads, request preflight and payload binding), no research runtime, DOTS connection, experiment execution, paid API/GPU use, or performance improvement is delivered by this repository. Examples are inactive design fixtures.
 
 ## First offline implementation — 2026-11-17
 
@@ -23,6 +23,10 @@ The [strict JSON blob reader](docs/19-json-blob-reader.md) connects verified bou
 ## Fourth offline helper — 2026-11-17
 
 The [handoff request preflight](docs/20-handoff-request-preflight.md) checks a fixed request-only structure and caller-clock expiry after verified strict JSON reads. Eight H01–H08 cases passed once offline on Python 3.15.2. It does not authenticate, authorize, reserve or dispatch.
+
+## Fifth offline helper — 2026-11-17
+
+The [handoff payload binding](docs/21-handoff-payload-binding.md) composes request preflight, current trusted local metadata/access and a bounded verified payload read. Implemented; ten new P01–P10 scenarios passed once offline (0.074s); coordinator source review completed. It grants no admission or dispatch authority.
 
 ## Kaggle competition support — 2026-11-16
 
@@ -103,6 +107,7 @@ The harness is the project/state/experiment/evaluation layer around existing age
 | [18 Immutable blob helper](docs/18-immutable-blob-helper.md) | Implemented exact-byte local blob helper; twelve cases passed once offline, not a registry |
 | [20 Handoff request preflight](docs/20-handoff-request-preflight.md) | Request-only structure and expiry; eight cases passed once offline, not admission |
 | [19 Strict JSON blob reader](docs/19-json-blob-reader.md) | Verified blob reads followed by strict decoding; eight cases passed once offline, not record acceptance |
+| [21 Handoff payload binding](docs/21-handoff-payload-binding.md) | Current trusted local binding before verified payload read; ten scenarios passed once offline |
 
 Start a project using the [research brief](templates/research-brief.md), [experiment plan](templates/experiment-plan.md), and [run report](templates/run-report.md). For a Kaggle competition, add the [competition brief](templates/competition-brief.md). The [inactive CPU pilot](examples/cpu-pilot.json) illustrates the proposed contract. A [DOTS handoff](examples/dots-handoff.md) shows the minimum assignment.
 

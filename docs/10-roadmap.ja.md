@@ -50,6 +50,8 @@ tests/
 
 全体は予定構成です。[17 予算preflight](17-budget-preflight.ja.md)の純粋算術補助関数（過去の10ケース）と[18 不変Blob補助](18-immutable-blob-helper.ja.md)（E01〜E12が1回オフライン成功）は実装済みです。[19 厳格なJSON blob読取](19-json-blob-reader.ja.md)は検証済みバイトを厳格デコードへ接続します（J01〜J08が1回オフライン成功）が、レコードは受理しません。[20 依頼preflight](20-handoff-request-preflight.ja.md)は依頼限定の固定構造・期限検査を追加（H01〜H08が1回オフライン成功）しますが、認可・ディスパッチは行いません。runner・受付・研究runtimeは未実装です。可能なら標準ライブラリから始め、必要性を確認して固定依存を追加。対応するスキーマ機能を明示的に検証し、例のスキーマをポリシー実装と扱いません。
 
+[21 ハンドオフpayload束縛](21-handoff-payload-binding.ja.md)の接続は実装済みで、新規P01〜P10の10シナリオが1回オフライン成功（0.074秒）、coordinatorのソースレビューは完了です。呼出側が所有する現在のローカルmetadata／アクセスを確認してから実際の上限付きBlobStore payload読取へ接続し、受付・dispatch・新しい権限は追加しません。
+
 ## 最初の試行
 
 1. [ブリーフ](../templates/research-brief.ja.md)で反証可能な問いを一つ定義。

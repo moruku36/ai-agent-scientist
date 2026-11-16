@@ -50,6 +50,8 @@ tests/
 
 The full tree remains planned. The [17 budget preflight](17-budget-preflight.md) pure arithmetic helper (ten historical offline cases) and [18 immutable blob helper](18-immutable-blob-helper.md) (E01–E12 passed once offline) are implemented. The [19 strict JSON blob reader](19-json-blob-reader.md) connects verified bytes to strict decoding (J01–J08 passed once offline); it accepts no records. The [20 request preflight](20-handoff-request-preflight.md) adds a fixed request-only structure/expiry check (H01–H08 passed once offline), not authorization or dispatch. No runner, admission service or research runtime is delivered. Start with the standard library where practical, adding pinned libraries only for a measured need. Validate supported schema keywords explicitly; the sample schemas do not implement policy.
 
+The [21 handoff payload binding](21-handoff-payload-binding.md) seam is implemented with ten new P01–P10 scenarios passed once offline (0.074s); coordinator source review is complete. It binds current caller-owned local metadata/access before the actual bounded BlobStore payload read, without admission, dispatch or new authority.
+
 ## First pilot in concrete terms
 
 1. Define one falsifiable question with the [brief](../templates/research-brief.md).
