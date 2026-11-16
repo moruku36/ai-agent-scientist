@@ -73,6 +73,11 @@ class BlobStore:
 
     # ------------------------------------------------------------------ public
 
+    @property
+    def max_blob_bytes(self) -> int:
+        """Configured read/write cap; exposed read-only for trusted callers."""
+        return self._cap
+
     def put(self, data: bytes) -> str:
         if type(data) is not bytes:
             raise InvalidInput("data must be exact bytes")

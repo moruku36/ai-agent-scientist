@@ -6,7 +6,7 @@
 
 DOTSが研究を統括し、Codexが実装・上限付き実験を担当します。会話の外に事実を残し、固定仕様・保護した検証・範囲を明示した知識再利用で、候補と証拠を結びます。目的は研究を前進させることであり、論文の体裁やAI査読点だけを成果にしません。
 
-**2026-11-16 JSTに改訂した詳細設計です。** 以下の4つのオフライン補助（算術preflight・厳密バイトのblob保存・厳格なJSON blob読取・依頼preflight）を除き、研究ランタイム実装、DOTS接続、実験、有料API／GPU利用、性能改善の実測は行っていません。設定例も無効です。
+**2026-11-16 JSTに改訂した詳細設計です。** 以下の5つのオフライン補助（算術preflight・厳密バイトのblob保存・厳格なJSON blob読取・依頼preflight・payload束縛）を除き、研究ランタイム実装、DOTS接続、実験、有料API／GPU利用、性能改善の実測は行っていません。設定例も無効です。
 
 ## 最初のオフライン実装 — 2026-11-17
 
@@ -23,6 +23,10 @@ DOTSが研究を統括し、Codexが実装・上限付き実験を担当しま�
 ## 4つ目のオフライン補助 — 2026-11-17
 
 [ハンドオフ依頼preflight](docs/20-handoff-request-preflight.ja.md)は、検証済み厳格JSON読取の後、依頼限定の固定構造と呼び出し側時計による有効期限を確認します。H01〜H08の8ケースがPython 3.15.2で1回オフライン成功。認証・認可・予約・ディスパッチは行いません。
+
+## 5つ目のオフライン補助 — 2026-11-17
+
+[ハンドオフpayload束縛](docs/21-handoff-payload-binding.ja.md)は、依頼preflight・現在の信頼するローカルmetadata／アクセス・上限付き検証済みpayload読取を合成します。実装済み、新規P01〜P10の10シナリオが1回オフライン成功（0.074秒）。coordinatorのソースレビュー完了。受付・dispatch権限は付与しません。
 
 ## Kaggleコンペ対応 — 2026-11-16
 
@@ -103,6 +107,7 @@ flowchart TB
 | [18 不変Blob補助](docs/18-immutable-blob-helper.ja.md) | 厳密バイトのローカルblob補助を実装。12ケースが1回成功、台帳ではない |
 | [19 厳格なJSON blob読取](docs/19-json-blob-reader.ja.md) | 検証済みblobを厳格にデコード。8ケースが1回オフライン成功、レコード受理ではない |
 | [20 ハンドオフ依頼preflight](docs/20-handoff-request-preflight.ja.md) | 依頼限定の構造・期限確認。8ケースが1回オフライン成功。受付ではない |
+| [21 ハンドオフpayload束縛](docs/21-handoff-payload-binding.ja.md) | 検証済みpayload読取前に現在の信頼するローカル束縛を確認。新規10シナリオが1回オフライン成功 |
 
 [研究ブリーフ](templates/research-brief.ja.md)、[実験計画](templates/experiment-plan.ja.md)、[実験レポート](templates/run-report.ja.md)を雛形として使います。Kaggleコンペでは[競技ブリーフ](templates/competition-brief.ja.md)を追加します。[無効のCPU設定例](examples/cpu-pilot.json)と[DOTSへの引継ぎ例](examples/dots-handoff.ja.md)も用意しました。
 
