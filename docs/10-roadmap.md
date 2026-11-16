@@ -48,7 +48,7 @@ tests/
   reproducibility/
 ```
 
-This tree is planned; no runtime files are included. Start with the standard library where practical, adding pinned libraries only for a measured need. Validate supported schema keywords explicitly; the sample schemas do not implement policy.
+The full tree remains planned. Only the [17 budget preflight](17-budget-preflight.md) pure arithmetic helper and ten offline fixtures are implemented; no runner, admission service or research runtime is delivered. Start with the standard library where practical, adding pinned libraries only for a measured need. Validate supported schema keywords explicitly; the sample schemas do not implement policy.
 
 ## First pilot in concrete terms
 

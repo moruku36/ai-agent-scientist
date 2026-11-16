@@ -6,7 +6,11 @@
 
 DOTSが研究を統括し、Codexが実装・上限付き実験を担当します。会話の外に事実を残し、固定仕様・保護した検証・範囲を明示した知識再利用で、候補と証拠を結びます。目的は研究を前進させることであり、論文の体裁やAI査読点だけを成果にしません。
 
-**2026-11-16 JSTに改訂した詳細設計です。** ランタイム実装、DOTS接続、実験、有料API／GPU利用、性能改善の実測は行っていません。設定例も無効です。
+**2026-11-16 JSTに改訂した詳細設計です。** 以下のオフライン算術補助関数を除き、研究ランタイム実装、DOTS接続、実験、有料API／GPU利用、性能改善の実測は行っていません。設定例も無効です。
+
+## 最初のオフライン実装 — 2026-11-17
+
+[純粋なワーカー予算preflight](docs/17-budget-preflight.ja.md)でP1／SCI-05の算術部分のみを実装し、正本の10ケースが1回のオフライン実行で成功しました。受付・runner・認可・実研究runtimeではなく、残りの設計と無効の例は維持します。
 
 ## Kaggleコンペ対応 — 2026-11-16
 
@@ -83,6 +87,7 @@ flowchart TB
 | [14 Sakana研究工程](docs/14-sakana-lifecycle.ja.md) | 着想・逐次探索・判定の分離・証拠付き報告 |
 | [15 Kaggleコンペ対応](docs/15-kaggle-competitions.ja.md) | 3コンペの競技プロファイル、提出境界、KGL-01〜10 |
 | [16 Kaggleの知識とOSS](docs/16-kaggle-knowledge-oss.ja.md) | 評価設計の知識、コンペ別の手法とOSS候補 |
+| [17 予算preflight](docs/17-budget-preflight.ja.md) | 純粋算術を実装。10ケースが1回成功、受付ではない |
 
 [研究ブリーフ](templates/research-brief.ja.md)、[実験計画](templates/experiment-plan.ja.md)、[実験レポート](templates/run-report.ja.md)を雛形として使います。Kaggleコンペでは[競技ブリーフ](templates/competition-brief.ja.md)を追加します。[無効のCPU設定例](examples/cpu-pilot.json)と[DOTSへの引継ぎ例](examples/dots-handoff.ja.md)も用意しました。
 
