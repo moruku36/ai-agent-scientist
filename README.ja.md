@@ -1,5 +1,13 @@
 # AI Agent Scientist
 
+> 増分28のcoordinator検査：最初の6メソッドは5成功・F04のfixtureエラー1件で、不変eventの削除が正しく拒否されました。file-onlyテスト修正でtrusted API外の旧形式event欠落を模し、唯一の対象再検査でF01–F06の6件すべて成功（0.050秒）。既存環境の設計checkerは1回成功（620リンク・36言語pair）、空白検査も成功。以下の未実行／保留はworker作成時点で後続検査ではありません。独立レビューは別途記録し、runtime受入ではありません。
+
+**復旧report増分28（2026-11-17）：作成済み・未実行（NOT EXECUTED）。** [上限付き決定的な非公開復旧report](docs/28-recovery-report.ja.md)は3番目の接続offline増分です。実triageの1ページを選択JSONの不変bytes・厳密バイトSHA-256・cursor metadataへ接続し、バイト超過時は全artifactを拒否します。新規の自己完結テストを正確に6つと日英文書を作成済みです。増分28の全検査は保留で、過去のcoordinator bannerは過去の増分だけが対象です。証明・復旧権限・自動公開exportはありません。
+
+> 増分27のcoordinator検査：新規T01–T06の6メソッドが1回offline成功（0.045秒）。既存環境の設計checkerは1回成功（594リンク・35言語pair）、空白検査も成功。以下の未実行／保留はworker作成時点の履歴で、このcoordinator結果ではありません。独立レビューは別途記録し、runtime受入ではありません。
+
+**復旧triage増分27（2026-11-17）：ソース・新規の自己完結テストを正確に6つ・日英文書を作成済み、未実行（NOT EXECUTED）。** [保守的な受信者ローカル復旧triage](docs/27-recovery-triage.ja.md)は2番目の接続offline増分です。実際の予約検査snapshotを上限付きreason viewへ接続し、完全な予約を保持します。受付・readiness・dispatch・settlement権限はありません。coordinator検査は保留中で、過去の検証bannerはこの増分を対象にしません。
+
 > Coordinator検証（2026-11-17）：新規I01–I06の6メソッドが1回offline成功（0.039秒）。既存環境の設計checkerは1回成功（564リンク・34言語pair）、空白検査も成功。固定sourceの独立全体レビューで記載の信頼前提内の実装欠陥はなし。以下の未実行／保留はworkerのfile-only作成時点で、後続coordinator検査ではありません。runtime受入ではありません。
 
 > Coordinator検証（2026-11-17、round3のみ）：新規U01〜U06の6シナリオが1回成功（1.183秒）、既存venvの設計checkerも1回成功（534リンク、33言語pair）。独立レビューは保留中です。以下の作成済み／未実行の文はworkerのfile-only作成時点の履歴で、現在のcoordinator検証状態ではありません。round2の元の生の検証出力は未入手で、round3からその検証を推測しません。
@@ -133,6 +141,8 @@ flowchart TB
 | [23 ローカル予算予約](docs/23-local-budget-reservation.ja.md) | 固定envelopeの接続worker-seconds予約。実装済み、10シナリオが1回オフライン成功 |
 | [25 ローカルusage観測](docs/25-local-usage-observations.ja.md) | 既存照合／outboxに接続する不変trusted観測。6メソッド作成済み・未実行、settlementなし |
 | [26 予約検査](docs/26-reservation-inspection.ja.md) | scope内の一貫した復旧snapshotと全量outstanding allocation。新規6メソッド作成済み・未実行 |
+| [27 復旧triage](docs/27-recovery-triage.ja.md) | 保守的な純粋分類と接続receiver検査。新規の自己完結メソッドを正確に6つ作成済み・未実行（NOT EXECUTED） |
+| [28 非公開復旧report](docs/28-recovery-report.ja.md) | 実triageの1ページから上限付き不変bytes／hash／cursorへ接続。新規6テスト作成済み・未実行（NOT EXECUTED） |
 
 [研究ブリーフ](templates/research-brief.ja.md)、[実験計画](templates/experiment-plan.ja.md)、[実験レポート](templates/run-report.ja.md)を雛形として使います。Kaggleコンペでは[競技ブリーフ](templates/competition-brief.ja.md)を追加します。[無効のCPU設定例](examples/cpu-pilot.json)と[DOTSへの引継ぎ例](examples/dots-handoff.ja.md)も用意しました。
 
@@ -149,3 +159,5 @@ flowchart TB
 [今回の設計](docs/13-verified-discovery.ja.md)は既存の評価境界を拡張し、DOTSや単一ワーカーを置き換えません。候補は仕様の依存定義を変更したり、自己申告で主張を採用したりできません。実証検査・形式証明・再現・科学的貢献を分け、確認済み部品とレビュー済み案に異なる再利用条件を設け、最終評価の答えを調整用知識へ混ぜません。
 
 検証契約と無効な合成例を追加し、既存の計画・受け渡しschema版は維持。[オフライン設計検査](scripts/README.ja.md)の成功は実行時受入ではありません。実装は上限付きCPU一周から始め、形式検証器は適した課題向けの後続選択肢です。
+
+[29 Local recovery console](docs/29-recovery-console.ja.md)

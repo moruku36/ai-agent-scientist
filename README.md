@@ -1,5 +1,13 @@
 # AI Agent Scientist
 
+> Increment28 coordinator checks: initial six-method run had five successes and one F04 fixture error: immutable-event deletion was correctly refused. A file-only test-fixture correction emulates a legacy missing event outside the trusted API; the sole targeted rerun passed all six F01–F06 methods (0.050s). Existing-environment design checker passed once (620 links, 36 language pairs); whitespace passed. Remaining NOT EXECUTED/pending text records worker authorship, not subsequent checks. Independent review is recorded separately; no runtime acceptance.
+
+**Recovery report increment 28 (2026-11-17): authored, NOT EXECUTED.** The [bounded deterministic private recovery report](docs/28-recovery-report.md) is the third connected offline increment: one actual triage page becomes immutable selected JSON bytes, exact-byte SHA-256 and cursor metadata, with whole-artifact byte-limit refusal. Exactly six NEW self-contained tests and paired docs are authored. All checks for increment 28 remain pending; previous coordinator banners cover earlier increments only. No proof, recovery authority or automatic public export.
+
+> Increment27 coordinator checks: six NEW T01–T06 offline methods passed once (0.045s); existing-environment design checker passed once (594 links, 35 language pairs); whitespace passed. Subsequent NOT EXECUTED/pending statements are worker-only authoring history, not these coordinator results. Independent review recorded separately; no runtime acceptance.
+
+**Recovery triage increment 27 (2026-11-17): source, exactly six NEW self-contained tests and paired docs authored; NOT EXECUTED.** [Conservative receiver-local recovery triage](docs/27-recovery-triage.md) is the second connected offline increment, composing actual reservation inspection snapshots into bounded reason-coded views while retaining every full reservation. It grants no admission, readiness, dispatch or settlement authority. Coordinator checks are pending; earlier validation banners do not cover this increment.
+
 > Coordinator validation (2026-11-17): six new I01–I06 offline contract methods passed once (0.039s); existing-environment design checker passed once (564 links, 34 language pairs); whitespace passed. Independent pinned full-source review found no implementation defect under documented trust assumptions. Later NOT EXECUTED/pending wording records worker-file-only authorship, not the subsequent coordinator checks. No runtime acceptance.
 
 > Coordinator validation, 2026-11-17 (round3 only): six NEW U01–U06 scenarios passed once (1.183s); existing-venv design checker passed once (534 links, 33 language pairs). Independent review pending. Later authored/NOT EXECUTED wording below is historical worker-file-only status, not current coordinator validation. Round2 original raw check receipts remain unavailable; do not infer their verification from round3.
@@ -134,6 +142,8 @@ The harness is the project/state/experiment/evaluation layer around existing age
 | [24 Local status outbox](docs/24-local-status-outbox.md) | Atomic reservation status events and scoped local ack CAS; implementation and six scenarios authored, not executed |
 | [25 Local usage observations](docs/25-local-usage-observations.md) | Immutable trusted observations with existing reconciliation/outbox; six methods authored, NOT EXECUTED; no settlement |
 | [26 Reservation inspection](docs/26-reservation-inspection.md) | Scoped consistent recovery snapshots and full outstanding allocation; six new methods authored, NOT EXECUTED |
+| [27 Recovery triage](docs/27-recovery-triage.md) | Conservative pure classification and connected receiver inspection; six NEW self-contained methods authored, NOT EXECUTED |
+| [28 Private recovery report](docs/28-recovery-report.md) | One real triage page to bounded immutable bytes/hash/cursors; six NEW tests authored, NOT EXECUTED |
 
 Start a project using the [research brief](templates/research-brief.md), [experiment plan](templates/experiment-plan.md), and [run report](templates/run-report.md). For a Kaggle competition, add the [competition brief](templates/competition-brief.md). The [inactive CPU pilot](examples/cpu-pilot.json) illustrates the proposed contract. A [DOTS handoff](examples/dots-handoff.md) shows the minimum assignment.
 
@@ -150,3 +160,5 @@ The three repositories remain independently usable. Optional integration follows
 The [new design](docs/13-verified-discovery.md) extends the existing evaluation boundary rather than replacing DOTS or creating a fixed agent team. Candidates cannot rewrite specification dependencies or promote their own claims. Empirical checks, formal proof, reproduction and scientific contribution remain separate. Checked components and reviewed ideas have different reuse rules; final answers stay outside tuning knowledge.
 
 The revision includes additive verification contracts and disabled synthetic fixtures. Existing protocol and handoff versions are unchanged. Run [offline design checks](scripts/README.md); passing them is not runtime acceptance. Implementation still begins with the bounded CPU slice, with an optional formal verifier only for suitable later tasks.
+
+[29 Local recovery console](docs/29-recovery-console.md)
