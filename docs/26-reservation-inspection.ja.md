@@ -1,5 +1,7 @@
 # 26 受信者scope内の予約検査と復旧snapshot
 
+> Coordinator検証（2026-11-17）：新規I01–I06の6メソッドが1回offline成功（0.039秒）。既存環境の設計checkerは1回成功（564リンク・34言語pair）、空白検査も成功。固定sourceの独立全体レビューで記載の信頼前提内の実装欠陥はなし。以下の未実行／保留はworkerのfile-only作成時点で、後続coordinator検査ではありません。runtime受入ではありません。
+
 [English](26-reservation-inspection.md) | [ホーム](../README.ja.md) | [実装計画](10-roadmap.ja.md) | [25 usage観測](25-local-usage-observations.ja.md)
 
 **状態（2026-11-17）：実装と新規の自己完結unittestメソッドを正確に6つ作成済み、未実行（NOT EXECUTED）。** 3つの上限付きoffline増分の最初として、保持済み情報の検査だけを追加します。ファイルの読取・編集のみで、テスト、checker、実装import、build、network、Git操作、model呼出、process、service、公開は行っていません。この増分の実行・再現・独立レビュー・runtime受入は保留中です。過去の補助機能の検証は本APIの検証ではありません。

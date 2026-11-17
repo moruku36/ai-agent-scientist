@@ -1,5 +1,7 @@
 # AI Agent Scientist
 
+> Coordinator validation (2026-11-17): six new I01–I06 offline contract methods passed once (0.039s); existing-environment design checker passed once (564 links, 34 language pairs); whitespace passed. Independent pinned full-source review found no implementation defect under documented trust assumptions. Later NOT EXECUTED/pending wording records worker-file-only authorship, not the subsequent coordinator checks. No runtime acceptance.
+
 > Coordinator validation, 2026-11-17 (round3 only): six NEW U01–U06 scenarios passed once (1.183s); existing-venv design checker passed once (534 links, 33 language pairs). Independent review pending. Later authored/NOT EXECUTED wording below is historical worker-file-only status, not current coordinator validation. Round2 original raw check receipts remain unavailable; do not infer their verification from round3.
 
 

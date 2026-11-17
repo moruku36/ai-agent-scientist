@@ -1,5 +1,7 @@
 # AI Agent Scientist
 
+> Coordinator検証（2026-11-17）：新規I01–I06の6メソッドが1回offline成功（0.039秒）。既存環境の設計checkerは1回成功（564リンク・34言語pair）、空白検査も成功。固定sourceの独立全体レビューで記載の信頼前提内の実装欠陥はなし。以下の未実行／保留はworkerのfile-only作成時点で、後続coordinator検査ではありません。runtime受入ではありません。
+
 > Coordinator検証（2026-11-17、round3のみ）：新規U01〜U06の6シナリオが1回成功（1.183秒）、既存venvの設計checkerも1回成功（534リンク、33言語pair）。独立レビューは保留中です。以下の作成済み／未実行の文はworkerのfile-only作成時点の履歴で、現在のcoordinator検証状態ではありません。round2の元の生の検証出力は未入手で、round3からその検証を推測しません。
 
 
