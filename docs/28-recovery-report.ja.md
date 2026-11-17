@@ -1,5 +1,7 @@
 # 28 上限付き決定的な非公開復旧レポート
 
+> 増分28のcoordinator検査：最初の6メソッドは5成功・F04のfixtureエラー1件で、不変eventの削除が正しく拒否されました。file-onlyテスト修正でtrusted API外の旧形式event欠落を模し、唯一の対象再検査でF01–F06の6件すべて成功（0.050秒）。既存環境の設計checkerは1回成功（620リンク・36言語pair）、空白検査も成功。以下の未実行／保留はworker作成時点で後続検査ではありません。独立レビューは別途記録し、runtime受入ではありません。
+
 [English](28-recovery-report.md) | [ホーム](../README.ja.md) | [実装計画](10-roadmap.ja.md) | [27 復旧triage](27-recovery-triage.ja.md)
 
 **増分28の状態（2026-11-17）：ソースと新規の自己完結unittestメソッドを正確に6つ作成済み、未実行（NOT EXECUTED）。** 3番目の接続された上限付きoffline増分です。既存coordinator bannerは明記された過去の増分だけが対象です。今回はファイルの読取／編集のみで、テスト・checker・build・実装import・network・Git操作・model subcall・process・公開は実行していません。増分28の実行・再現・独立レビュー・runtime受入は保留中です。

@@ -1,5 +1,7 @@
 # 28 Bounded Deterministic Private Recovery Report
 
+> Increment28 coordinator checks: initial six-method run had five successes and one F04 fixture error: immutable-event deletion was correctly refused. A file-only test-fixture correction emulates a legacy missing event outside the trusted API; the sole targeted rerun passed all six F01–F06 methods (0.050s). Existing-environment design checker passed once (620 links, 36 language pairs); whitespace passed. Remaining NOT EXECUTED/pending text records worker authorship, not subsequent checks. Independent review is recorded separately; no runtime acceptance.
+
 [日本語](28-recovery-report.ja.md) | [Home](../README.md) | [Roadmap](10-roadmap.md) | [27 Recovery triage](27-recovery-triage.md)
 
 **Increment 28 status (2026-11-17): source and exactly six NEW self-contained unittest methods authored; NOT EXECUTED.** This is the third connected bounded offline increment. Previous coordinator banners cover their named earlier increments only. Files were read/edited only; no tests, checkers, builds, implementation imports, network, Git operations, model subcalls, processes or publication were performed. Execution, reproduction, independent review and runtime acceptance remain pending for increment 28.

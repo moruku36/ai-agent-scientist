@@ -1,5 +1,7 @@
 # AI Agent Scientist
 
+> Increment28 coordinator checks: initial six-method run had five successes and one F04 fixture error: immutable-event deletion was correctly refused. A file-only test-fixture correction emulates a legacy missing event outside the trusted API; the sole targeted rerun passed all six F01–F06 methods (0.050s). Existing-environment design checker passed once (620 links, 36 language pairs); whitespace passed. Remaining NOT EXECUTED/pending text records worker authorship, not subsequent checks. Independent review is recorded separately; no runtime acceptance.
+
 **Recovery report increment 28 (2026-11-17): authored, NOT EXECUTED.** The [bounded deterministic private recovery report](docs/28-recovery-report.md) is the third connected offline increment: one actual triage page becomes immutable selected JSON bytes, exact-byte SHA-256 and cursor metadata, with whole-artifact byte-limit refusal. Exactly six NEW self-contained tests and paired docs are authored. All checks for increment 28 remain pending; previous coordinator banners cover earlier increments only. No proof, recovery authority or automatic public export.
 
 > Increment27 coordinator checks: six NEW T01–T06 offline methods passed once (0.045s); existing-environment design checker passed once (594 links, 35 language pairs); whitespace passed. Subsequent NOT EXECUTED/pending statements are worker-only authoring history, not these coordinator results. Independent review recorded separately; no runtime acceptance.
