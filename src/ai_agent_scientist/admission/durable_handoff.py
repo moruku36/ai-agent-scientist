@@ -6,6 +6,7 @@ bindings/time/stores and a private local DB path, all outside candidate control.
 See docs/22-durable-handoff-receipt.md for trust and resource assumptions and
 docs/23-local-budget-reservation.md for the fixed worker-seconds extension.
 docs/24-local-status-outbox.md describes receiver-local status bookkeeping.
+docs/25-local-usage-observations.md adds immutable observations, not settlement.
 """
 from __future__ import annotations
 
@@ -33,6 +34,7 @@ __all__ = [
     'WorkerSecondsEnvelope', 'WorkerSecondsAuthority', 'DurableReservation',
     'ReservedHandoff', 'ReservationRefused',
     'LocalStatusEvent', 'LocalStatusEntry',
+    'LocalUsageObservation',
 ]
 
 _MAX_INT = (1 << 63) - 1
@@ -44,6 +46,9 @@ _EVENT_COLUMNS = ('principal, project_id, recipient, request_id, sender, '
                   'budget_reservation_ref, request_sha256, receipt_revision, '
                   'status, worker_seconds, created_at')
 _MAX_STATUS_PAGE = 100
+_USAGE_COLUMNS = ('observation_id, principal, project_id, recipient, request_id, sender, '
+                  'budget_reservation_ref, request_sha256, expected_revision, '
+                  'worker_seconds, execution_stopped, cleanup_known, over_cap, observed_at')
 
 
 class ReceiptConflict(ValueError):
@@ -204,6 +209,31 @@ class LocalStatusEntry:
     acknowledged_at: str | None
 
 
+@dataclass(frozen=True, slots=True)
+class LocalUsageObservation:
+    """Immutable trusted caller observation; neither metering nor settlement.
+
+    sequence is local insertion order. Unknown usage/over_cap remain None.
+    expected_revision and observed_at are original content, including on replay.
+    """
+
+    sequence: int
+    observation_id: str
+    principal: str
+    project_id: str
+    recipient: str
+    request_id: str
+    sender: str
+    budget_reservation_ref: str
+    request_sha256: str
+    expected_revision: int
+    worker_seconds: int | None
+    execution_stopped: bool
+    cleanup_known: bool
+    over_cap: bool | None
+    observed_at: str
+
+
 def _text(value: object) -> str:
     # Guard before comparisons, encoding or SQL binding; bound local metadata.
     if type(value) is not str or not value:
@@ -324,6 +354,27 @@ class DurableHandoffReceipts:
                     operation.lower() + ' BEFORE ' + operation +
                     " ON reservation_status_events BEGIN SELECT RAISE(ABORT, "
                     "'local status events are immutable'); END")
+            conn.execute('''CREATE TABLE IF NOT EXISTS local_usage_observations (
+                sequence INTEGER PRIMARY KEY AUTOINCREMENT,
+                observation_id TEXT NOT NULL UNIQUE,
+                principal TEXT NOT NULL, project_id TEXT NOT NULL,
+                recipient TEXT NOT NULL, request_id TEXT NOT NULL, sender TEXT NOT NULL,
+                budget_reservation_ref TEXT NOT NULL, request_sha256 TEXT NOT NULL,
+                expected_revision INTEGER NOT NULL CHECK(expected_revision IN (1,2)),
+                worker_seconds INTEGER CHECK(worker_seconds>=0),
+                execution_stopped INTEGER NOT NULL CHECK(execution_stopped IN (0,1)),
+                cleanup_known INTEGER NOT NULL CHECK(cleanup_known IN (0,1)),
+                over_cap INTEGER CHECK(over_cap IN (0,1)), observed_at TEXT NOT NULL,
+                CHECK ((worker_seconds IS NULL AND over_cap IS NULL) OR
+                       (worker_seconds IS NOT NULL AND over_cap IS NOT NULL))
+            )''')
+            conn.execute('''CREATE INDEX IF NOT EXISTS local_usage_scope_order
+                ON local_usage_observations(principal, project_id, recipient, sequence)''')
+            for operation in ('UPDATE', 'DELETE'):
+                conn.execute('CREATE TRIGGER IF NOT EXISTS local_usage_no_' +
+                    operation.lower() + ' BEFORE ' + operation +
+                    " ON local_usage_observations BEGIN SELECT RAISE(ABORT, "
+                    "'local usage observations are immutable'); END")
 
     def _check_directory(self) -> None:
         # Best-effort accidental misconfiguration checks, not hostile DB defense.
@@ -633,6 +684,96 @@ class DurableHandoffReceipts:
         with self._transaction(write=False) as conn:
             return self._read(conn, request_id)
 
+    def _usage_observation(self, row) -> LocalUsageObservation:
+        values = list(row)
+        # SQLite stores booleans as integers; expose the exact local API types.
+        values[11] = bool(values[11])
+        values[12] = bool(values[12])
+        values[13] = None if values[13] is None else bool(values[13])
+        observation = LocalUsageObservation(*values)
+        if observation.sender != self._scope.sender:
+            raise ReceiptScopeError('retained usage observation mapping differs')
+        return observation
+
+    def record_usage_observation(self, observation_id: str, *, request_id: str,
+                                 budget_reservation_ref: str, request_sha256: str,
+                                 expected_revision: int, worker_seconds: int | None,
+                                 execution_stopped: bool, cleanup_known: bool,
+                                 observed_at: datetime) -> LocalUsageObservation:
+        """Retain independently observed facts and require reconciliation atomically.
+
+        Caller and scope are trusted independently, NOT authenticated here. No
+        sender/wire observation intake. All reservations stay fully outstanding,
+        even for known zero usage with stopped execution and known cleanup.
+        Exact replay includes the ORIGINAL timestamp/revision, checked before
+        current-revision CAS. A new observation needs the exact current revision.
+        """
+        for value in (observation_id, request_id, budget_reservation_ref):
+            _text(value)
+        if type(request_sha256) is not str or re.fullmatch('[a-f0-9]{64}', request_sha256) is None:
+            raise ValueError('invalid receipt request digest')
+        revision = _revision(expected_revision)
+        if worker_seconds is not None and (type(worker_seconds) is not int or
+                                           not 0 <= worker_seconds <= _MAX_INT):
+            raise ValueError('usage must be an exact bounded nonnegative integer or None')
+        if type(execution_stopped) is not bool or type(cleanup_known) is not bool:
+            raise TypeError('independent execution and cleanup observations must be exact bools')
+        stamp = _clock(observed_at)
+        scope = self._scope
+        with self._transaction(write=True) as conn:
+            row = conn.execute('SELECT ' + _RES_COLUMNS +
+                ' FROM worker_seconds_reservations WHERE budget_reservation_ref=?',
+                (budget_reservation_ref,)).fetchone()
+            if row is None:
+                raise ReceiptConflict('usage observation requires an existing reservation')
+            reservation = DurableReservation(*row)
+            if (reservation.principal, reservation.project_id, reservation.recipient,
+                    reservation.sender) != (scope.principal, scope.project_id,
+                                             scope.recipient, scope.sender):
+                raise ReceiptScopeError('usage observation reservation scope differs')
+            if (reservation.request_id, reservation.request_sha256) != (request_id, request_sha256):
+                raise ReceiptConflict('usage observation reservation binding differs')
+            current = self._read(conn, request_id)
+            if current is None or current.request_sha256 != request_sha256:
+                raise ReceiptConflict('usage observation has no exact retained receipt')
+            over_cap = None if worker_seconds is None else worker_seconds > reservation.worker_seconds
+            values = (observation_id, scope.principal, scope.project_id, scope.recipient,
+                      request_id, scope.sender, budget_reservation_ref, request_sha256,
+                      revision, worker_seconds, execution_stopped, cleanup_known, over_cap, stamp)
+            retained = conn.execute('SELECT sequence, ' + _USAGE_COLUMNS +
+                ' FROM local_usage_observations WHERE observation_id=?', (observation_id,)).fetchone()
+            if retained is not None:
+                if retained[1:] != values:
+                    raise ReceiptConflict('observation identity already binds different content')
+                return self._usage_observation(retained)
+            if current.revision != revision:
+                raise ReceiptRevisionError('stale receipt revision')
+            if stamp < current.updated_at:
+                raise ValueError('usage observation clock precedes receipt revision')
+            if current.state == 'recorded':
+                self._require_reconciliation(conn, request_id, revision, stamp)
+            elif current.state != 'reconciliation_required':
+                raise InvalidReceiptTransition('unsupported usage observation receipt state')
+            # Insert AFTER the existing transition/event, in the SAME transaction:
+            # late observation failure must roll back that transition and event too.
+            inserted = conn.execute('INSERT INTO local_usage_observations (' + _USAGE_COLUMNS +
+                ') VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)', values)
+            return self._usage_observation((inserted.lastrowid, *values))
+
+    def inspect_usage_observations(self, *, after_sequence: int = 0,
+                                   limit: int = 100) -> tuple[LocalUsageObservation, ...]:
+        """Bounded scoped ascending insertion order; no consume, ack or authority."""
+        _revision(after_sequence)
+        if type(limit) is not int or not 1 <= limit <= _MAX_STATUS_PAGE:
+            raise ValueError('local usage limit must be an exact integer in 1..100')
+        scope = self._scope
+        with self._transaction(write=False) as conn:
+            rows = conn.execute('SELECT sequence, ' + _USAGE_COLUMNS +
+                ' FROM local_usage_observations WHERE principal=? AND project_id=? '
+                'AND recipient=? AND sequence>? ORDER BY sequence ASC LIMIT ?',
+                (scope.principal, scope.project_id, scope.recipient, after_sequence, limit)).fetchall()
+            return tuple(self._usage_observation(row) for row in rows)
+
     def require_reconciliation(self, request_id: str, *, expected_revision: int,
                                now: datetime) -> DurableReceipt:
         """Receiver-local CAS: recorded -> reconciliation_required, once only.
@@ -646,25 +787,29 @@ class DurableHandoffReceipts:
         if revision == _MAX_INT:
             raise ReceiptRevisionError('receipt revision would overflow')
         with self._transaction(write=True) as conn:
-            current = self._read(conn, request_id)
-            if current is None or current.revision != revision:
-                raise ReceiptRevisionError('stale receipt revision')
-            if current.state != 'recorded':
-                raise InvalidReceiptTransition('receipt already requires reconciliation')
-            if stamp < current.updated_at:
-                raise ValueError('receipt clock moved backward')
-            changed = conn.execute(
-                'UPDATE durable_handoff_receipts SET revision=revision+1, '
-                "state='reconciliation_required', updated_at=? WHERE " + _KEY +
-                " AND revision=? AND state='recorded'",
-                (stamp, *self._key(request_id), revision))
-            if changed.rowcount != 1:
-                raise ReceiptRevisionError('stale receipt revision')
-            receipt = self._read(conn, request_id)
-            retained = conn.execute('SELECT ' + _RES_COLUMNS +
-                ' FROM worker_seconds_reservations WHERE ' + _KEY,
-                self._key(request_id)).fetchone()
-            # A receipt-only reconciliation must never invent a reservation/event.
-            if retained is not None:
-                self._append_status_event(conn, receipt, DurableReservation(*retained), stamp)
-            return receipt
+            return self._require_reconciliation(conn, request_id, revision, stamp)
+
+    def _require_reconciliation(self, conn, request_id, revision, stamp):
+        # Shared existing CAS/outbox path; callers own the single transaction.
+        current = self._read(conn, request_id)
+        if current is None or current.revision != revision:
+            raise ReceiptRevisionError('stale receipt revision')
+        if current.state != 'recorded':
+            raise InvalidReceiptTransition('receipt already requires reconciliation')
+        if stamp < current.updated_at:
+            raise ValueError('receipt clock moved backward')
+        changed = conn.execute(
+            'UPDATE durable_handoff_receipts SET revision=revision+1, '
+            "state='reconciliation_required', updated_at=? WHERE " + _KEY +
+            " AND revision=? AND state='recorded'",
+            (stamp, *self._key(request_id), revision))
+        if changed.rowcount != 1:
+            raise ReceiptRevisionError('stale receipt revision')
+        receipt = self._read(conn, request_id)
+        retained = conn.execute('SELECT ' + _RES_COLUMNS +
+            ' FROM worker_seconds_reservations WHERE ' + _KEY,
+            self._key(request_id)).fetchone()
+        # A receipt-only reconciliation must never invent a reservation/event.
+        if retained is not None:
+            self._append_status_event(conn, receipt, DurableReservation(*retained), stamp)
+        return receipt

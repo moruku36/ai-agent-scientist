@@ -1,9 +1,13 @@
 # 24 Transactional Receiver-Local Reservation Status Outbox
 
+> Coordinator validation, 2026-11-17 (round3 only): six NEW U01–U06 scenarios passed once (1.183s); existing-venv design checker passed once (534 links, 33 language pairs). Independent review pending. Later authored/NOT EXECUTED wording below is historical worker-file-only status, not current coordinator validation. Round2 original raw check receipts remain unavailable; do not infer their verification from round3.
+
 
 **Outbox coordinator verification (2026-11-17): O01–O06 passed once offline, 0.046s; required design checker passed once (504 links, 32 language pairs). Original selected worker timed out at 600s; no task_complete/final, completion UNKNOWN, no replay. Authored/not-executed wording below records worker-only activity, not current coordinator check status. No live acceptance.**
 
 [日本語](24-local-status-outbox.ja.md) | [Home](../README.md)
+
+**Later increment:** [25 immutable local usage observations](25-local-usage-observations.md) (round3 on independently source-reviewed round2 `bf4743970dc48e0e89e2717a2e07c2591c8db129`) retains trusted observations with the existing reconciliation/outbox transaction. Implementation and exactly six methods authored, **NOT EXECUTED**; coordinator checks pending. It adds no completion event, settlement or reservation release; all reservations and the settled floor are unchanged. This does not alter historical outbox results or UNKNOWNs below.
 
 **Status (2026-11-17): implementation and exactly six new offline unittest scenarios authored; NOT EXECUTED.** Based on reviewed commit `d3245b42dafb0438ebd5a0065e930a3f759004f5`. File reads/edits only: no tests, checkers, implementation imports, builds, network, installs, services, models, research or dispatch. No runtime acceptance, reproduction, independent review, remote delivery or measured durability is claimed. Earlier helper results do not validate this increment.
 
