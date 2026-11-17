@@ -165,3 +165,7 @@ flowchart TB
 [30 Local recovery queue](docs/30-recovery-queue.ja.md)
 
 [31 Local recovery operator workflow](docs/31-recovery-operator.ja.md)
+
+## 既存run証跡のインポート
+
+すでに存在するrunの証跡（candidate、config、log、evidence、environment）を、明示的なorigin識別、3つの分離した結果カテゴリ、任意の実測時間、文書化したWindowsの境界とともに取り込む、追加のオフラインヘルパーです。合成データによるオフライン契約検査と文書の実行例は通過済みです。実モデルと Windows/WSL の受入れは未実施です。[docs/38-existing-run-import.ja.md](docs/38-existing-run-import.ja.md)（[English](docs/38-existing-run-import.md)）を参照してください。過去のレコードと文章は変更していません。

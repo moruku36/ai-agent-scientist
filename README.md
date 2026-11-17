@@ -166,3 +166,7 @@ The revision includes additive verification contracts and disabled synthetic fix
 [30 Local recovery queue](docs/30-recovery-queue.md)
 
 [31 Local recovery operator workflow](docs/31-recovery-operator.md)
+
+## Existing-run evidence import
+
+An additive, offline helper imports already-existing run evidence (candidate, config, log, evidence, environment) with explicit origin identities, three separate result categories, optional measured timing and a documented Windows boundary. Synthetic offline contract checks and the documented example have passed; real-model and Windows/WSL acceptance remain unperformed; see [docs/38-existing-run-import.md](docs/38-existing-run-import.md) ([日本語](docs/38-existing-run-import.ja.md)). Earlier records and text are unchanged.
