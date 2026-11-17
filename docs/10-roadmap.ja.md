@@ -1,5 +1,9 @@
 # 10 実装計画と設計判断
 
+> 増分28のcoordinator検査：最初の6メソッドは5成功・F04のfixtureエラー1件で、不変eventの削除が正しく拒否されました。file-onlyテスト修正でtrusted API外の旧形式event欠落を模し、唯一の対象再検査でF01–F06の6件すべて成功（0.050秒）。既存環境の設計checkerは1回成功（620リンク・36言語pair）、空白検査も成功。以下の未実行／保留はworker作成時点で後続検査ではありません。独立レビューは別途記録し、runtime受入ではありません。
+
+**増分28（2026-11-17）：作成済み・未実行（NOT EXECUTED）。** [非公開復旧report](28-recovery-report.ja.md)が3番目の接続された上限付きoffline増分です。実triageの1ページ・明示的metadata allowlist・不変の厳密JSON bytes／SHA-256／cursor・全artifactの厳密バイト上限を追加します。新規の自己完結テストを正確に6つと日英文書を作成済みで、増分28の実行・設計検査・再現・独立レビューは保留です。過去のbannerは明記された過去の増分だけが対象です。正本schema変更・別台帳・権限・constructor／CLI・書込・自動公開exportはありません。
+
 > 増分27のcoordinator検査：新規T01–T06の6メソッドが1回offline成功（0.045秒）。既存環境の設計checkerは1回成功（594リンク・35言語pair）、空白検査も成功。以下の未実行／保留はworker作成時点の履歴で、このcoordinator結果ではありません。独立レビューは別途記録し、runtime受入ではありません。
 
 **増分27：作成済み・未実行（NOT EXECUTED、2026-11-17）。** [保守的な復旧triage](27-recovery-triage.ja.md)は3つの接続された上限付きoffline増分の2番目です。純粋分類でsnapshotの厳密型／束縛を検査し、接続検査は実receiver snapshotを使います。上限付きfrozen reportは全量outstanding予約と明示的な証拠不足／ローカルack reasonを保持し、global合計や受付／readiness／dispatch／settlement権限を持ちません。新規の自己完結unittestメソッドを正確に6つと日英文書を作成済みで、coordinator検査は保留中です。過去の検証bannerは過去の増分だけが対象です。
