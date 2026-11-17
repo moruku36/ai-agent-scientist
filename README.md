@@ -1,5 +1,7 @@
 # AI Agent Scientist
 
+**Recovery report increment 28 (2026-11-17): authored, NOT EXECUTED.** The [bounded deterministic private recovery report](docs/28-recovery-report.md) is the third connected offline increment: one actual triage page becomes immutable selected JSON bytes, exact-byte SHA-256 and cursor metadata, with whole-artifact byte-limit refusal. Exactly six NEW self-contained tests and paired docs are authored. All checks for increment 28 remain pending; previous coordinator banners cover earlier increments only. No proof, recovery authority or automatic public export.
+
 > Increment27 coordinator checks: six NEW T01–T06 offline methods passed once (0.045s); existing-environment design checker passed once (594 links, 35 language pairs); whitespace passed. Subsequent NOT EXECUTED/pending statements are worker-only authoring history, not these coordinator results. Independent review recorded separately; no runtime acceptance.
 
 **Recovery triage increment 27 (2026-11-17): source, exactly six NEW self-contained tests and paired docs authored; NOT EXECUTED.** [Conservative receiver-local recovery triage](docs/27-recovery-triage.md) is the second connected offline increment, composing actual reservation inspection snapshots into bounded reason-coded views while retaining every full reservation. It grants no admission, readiness, dispatch or settlement authority. Coordinator checks are pending; earlier validation banners do not cover this increment.
@@ -139,6 +141,7 @@ The harness is the project/state/experiment/evaluation layer around existing age
 | [25 Local usage observations](docs/25-local-usage-observations.md) | Immutable trusted observations with existing reconciliation/outbox; six methods authored, NOT EXECUTED; no settlement |
 | [26 Reservation inspection](docs/26-reservation-inspection.md) | Scoped consistent recovery snapshots and full outstanding allocation; six new methods authored, NOT EXECUTED |
 | [27 Recovery triage](docs/27-recovery-triage.md) | Conservative pure classification and connected receiver inspection; six NEW self-contained methods authored, NOT EXECUTED |
+| [28 Private recovery report](docs/28-recovery-report.md) | One real triage page to bounded immutable bytes/hash/cursors; six NEW tests authored, NOT EXECUTED |
 
 Start a project using the [research brief](templates/research-brief.md), [experiment plan](templates/experiment-plan.md), and [run report](templates/run-report.md). For a Kaggle competition, add the [competition brief](templates/competition-brief.md). The [inactive CPU pilot](examples/cpu-pilot.json) illustrates the proposed contract. A [DOTS handoff](examples/dots-handoff.md) shows the minimum assignment.
 

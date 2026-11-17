@@ -1,5 +1,7 @@
 # AI Agent Scientist
 
+**復旧report増分28（2026-11-17）：作成済み・未実行（NOT EXECUTED）。** [上限付き決定的な非公開復旧report](docs/28-recovery-report.ja.md)は3番目の接続offline増分です。実triageの1ページを選択JSONの不変bytes・厳密バイトSHA-256・cursor metadataへ接続し、バイト超過時は全artifactを拒否します。新規の自己完結テストを正確に6つと日英文書を作成済みです。増分28の全検査は保留で、過去のcoordinator bannerは過去の増分だけが対象です。証明・復旧権限・自動公開exportはありません。
+
 > 増分27のcoordinator検査：新規T01–T06の6メソッドが1回offline成功（0.045秒）。既存環境の設計checkerは1回成功（594リンク・35言語pair）、空白検査も成功。以下の未実行／保留はworker作成時点の履歴で、このcoordinator結果ではありません。独立レビューは別途記録し、runtime受入ではありません。
 
 **復旧triage増分27（2026-11-17）：ソース・新規の自己完結テストを正確に6つ・日英文書を作成済み、未実行（NOT EXECUTED）。** [保守的な受信者ローカル復旧triage](docs/27-recovery-triage.ja.md)は2番目の接続offline増分です。実際の予約検査snapshotを上限付きreason viewへ接続し、完全な予約を保持します。受付・readiness・dispatch・settlement権限はありません。coordinator検査は保留中で、過去の検証bannerはこの増分を対象にしません。
@@ -138,6 +140,7 @@ flowchart TB
 | [25 ローカルusage観測](docs/25-local-usage-observations.ja.md) | 既存照合／outboxに接続する不変trusted観測。6メソッド作成済み・未実行、settlementなし |
 | [26 予約検査](docs/26-reservation-inspection.ja.md) | scope内の一貫した復旧snapshotと全量outstanding allocation。新規6メソッド作成済み・未実行 |
 | [27 復旧triage](docs/27-recovery-triage.ja.md) | 保守的な純粋分類と接続receiver検査。新規の自己完結メソッドを正確に6つ作成済み・未実行（NOT EXECUTED） |
+| [28 非公開復旧report](docs/28-recovery-report.ja.md) | 実triageの1ページから上限付き不変bytes／hash／cursorへ接続。新規6テスト作成済み・未実行（NOT EXECUTED） |
 
 [研究ブリーフ](templates/research-brief.ja.md)、[実験計画](templates/experiment-plan.ja.md)、[実験レポート](templates/run-report.ja.md)を雛形として使います。Kaggleコンペでは[競技ブリーフ](templates/competition-brief.ja.md)を追加します。[無効のCPU設定例](examples/cpu-pilot.json)と[DOTSへの引継ぎ例](examples/dots-handoff.ja.md)も用意しました。
 
