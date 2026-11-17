@@ -1,6 +1,10 @@
 # AI Agent Scientist
 
+> 増分27のcoordinator検査：新規T01–T06の6メソッドが1回offline成功（0.045秒）。既存環境の設計checkerは1回成功（594リンク・35言語pair）、空白検査も成功。以下の未実行／保留はworker作成時点の履歴で、このcoordinator結果ではありません。独立レビューは別途記録し、runtime受入ではありません。
+
 **復旧triage増分27（2026-11-17）：ソース・新規の自己完結テストを正確に6つ・日英文書を作成済み、未実行（NOT EXECUTED）。** [保守的な受信者ローカル復旧triage](docs/27-recovery-triage.ja.md)は2番目の接続offline増分です。実際の予約検査snapshotを上限付きreason viewへ接続し、完全な予約を保持します。受付・readiness・dispatch・settlement権限はありません。coordinator検査は保留中で、過去の検証bannerはこの増分を対象にしません。
+
+> Coordinator検証（2026-11-17）：新規I01–I06の6メソッドが1回offline成功（0.039秒）。既存環境の設計checkerは1回成功（564リンク・34言語pair）、空白検査も成功。固定sourceの独立全体レビューで記載の信頼前提内の実装欠陥はなし。以下の未実行／保留はworkerのfile-only作成時点で、後続coordinator検査ではありません。runtime受入ではありません。
 
 > Coordinator検証（2026-11-17、round3のみ）：新規U01〜U06の6シナリオが1回成功（1.183秒）、既存venvの設計checkerも1回成功（534リンク、33言語pair）。独立レビューは保留中です。以下の作成済み／未実行の文はworkerのfile-only作成時点の履歴で、現在のcoordinator検証状態ではありません。round2の元の生の検証出力は未入手で、round3からその検証を推測しません。
 

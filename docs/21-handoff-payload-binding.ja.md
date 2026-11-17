@@ -72,7 +72,7 @@ load_bound_handoff_request(
 
 ```sh
 env PYTHONPATH=src PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests/contracts -p test_handoff_binding.py -v
-/Users/moruku36/.openclaw/workspace-kurotchi-work/.dev-tools/scientist-validation-20261117/bin/python -B scripts/check_design.py
+python -B scripts/check_design.py
 ```
 
 過去の依頼／JSON／blob／予算テストは再実行しません。実際の結果は別途記録します。作成済みケースやオフライン設計検査だけではSCI runtime受入にはなりません。

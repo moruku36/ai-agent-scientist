@@ -72,7 +72,7 @@ After source review, the coordinator ran the targeted test command below exactly
 
 ```sh
 env PYTHONPATH=src PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests/contracts -p test_handoff_binding.py -v
-/Users/moruku36/.openclaw/workspace-kurotchi-work/.dev-tools/scientist-validation-20261117/bin/python -B scripts/check_design.py
+python -B scripts/check_design.py
 ```
 
 Do not replay the historical request/JSON/blob/budget tests. Record actual outcomes separately; authored cases and offline design checks establish no SCI runtime acceptance.

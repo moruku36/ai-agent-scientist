@@ -1,5 +1,7 @@
 # 27 Conservative Receiver-Local Recovery Triage
 
+> Increment27 coordinator checks: six NEW T01–T06 offline methods passed once (0.045s); existing-environment design checker passed once (594 links, 35 language pairs); whitespace passed. Subsequent NOT EXECUTED/pending statements are worker-only authoring history, not these coordinator results. Independent review recorded separately; no runtime acceptance.
+
 [日本語](27-recovery-triage.ja.md) | [Home](../README.md) | [Roadmap](10-roadmap.md) | [26 Reservation inspection](26-reservation-inspection.md)
 
 **Status (2026-11-17): source, exactly six NEW dedicated self-contained unittest methods and documentation authored; NOT EXECUTED.** This is the second of three connected bounded offline increments. Only checkout files were read/edited. Tests, checkers, implementation imports, builds, network, Git operations, model calls, publication and process execution were not performed. Coordinator checks, execution, reproduction, independent review and runtime acceptance remain pending. Earlier validation banners concern earlier increments only.

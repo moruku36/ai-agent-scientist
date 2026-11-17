@@ -1,5 +1,7 @@
 # 27 保守的な受信者ローカル復旧triage
 
+> 増分27のcoordinator検査：新規T01–T06の6メソッドが1回offline成功（0.045秒）。既存環境の設計checkerは1回成功（594リンク・35言語pair）、空白検査も成功。以下の未実行／保留はworker作成時点の履歴で、このcoordinator結果ではありません。独立レビューは別途記録し、runtime受入ではありません。
+
 [English](27-recovery-triage.md) | [ホーム](../README.ja.md) | [実装計画](10-roadmap.ja.md) | [26 予約検査](26-reservation-inspection.ja.md)
 
 **状態（2026-11-17）：ソース・新規の専用自己完結unittestメソッドを正確に6つ・文書を作成済み。未実行（NOT EXECUTED）。** 3つの接続された上限付きoffline増分の2番目です。checkoutのファイル読取／編集のみ行いました。テスト・checker・実装import・build・network・Git操作・model呼出・公開・process実行は行っていません。coordinator検査・実行・再現・独立レビュー・runtime受入は保留中です。過去の検証bannerは過去の増分だけが対象です。
