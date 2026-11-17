@@ -2,6 +2,8 @@
 
 [English](22-durable-handoff-receipt.md) | [ホーム](../README.ja.md)
 
+**予約拡張：** [23](23-local-budget-reservation.ja.md)で同じmoduleに接続した`reserve`を追加します。実装済み、新規10シナリオは1回オフライン成功（0.082秒）し、coordinatorの差分レビュー完了です。以下の受領のみの制約と過去D01〜D10結果は元の`record`経路の記録で、拡張の検証結果ではありません。`record`は予約を作りません。constructorは空の内部予約／会計tableも初期化しますが、その行を書くのは`reserve`のみです。dispatchや完全な受付権限は追加しません。
+
 **状態（2026-11-17）：実装済み、新規D01〜D10の10シナリオが1回オフライン成功（1.172秒）。** 実装者はテスト・設計checker・実行目的の実装import・研究・dispatchを実行していません。coordinatorのソースレビューと対象実行1回は完了し、必須設計検査の結果は別途記録します。再現・独立レビュー・runtime受入・電源断の結果は主張しません。Python 3.12互換はソース上の目標のみです。
 
 [P1](10-roadmap.ja.md)の狭い接続点として、実際の[21 束縛loader](21-handoff-payload-binding.ja.md)、[20 依頼preflight](20-handoff-request-preflight.ja.md)、[19 厳格reader](19-json-blob-reader.ja.md)、[18 BlobStore](18-immutable-blob-helper.ja.md)を標準ライブラリSQLiteへ接続します。アーキテクチャと正本の[harness-handoff/1 schema](../schemas/handoff.schema.json)は変更しません。

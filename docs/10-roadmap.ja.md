@@ -2,6 +2,8 @@
 
 [English](10-roadmap.md) | [ホーム](../README.ja.md)
 
+[23 ローカルworker-seconds予約](23-local-budget-reservation.ja.md)は永続受領transactionの狭いP1拡張です。現在の独立したcaller権限、固定共有envelope／allocation、原子的な受領／予約／会計を接続します。実装済み、R01〜R10の10シナリオは1回オフライン成功（0.082秒）し、coordinatorの差分レビュー完了です。受領のみの動作は維持します。完全な予約／受付受入、他資源次元、protocol／plan解決、JCS、dispatchは未実装です。以下の受領のみの状態は履歴です。
+
 ## 今回の設計判断
 
 - 名称は `ai-agent-scientist`。英語標準、日本語版を併設。
