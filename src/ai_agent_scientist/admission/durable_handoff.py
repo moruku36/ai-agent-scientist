@@ -7,6 +7,7 @@ See docs/22-durable-handoff-receipt.md for trust and resource assumptions and
 docs/23-local-budget-reservation.md for the fixed worker-seconds extension.
 docs/24-local-status-outbox.md describes receiver-local status bookkeeping.
 docs/25-local-usage-observations.md adds immutable observations, not settlement.
+docs/26-reservation-inspection.md adds scoped read-only recovery snapshots.
 """
 from __future__ import annotations
 
@@ -35,6 +36,7 @@ __all__ = [
     'ReservedHandoff', 'ReservationRefused',
     'LocalStatusEvent', 'LocalStatusEntry',
     'LocalUsageObservation',
+    'ReservationAccounting', 'ReservationSnapshot', 'ReservationSnapshotPage',
 ]
 
 _MAX_INT = (1 << 63) - 1
@@ -46,6 +48,7 @@ _EVENT_COLUMNS = ('principal, project_id, recipient, request_id, sender, '
                   'budget_reservation_ref, request_sha256, receipt_revision, '
                   'status, worker_seconds, created_at')
 _MAX_STATUS_PAGE = 100
+_MAX_RESERVATION_PAGE = 100
 _USAGE_COLUMNS = ('observation_id, principal, project_id, recipient, request_id, sender, '
                   'budget_reservation_ref, request_sha256, expected_revision, '
                   'worker_seconds, execution_stopped, cleanup_known, over_cap, observed_at')
@@ -234,6 +237,37 @@ class LocalUsageObservation:
     observed_at: str
 
 
+@dataclass(frozen=True, slots=True)
+class ReservationAccounting:
+    """This reservation only; no shared envelope totals or owner identity."""
+
+    allocation_worker_seconds: int
+    outstanding_worker_seconds: int
+
+
+@dataclass(frozen=True, slots=True)
+class ReservationSnapshot:
+    """One consistent retained view, never authorization or inferred spend.
+
+    Missing current_status means no retained event for this receipt revision.
+    Missing latest_usage_observation means no observation, not known zero usage.
+    """
+
+    receipt: DurableReceipt
+    reservation: DurableReservation
+    accounting: ReservationAccounting
+    current_status: LocalStatusEntry | None
+    latest_usage_observation: LocalUsageObservation | None
+
+
+@dataclass(frozen=True, slots=True)
+class ReservationSnapshotPage:
+    """Scoped binary request-ID order; next cursor is exclusive, or None at end."""
+
+    entries: tuple[ReservationSnapshot, ...]
+    next_after_request_id: str | None
+
+
 def _text(value: object) -> str:
     # Guard before comparisons, encoding or SQL binding; bound local metadata.
     if type(value) is not str or not value:
@@ -370,6 +404,9 @@ class DurableHandoffReceipts:
             )''')
             conn.execute('''CREATE INDEX IF NOT EXISTS local_usage_scope_order
                 ON local_usage_observations(principal, project_id, recipient, sequence)''')
+            conn.execute('''CREATE INDEX IF NOT EXISTS local_usage_request_order
+                ON local_usage_observations(
+                    principal, project_id, recipient, request_id, sequence)''')
             for operation in ('UPDATE', 'DELETE'):
                 conn.execute('CREATE TRIGGER IF NOT EXISTS local_usage_no_' +
                     operation.lower() + ' BEFORE ' + operation +
@@ -683,6 +720,102 @@ class DurableHandoffReceipts:
         _text(request_id)
         with self._transaction(write=False) as conn:
             return self._read(conn, request_id)
+
+    def _reservation_accounting(self, conn, reservation) -> ReservationAccounting:
+        # Read the actual fixed envelope, but never export its namespace, cap,
+        # settled floor, shared counter or remaining capacity through this API.
+        row = conn.execute('SELECT cap_worker_seconds, settled_worker_seconds, '
+            'planned_attempts, max_retries, per_attempt_seconds, evaluation_cleanup_seconds, '
+            'reserved_worker_seconds FROM worker_seconds_envelope WHERE singleton=1').fetchone()
+        if row is None:
+            raise ReceiptConflict('retained reservation has no fixed accounting')
+        try:
+            allocation = _allocation(WorkerSecondsEnvelope('retained', 'retained', *row[:-1]))
+        except ReservationRefused:
+            raise ReceiptConflict('retained fixed accounting differs') from None
+        reserved = row[-1]
+        if (type(reserved) is not int or not allocation <= reserved <= row[0] - row[1] or
+                reservation.worker_seconds != allocation):
+            raise ReceiptConflict('retained reservation accounting differs')
+        # Neither observations nor ack/receipt state reduce outstanding usage.
+        return ReservationAccounting(allocation, reservation.worker_seconds)
+
+    def _reservation_snapshot(self, conn, row) -> ReservationSnapshot:
+        reservation = DurableReservation(*row)
+        scope = self._scope
+        if (reservation.principal, reservation.project_id, reservation.recipient,
+                reservation.sender) != (scope.principal, scope.project_id,
+                                         scope.recipient, scope.sender):
+            raise ReceiptScopeError('retained reservation mapping differs')
+        receipt = self._read(conn, reservation.request_id)
+        if receipt is None or receipt.request_sha256 != reservation.request_sha256:
+            raise ReceiptConflict('reservation has no exact retained receipt')
+        accounting = self._reservation_accounting(conn, reservation)
+        status_row = conn.execute('SELECT e.event_id, ' + ', '.join(
+            'e.' + name.strip() for name in _EVENT_COLUMNS.split(',')) +
+            ', COALESCE(a.ack_revision, 0), a.acknowledged_at '
+            'FROM reservation_status_events e LEFT JOIN reservation_status_acks a '
+            'ON a.event_id=e.event_id WHERE e.principal=? AND e.project_id=? '
+            'AND e.recipient=? AND e.request_id=? AND e.receipt_revision=?',
+            (*self._key(reservation.request_id), receipt.revision)).fetchone()
+        status = None if status_row is None else self._status_entry(status_row)
+        if status is not None:
+            event = status.event
+            expected_status = ('reservation_retained' if receipt.state == 'recorded'
+                               else 'reconciliation_required')
+            if (event.budget_reservation_ref, event.request_sha256, event.worker_seconds,
+                    event.status) != (reservation.budget_reservation_ref,
+                        reservation.request_sha256, reservation.worker_seconds, expected_status):
+                raise ReceiptConflict('retained status reservation binding differs')
+        usage_row = conn.execute('SELECT sequence, ' + _USAGE_COLUMNS +
+            ' FROM local_usage_observations WHERE ' + _KEY +
+            ' ORDER BY sequence DESC LIMIT 1', self._key(reservation.request_id)).fetchone()
+        latest = None if usage_row is None else self._usage_observation(usage_row)
+        if latest is not None and (
+                (latest.budget_reservation_ref, latest.request_sha256) !=
+                (reservation.budget_reservation_ref, reservation.request_sha256) or
+                latest.expected_revision > receipt.revision):
+            raise ReceiptConflict('retained usage reservation binding differs')
+        return ReservationSnapshot(receipt, reservation, accounting, status, latest)
+
+    def inspect_reservation(self, request_id: str) -> ReservationSnapshot | None:
+        """Exact retained reservation in this trusted scope, in one read transaction.
+
+        Missing/receipt-only returns None. No blobs, authority lookup, writes,
+        consumption, settlement or continuing authority. Errors return no view.
+        """
+        _text(request_id)
+        with self._transaction(write=False) as conn:
+            row = conn.execute('SELECT ' + _RES_COLUMNS +
+                ' FROM worker_seconds_reservations WHERE ' + _KEY,
+                self._key(request_id)).fetchone()
+            return None if row is None else self._reservation_snapshot(conn, row)
+
+    def inspect_reservations(self, *, after_request_id: str | None = None,
+                             limit: int = 100) -> ReservationSnapshotPage:
+        """One consistent bounded page, ordered by scoped request ID, not time.
+
+        Use next_after_request_id for the next page; None ends this scan. Pages
+        are independent snapshots: restart from None to revisit changed/older
+        rows. A cursor is a seek position, not authority or a durable scan lease.
+        """
+        if after_request_id is not None:
+            _text(after_request_id)
+        if type(limit) is not int or not 1 <= limit <= _MAX_RESERVATION_PAGE:
+            raise ValueError('reservation limit must be an exact integer in 1..100')
+        scope = self._scope
+        with self._transaction(write=False) as conn:
+            query = ('SELECT ' + _RES_COLUMNS + ' FROM worker_seconds_reservations '
+                     'WHERE principal=? AND project_id=? AND recipient=?')
+            values = (scope.principal, scope.project_id, scope.recipient)
+            if after_request_id is not None:
+                query += ' AND request_id COLLATE BINARY > ?'
+                values += (after_request_id,)
+            rows = conn.execute(query + ' ORDER BY request_id COLLATE BINARY ASC LIMIT ?',
+                                (*values, limit + 1)).fetchall()
+            entries = tuple(self._reservation_snapshot(conn, row) for row in rows[:limit])
+            cursor = entries[-1].reservation.request_id if len(rows) > limit else None
+            return ReservationSnapshotPage(entries, cursor)
 
     def _usage_observation(self, row) -> LocalUsageObservation:
         values = list(row)

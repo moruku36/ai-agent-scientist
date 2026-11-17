@@ -7,6 +7,8 @@
 
 [日本語](10-roadmap.ja.md) | [Home](../README.md)
 
+[26 receiver-scoped reservation inspection](26-reservation-inspection.md) is the first of three bounded offline increments. Implementation and exactly six new self-contained unittest methods authored, **NOT EXECUTED**; checks for this increment remain pending. One read transaction connects retained receipts/reservations, current local outbox/ack, latest inserted usage and fixed allocation accounting. Only scoped snapshots with the full outstanding allocation are returned; no global totals, owner identity, authority lookup, settlement or continuing authority. Earlier coordinator validation applies only to its named historical increments.
+
 [25 immutable local usage observations](25-local-usage-observations.md) is the narrow Scientist round3 increment on independently source-reviewed round2 `bf4743970dc48e0e89e2717a2e07c2591c8db129`. Implementation and exactly six self-contained methods authored, **NOT EXECUTED**; coordinator checks pending. Trusted observations, existing reconciliation CAS and local outbox share one SQLite transaction. All reservations remain fully outstanding and the settled floor is unchanged; no settlement, refund, completion, admission, metering or authentication is added. Historical UNKNOWNs remain unchanged.
 
 [24 local status outbox](24-local-status-outbox.md) adds atomic retained-reservation/reconciliation events and scoped local acknowledgement CAS. Implementation and exactly six scenarios authored, not executed; no sender, transport or delivery acceptance. Earlier no-outbox statements below describe historical increments.

@@ -7,6 +7,8 @@
 
 [English](10-roadmap.md) | [ホーム](../README.ja.md)
 
+[26 受信者scope内の予約検査](26-reservation-inspection.ja.md)は3つの上限付きoffline増分の最初です。実装と新規の自己完結unittestメソッドを正確に6つ作成済み、**未実行（NOT EXECUTED）**で、この増分の検査は保留中です。単一読取transactionで保持済み受領／予約・現在のローカルoutbox／ack・最後に挿入されたusage・固定allocation会計を接続します。全量outstanding allocationを持つscope内snapshotだけを返し、global合計・owner識別情報・権限lookup・settlement・継続権限は追加しません。過去のcoordinator検証は明記された過去の増分だけが対象です。
+
 [25 不変のローカルusage観測](25-local-usage-observations.ja.md)は独立source review済みround2 `bf4743970dc48e0e89e2717a2e07c2591c8db129`を基点とする狭いScientist round3増分です。実装と自己完結メソッドを正確に6つ作成済み、**未実行（NOT EXECUTED）**でcoordinator検査は保留中です。trusted観測・既存照合CAS・ローカルoutboxを同じSQLite transactionへ接続します。全予約を全量outstandingに保ち、settled floorは不変です。settlement・refund・完了・受付・計測・認証を追加しません。過去のUNKNOWNは変更しません。
 
 [24 ローカルstatus outbox](24-local-status-outbox.ja.md)で予約保持／照合eventとscope内ローカルack CASを同じtransactionへ追加します。実装と正確に6シナリオ作成済み、未実行です。sender・transport・配送受入はありません。以下のoutbox未実装という記述は過去の増分の説明です。

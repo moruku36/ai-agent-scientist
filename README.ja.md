@@ -45,6 +45,8 @@ DOTSが研究を統括し、Codexが実装・上限付き実験を担当しま�
 
 [不変の受信者ローカルusage観測](docs/25-local-usage-observations.ja.md)（Scientist round3、独立source review済みround2 `bf4743970dc48e0e89e2717a2e07c2591c8db129`基点）は、trusted観測を既存予約・照合遷移・outboxと同じSQLite transactionへ接続します。実装と新規メソッドを正確に6つ作成済み、**未実行（NOT EXECUTED）**でcoordinator検査は保留中です。全予約を全量outstandingに保ち、settled floorを変更せず、usage／cleanupのUNKNOWNで予算をreleaseしません。観測保存のみで、settlement・計測・認証の主張はありません。
 
+[受信者scope内の予約検査snapshot](docs/26-reservation-inspection.ja.md)は、保持済み受領・予約・現在のローカルoutbox状態・最後に挿入されたusage観測・固定allocation会計を単一読取transactionへ接続します。実装と新規の自己完結テストメソッドを正確に6つ作成済み、**未実行（NOT EXECUTED）**で、この増分の全検査は保留中です。この予約のallocation／全量outstandingだけを返し、共有合計やowner識別情報を含めません。3つの上限付きoffline増分の最初で、継続権限やsettlementを与えません。
+
 ## Kaggleコンペ対応 — 2026-11-16
 
 [競技プロファイルと提出境界](docs/15-kaggle-competitions.ja.md)で、Kaggleを「主催者が評価器と最終評価を所有する研究課題」として既存設計へ接続。対象はGemma 4 Developer Agent、Name That LLM、Physical-Engineering's Last Examの3件です。ローカル評価を選択の根拠にし、Public LBは提出枠付きの外部フィードバック、提出・規則同意・公開は利用者の許可が要る外部行為として扱います。[知識とOSS候補](docs/16-kaggle-knowledge-oss.ja.md)は一覧であり、導入・検証はしていません。コンペへの参加、データ取得、学習、提出は行っていません。
@@ -128,6 +130,7 @@ flowchart TB
 | [22 永続ハンドオフ受領](docs/22-durable-handoff-receipt.ja.md) | ローカルSQLiteの厳密バイト受領・未解決CAS。10シナリオが1回オフライン成功 |
 | [23 ローカル予算予約](docs/23-local-budget-reservation.ja.md) | 固定envelopeの接続worker-seconds予約。実装済み、10シナリオが1回オフライン成功 |
 | [25 ローカルusage観測](docs/25-local-usage-observations.ja.md) | 既存照合／outboxに接続する不変trusted観測。6メソッド作成済み・未実行、settlementなし |
+| [26 予約検査](docs/26-reservation-inspection.ja.md) | scope内の一貫した復旧snapshotと全量outstanding allocation。新規6メソッド作成済み・未実行 |
 
 [研究ブリーフ](templates/research-brief.ja.md)、[実験計画](templates/experiment-plan.ja.md)、[実験レポート](templates/run-report.ja.md)を雛形として使います。Kaggleコンペでは[競技ブリーフ](templates/competition-brief.ja.md)を追加します。[無効のCPU設定例](examples/cpu-pilot.json)と[DOTSへの引継ぎ例](examples/dots-handoff.ja.md)も用意しました。
 

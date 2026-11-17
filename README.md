@@ -45,6 +45,8 @@ The [transactional receiver-local status outbox](docs/24-local-status-outbox.md)
 
 The [immutable receiver-local usage observations](docs/25-local-usage-observations.md) (Scientist round3, based on independently source-reviewed round2 `bf4743970dc48e0e89e2717a2e07c2591c8db129`) connect trusted observations to the existing reservation, reconciliation transition and outbox in one SQLite transaction. Implementation and exactly six new methods authored, **NOT EXECUTED**; coordinator checks pending. All reservations remain fully outstanding, the settled floor is unchanged, and UNKNOWN usage/cleanup never releases budget. This is observation retention only, without settlement, metering or authentication claims.
 
+The [receiver-scoped reservation inspection snapshots](docs/26-reservation-inspection.md) connect retained receipts, reservations, current local outbox state, latest inserted usage observations and fixed allocation accounting in one read transaction. Implementation and exactly six new self-contained test methods authored, **NOT EXECUTED**; all checks for this increment remain pending. Only this reservation's allocation/full outstanding amount is exposed, without shared totals or owner identity. This is the first of three bounded offline increments and grants no continuing authority or settlement.
+
 ## Kaggle competition support — 2026-11-16
 
 [Competition profiles and the submission boundary](docs/15-kaggle-competitions.md) connect Kaggle to the existing design as "a research task whose evaluator and final holdout belong to the host". Three competitions are covered: Gemma 4 Developer Agent, Name That LLM and Physical-Engineering's Last Exam. Local evaluation is the basis for selection; the public leaderboard is quota-limited external feedback; submitting, accepting rules and publishing are external acts that need the owner's authorization. [Knowledge and OSS candidates](docs/16-kaggle-knowledge-oss.md) are a list, not installed or tested. No competition was joined and no data download, training or submission took place.
@@ -129,6 +131,7 @@ The harness is the project/state/experiment/evaluation layer around existing age
 | [23 Local budget reservation](docs/23-local-budget-reservation.md) | Connected fixed-envelope worker-seconds reservations; implemented, ten scenarios passed once offline |
 | [24 Local status outbox](docs/24-local-status-outbox.md) | Atomic reservation status events and scoped local ack CAS; implementation and six scenarios authored, not executed |
 | [25 Local usage observations](docs/25-local-usage-observations.md) | Immutable trusted observations with existing reconciliation/outbox; six methods authored, NOT EXECUTED; no settlement |
+| [26 Reservation inspection](docs/26-reservation-inspection.md) | Scoped consistent recovery snapshots and full outstanding allocation; six new methods authored, NOT EXECUTED |
 
 Start a project using the [research brief](templates/research-brief.md), [experiment plan](templates/experiment-plan.md), and [run report](templates/run-report.md). For a Kaggle competition, add the [competition brief](templates/competition-brief.md). The [inactive CPU pilot](examples/cpu-pilot.json) illustrates the proposed contract. A [DOTS handoff](examples/dots-handoff.md) shows the minimum assignment.
 
