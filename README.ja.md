@@ -163,3 +163,5 @@ flowchart TB
 [29 Local recovery console](docs/29-recovery-console.ja.md)
 
 [30 Local recovery queue](docs/30-recovery-queue.ja.md)
+
+[31 Local recovery operator workflow](docs/31-recovery-operator.ja.md)

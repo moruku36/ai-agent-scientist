@@ -164,3 +164,5 @@ The revision includes additive verification contracts and disabled synthetic fix
 [29 Local recovery console](docs/29-recovery-console.md)
 
 [30 Local recovery queue](docs/30-recovery-queue.md)
+
+[31 Local recovery operator workflow](docs/31-recovery-operator.md)
