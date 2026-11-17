@@ -1,5 +1,9 @@
 # 10 Implementation Roadmap and Decisions
 
+> Increment27 coordinator checks: six NEW T01–T06 offline methods passed once (0.045s); existing-environment design checker passed once (594 links, 35 language pairs); whitespace passed. Subsequent NOT EXECUTED/pending statements are worker-only authoring history, not these coordinator results. Independent review recorded separately; no runtime acceptance.
+
+**Increment 27: authored, NOT EXECUTED (2026-11-17).** [Conservative recovery triage](27-recovery-triage.md) is the second of three connected bounded offline increments. Pure classification validates exact snapshot types/bindings; connected inspection uses actual receiver snapshots. Bounded frozen reports retain the full outstanding reservation and explicit evidence-gap/local-ack reasons, without global totals or admission/readiness/dispatch/settlement authority. Exactly six NEW self-contained unittest methods and paired documentation are authored; coordinator checks remain pending. Earlier validation banners apply only to earlier increments.
+
 > Coordinator validation (2026-11-17): six new I01–I06 offline contract methods passed once (0.039s); existing-environment design checker passed once (564 links, 34 language pairs); whitespace passed. Independent pinned full-source review found no implementation defect under documented trust assumptions. Later NOT EXECUTED/pending wording records worker-file-only authorship, not the subsequent coordinator checks. No runtime acceptance.
 
 > Coordinator validation, 2026-11-17 (round3 only): six NEW U01–U06 scenarios passed once (1.183s); existing-venv design checker passed once (534 links, 33 language pairs). Independent review pending. Later authored/NOT EXECUTED wording below is historical worker-file-only status, not current coordinator validation. Round2 original raw check receipts remain unavailable; do not infer their verification from round3.
