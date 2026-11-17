@@ -162,3 +162,7 @@ The [new design](docs/13-verified-discovery.md) extends the existing evaluation 
 The revision includes additive verification contracts and disabled synthetic fixtures. Existing protocol and handoff versions are unchanged. Run [offline design checks](scripts/README.md); passing them is not runtime acceptance. Implementation still begins with the bounded CPU slice, with an optional formal verifier only for suitable later tasks.
 
 [29 Local recovery console](docs/29-recovery-console.md)
+
+[30 Local recovery queue](docs/30-recovery-queue.md)
+
+[31 Local recovery operator workflow](docs/31-recovery-operator.md)
