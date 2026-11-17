@@ -5,6 +5,7 @@ The caller declares an independently authenticated principal/mapping, current
 bindings/time/stores and a private local DB path, all outside candidate control.
 See docs/22-durable-handoff-receipt.md for trust and resource assumptions and
 docs/23-local-budget-reservation.md for the fixed worker-seconds extension.
+docs/24-local-status-outbox.md describes receiver-local status bookkeeping.
 """
 from __future__ import annotations
 
@@ -31,6 +32,7 @@ __all__ = [
     'ReceiptScopeError', 'ReceiptStorageError',
     'WorkerSecondsEnvelope', 'WorkerSecondsAuthority', 'DurableReservation',
     'ReservedHandoff', 'ReservationRefused',
+    'LocalStatusEvent', 'LocalStatusEntry',
 ]
 
 _MAX_INT = (1 << 63) - 1
@@ -38,6 +40,10 @@ _ROLES = ('scientist', 'ctf', 'sleep', 'evaluator')
 _COLUMNS = ('principal, project_id, recipient, request_id, sender, message_id, '
             'request_sha256, payload_sha256, revision, state, recorded_at, updated_at')
 _KEY = 'principal=? AND project_id=? AND recipient=? AND request_id=?'
+_EVENT_COLUMNS = ('principal, project_id, recipient, request_id, sender, '
+                  'budget_reservation_ref, request_sha256, receipt_revision, '
+                  'status, worker_seconds, created_at')
+_MAX_STATUS_PAGE = 100
 
 
 class ReceiptConflict(ValueError):
@@ -171,6 +177,33 @@ class DurableReceipt:
     updated_at: str
 
 
+@dataclass(frozen=True, slots=True)
+class LocalStatusEvent:
+    """Immutable retained-reservation fact; event_id is local to this DB."""
+
+    event_id: int
+    principal: str
+    project_id: str
+    recipient: str
+    request_id: str
+    sender: str
+    budget_reservation_ref: str
+    request_sha256: str
+    receipt_revision: int
+    status: str
+    worker_seconds: int
+    created_at: str
+
+
+@dataclass(frozen=True, slots=True)
+class LocalStatusEntry:
+    """Event plus separate local acknowledgement, never remote delivery."""
+
+    event: LocalStatusEvent
+    ack_revision: int
+    acknowledged_at: str | None
+
+
 def _text(value: object) -> str:
     # Guard before comparisons, encoding or SQL binding; bound local metadata.
     if type(value) is not str or not value:
@@ -265,6 +298,32 @@ class DurableHandoffReceipts:
                 recorded_at TEXT NOT NULL,
                 UNIQUE(principal, project_id, recipient, request_id)
             )''')
+            conn.execute('''CREATE TABLE IF NOT EXISTS reservation_status_events (
+                event_id INTEGER PRIMARY KEY AUTOINCREMENT,
+                principal TEXT NOT NULL, project_id TEXT NOT NULL,
+                recipient TEXT NOT NULL, request_id TEXT NOT NULL, sender TEXT NOT NULL,
+                budget_reservation_ref TEXT NOT NULL, request_sha256 TEXT NOT NULL,
+                receipt_revision INTEGER NOT NULL, status TEXT NOT NULL,
+                worker_seconds INTEGER NOT NULL CHECK(worker_seconds>0),
+                created_at TEXT NOT NULL,
+                UNIQUE(principal, project_id, recipient, request_id, receipt_revision),
+                UNIQUE(budget_reservation_ref, receipt_revision),
+                CHECK ((receipt_revision=1 AND status='reservation_retained') OR
+                       (receipt_revision=2 AND status='reconciliation_required'))
+            )''')
+            conn.execute('''CREATE INDEX IF NOT EXISTS reservation_status_scope_order
+                ON reservation_status_events(principal, project_id, recipient, event_id)''')
+            conn.execute('''CREATE TABLE IF NOT EXISTS reservation_status_acks (
+                event_id INTEGER PRIMARY KEY,
+                ack_revision INTEGER NOT NULL CHECK(ack_revision=1),
+                acknowledged_at TEXT NOT NULL
+            )''')
+            # Ack lives separately: neither acknowledgement nor replay edits a fact.
+            for operation in ('UPDATE', 'DELETE'):
+                conn.execute('CREATE TRIGGER IF NOT EXISTS reservation_status_no_' +
+                    operation.lower() + ' BEFORE ' + operation +
+                    " ON reservation_status_events BEGIN SELECT RAISE(ABORT, "
+                    "'local status events are immutable'); END")
 
     def _check_directory(self) -> None:
         # Best-effort accidental misconfiguration checks, not hostile DB defense.
@@ -397,7 +456,7 @@ class DurableHandoffReceipts:
         budget_reservation_ref). Caller owns/authenticates this namespace and
         serializes authority/binding/store updates across the entire call.
         References are lookup keys, not credentials. No sender cap is consumed.
-        Receipt, reservation and envelope accounting commit atomically. No
+        Receipt, reservation, envelope accounting and local status commit atomically. No
         return authorizes work; commit/close errors leave an uncertain outcome.
         """
         stamp = _clock(now)
@@ -441,7 +500,9 @@ class DurableHandoffReceipts:
                 current = self._read(conn, request['request_id'])
                 if current is None or current.request_sha256 != request_sha256:
                     raise ReceiptConflict('reservation has no exact retained receipt')
-                return ReservedHandoff(current, DurableReservation(*retained))
+                reservation = DurableReservation(*retained)
+                self._append_status_event(conn, current, reservation, stamp)
+                return ReservedHandoff(current, reservation)
             # Prevent changing a reference or scope from charging one request
             # again; global digest uniqueness also prevents cross-scope aliases.
             collision = conn.execute('SELECT 1 FROM worker_seconds_reservations WHERE '
@@ -474,7 +535,97 @@ class DurableHandoffReceipts:
             reservation = DurableReservation(*expected, stamp)
             conn.execute('INSERT INTO worker_seconds_reservations (' + _RES_COLUMNS +
                          ') VALUES (?,?,?,?,?,?,?,?,?,?)', (*expected, stamp))
+            self._append_status_event(conn, receipt, reservation, stamp)
             return ReservedHandoff(receipt, reservation)
+
+    def _append_status_event(self, conn, receipt, reservation, stamp):
+        # Called inside the SAME receipt/reservation or reconciliation transaction.
+        identity = (receipt.principal, receipt.project_id, receipt.recipient,
+                    receipt.request_id, receipt.sender, receipt.request_sha256)
+        if identity != (reservation.principal, reservation.project_id, reservation.recipient,
+                        reservation.request_id, reservation.sender, reservation.request_sha256):
+            raise ReceiptConflict('local status reservation binding differs')
+        status = ('reservation_retained' if receipt.state == 'recorded'
+                  else 'reconciliation_required')
+        values = (*identity[:5], reservation.budget_reservation_ref,
+                  receipt.request_sha256, receipt.revision, status, reservation.worker_seconds)
+        row = conn.execute('SELECT event_id, ' + _EVENT_COLUMNS +
+            ' FROM reservation_status_events WHERE ' + _KEY + ' AND receipt_revision=?',
+            (*self._key(receipt.request_id), receipt.revision)).fetchone()
+        if row is not None:
+            if row[1:-1] != values:
+                raise ReceiptConflict('retained local status binding differs')
+            return LocalStatusEvent(*row)
+        inserted = conn.execute('INSERT INTO reservation_status_events (' + _EVENT_COLUMNS +
+            ') VALUES (?,?,?,?,?,?,?,?,?,?,?)', (*values, stamp))
+        return LocalStatusEvent(inserted.lastrowid, *values, stamp)
+
+    def _status_entry(self, row):
+        event = LocalStatusEvent(*row[:-2])
+        if event.sender != self._scope.sender:
+            raise ReceiptScopeError('retained local status mapping differs')
+        return LocalStatusEntry(event, row[-2], row[-1])
+
+    def _status_rows(self, conn, *, event_id=None, after_event_id=0, limit=1,
+                     pending_only=False):
+        scope = self._scope
+        # Fixed SQL and bound values; no caller-supplied scope or query fragment.
+        query = ('SELECT e.event_id, ' + ', '.join('e.' + name.strip()
+                 for name in _EVENT_COLUMNS.split(',')) +
+                 ', COALESCE(a.ack_revision, 0), a.acknowledged_at '
+                 'FROM reservation_status_events e LEFT JOIN reservation_status_acks a '
+                 'ON a.event_id=e.event_id WHERE e.principal=? AND e.project_id=? '
+                 'AND e.recipient=?')
+        values = (scope.principal, scope.project_id, scope.recipient)
+        if event_id is not None:
+            query += ' AND e.event_id=?'
+            values += (event_id,)
+        else:
+            query += ' AND e.event_id>?'
+            values += (after_event_id,)
+        if pending_only:
+            query += ' AND a.event_id IS NULL'
+        return conn.execute(query + ' ORDER BY e.event_id ASC LIMIT ?', (*values, limit)).fetchall()
+
+    def inspect_status_events(self, *, after_event_id: int = 0, limit: int = 100,
+                              pending_only: bool = True) -> tuple[LocalStatusEntry, ...]:
+        """Bounded ascending scoped snapshots; cursors never consume events.
+
+        Pending means no receiver-local acknowledgement, not undelivered remotely.
+        Start at zero again to inspect older unacknowledged events after a lost ack.
+        """
+        _revision(after_event_id)
+        if type(limit) is not int or not 1 <= limit <= _MAX_STATUS_PAGE:
+            raise ValueError('local status limit must be an exact integer in 1..100')
+        if type(pending_only) is not bool:
+            raise TypeError('pending_only must be an exact bool')
+        with self._transaction(write=False) as conn:
+            return tuple(self._status_entry(row) for row in self._status_rows(
+                conn, after_event_id=after_event_id, limit=limit, pending_only=pending_only))
+
+    def acknowledge_status_event(self, event_id: int, *, expected_ack_revision: int,
+                                 now: datetime) -> LocalStatusEntry:
+        """Receiver-local CAS 0 -> 1 only; no release or delivery assertion.
+
+        A repeated/stale/missing/cross-scope event fails without changing anything.
+        After an uncertain response, inspect retained ack state before retrying.
+        """
+        if _revision(event_id) == 0:
+            raise ReceiptRevisionError('invalid local event identity')
+        revision = _revision(expected_ack_revision)
+        stamp = _clock(now)
+        with self._transaction(write=True) as conn:
+            rows = self._status_rows(conn, event_id=event_id)
+            if not rows:
+                raise ReceiptRevisionError('missing or stale local status acknowledgement')
+            current = self._status_entry(rows[0])
+            if revision != 0 or current.ack_revision != revision:
+                raise ReceiptRevisionError('missing or stale local status acknowledgement')
+            if stamp < current.event.created_at:
+                raise ValueError('local acknowledgement clock moved backward')
+            conn.execute('INSERT INTO reservation_status_acks '
+                '(event_id, ack_revision, acknowledged_at) VALUES (?,1,?)', (event_id, stamp))
+            return LocalStatusEntry(current.event, 1, stamp)
 
     def inspect(self, request_id: str) -> DurableReceipt | None:
         """Local retained metadata only; no blob access or continuing authority."""
@@ -509,4 +660,11 @@ class DurableHandoffReceipts:
                 (stamp, *self._key(request_id), revision))
             if changed.rowcount != 1:
                 raise ReceiptRevisionError('stale receipt revision')
-            return self._read(conn, request_id)
+            receipt = self._read(conn, request_id)
+            retained = conn.execute('SELECT ' + _RES_COLUMNS +
+                ' FROM worker_seconds_reservations WHERE ' + _KEY,
+                self._key(request_id)).fetchone()
+            # A receipt-only reconciliation must never invent a reservation/event.
+            if retained is not None:
+                self._append_status_event(conn, receipt, DurableReservation(*retained), stamp)
+            return receipt

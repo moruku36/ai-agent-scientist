@@ -1,6 +1,11 @@
 # 23 ローカル永続ワーカー秒予約の前提部品
 
+
+**outbox coordinator検証（2026-11-17）：O01〜O06はofflineで1回成功、0.046秒。必須設計checkerも1回成功（504 links、32言語pair）。元の選択workerは600秒timeout、task_complete／finalなし、完了UNKNOWN、再実行なし。以下の作成済み・未実行はworkerのみの活動履歴で、現在のcoordinator検証状態ではありません。live受入は主張しません。**
+
 日本語 | [English](23-local-budget-reservation.md) | [ホーム](../README.ja.md)
+
+**後続のローカル拡張：** [24 transaction内status outbox](24-local-status-outbox.ja.md)で予約保持eventと受信者ローカルack CASを追加します。実装と6シナリオ作成済み、未実行です。以下のoutboxなしという記述は以前の予約増分の説明です。24も配送・settlementは追加しません。
 
 **状態（2026-11-17）：実装済み。R01〜R10の10シナリオが1回オフライン成功（0.082秒）。** 選択したworkerがファイルを作成し、coordinatorが全差分をレビューして対象テストを1回実行しました。workerの元実行は600秒でtimeoutし、task_completeとdurable finalは得られず、worker完了は未確認です。再実行はしていません。受入・再現・独立レビュー・実測した耐久性は主張しません。
 

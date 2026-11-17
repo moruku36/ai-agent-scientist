@@ -1,5 +1,8 @@
 # AI Agent Scientist
 
+
+**Outbox coordinator verification (2026-11-17): O01–O06 passed once offline, 0.046s; required design checker passed once (504 links, 32 language pairs). Original selected worker timed out at 600s; no task_complete/final, completion UNKNOWN, no replay. Authored/not-executed wording below records worker-only activity, not current coordinator check status. No live acceptance.**
+
 [日本語](README.ja.md) | English
 
 **A DOTS-centered research harness for turning a question into a testable hypothesis, a reproducible experiment, and an evidence-backed conclusion using existing ChatGPT and Codex.**
@@ -35,6 +38,8 @@ The [durable byte-bound handoff receipt](docs/22-durable-handoff-receipt.md) con
 ## Local reservation prerequisite — 2026-11-17
 
 The [local worker-seconds reservation prerequisite](docs/23-local-budget-reservation.md) extends the receipt transaction with current caller-owned authority and one fixed shared envelope. Implemented; ten R01–R10 scenarios passed once offline (0.082s); coordinator diff review completed. It provides no dispatch or full admission acceptance.
+
+The [transactional receiver-local status outbox](docs/24-local-status-outbox.md) adds atomic retained-reservation/reconciliation events and scoped local acknowledgement CAS. Implementation and exactly six new offline scenarios authored, **not executed**. No sender, transport, remote delivery or settlement is implemented.
 
 ## Kaggle competition support — 2026-11-16
 
@@ -118,6 +123,7 @@ The harness is the project/state/experiment/evaluation layer around existing age
 | [21 Handoff payload binding](docs/21-handoff-payload-binding.md) | Current trusted local binding before verified payload read; ten scenarios passed once offline |
 | [22 Durable handoff receipt](docs/22-durable-handoff-receipt.md) | Local SQLite exact-byte receipts and unresolved CAS; ten scenarios passed once offline |
 | [23 Local budget reservation](docs/23-local-budget-reservation.md) | Connected fixed-envelope worker-seconds reservations; implemented, ten scenarios passed once offline |
+| [24 Local status outbox](docs/24-local-status-outbox.md) | Atomic reservation status events and scoped local ack CAS; implementation and six scenarios authored, not executed |
 
 Start a project using the [research brief](templates/research-brief.md), [experiment plan](templates/experiment-plan.md), and [run report](templates/run-report.md). For a Kaggle competition, add the [competition brief](templates/competition-brief.md). The [inactive CPU pilot](examples/cpu-pilot.json) illustrates the proposed contract. A [DOTS handoff](examples/dots-handoff.md) shows the minimum assignment.
 

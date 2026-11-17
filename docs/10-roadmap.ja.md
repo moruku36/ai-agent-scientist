@@ -1,6 +1,11 @@
 # 10 実装計画と設計判断
 
+
+**outbox coordinator検証（2026-11-17）：O01〜O06はofflineで1回成功、0.046秒。必須設計checkerも1回成功（504 links、32言語pair）。元の選択workerは600秒timeout、task_complete／finalなし、完了UNKNOWN、再実行なし。以下の作成済み・未実行はworkerのみの活動履歴で、現在のcoordinator検証状態ではありません。live受入は主張しません。**
+
 [English](10-roadmap.md) | [ホーム](../README.ja.md)
+
+[24 ローカルstatus outbox](24-local-status-outbox.ja.md)で予約保持／照合eventとscope内ローカルack CASを同じtransactionへ追加します。実装と正確に6シナリオ作成済み、未実行です。sender・transport・配送受入はありません。以下のoutbox未実装という記述は過去の増分の説明です。
 
 [23 ローカルworker-seconds予約](23-local-budget-reservation.ja.md)は永続受領transactionの狭いP1拡張です。現在の独立したcaller権限、固定共有envelope／allocation、原子的な受領／予約／会計を接続します。実装済み、R01〜R10の10シナリオは1回オフライン成功（0.082秒）し、coordinatorの差分レビュー完了です。受領のみの動作は維持します。完全な予約／受付受入、他資源次元、protocol／plan解決、JCS、dispatchは未実装です。以下の受領のみの状態は履歴です。
 
