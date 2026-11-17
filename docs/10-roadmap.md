@@ -1,6 +1,11 @@
 # 10 Implementation Roadmap and Decisions
 
+
+**Outbox coordinator verification (2026-11-17): O01–O06 passed once offline, 0.046s; required design checker passed once (504 links, 32 language pairs). Original selected worker timed out at 600s; no task_complete/final, completion UNKNOWN, no replay. Authored/not-executed wording below records worker-only activity, not current coordinator check status. No live acceptance.**
+
 [日本語](10-roadmap.ja.md) | [Home](../README.md)
+
+[24 local status outbox](24-local-status-outbox.md) adds atomic retained-reservation/reconciliation events and scoped local acknowledgement CAS. Implementation and exactly six scenarios authored, not executed; no sender, transport or delivery acceptance. Earlier no-outbox statements below describe historical increments.
 
 [23 local worker-seconds reservation](23-local-budget-reservation.md) is a narrow P1 extension at the durable receipt transaction seam: current independent caller authority, one immutable shared envelope/allocation and atomic receipt/reservation/accounting. Implemented; ten R01–R10 scenarios passed once offline (0.082s); coordinator diff review completed. Original receipt-only behavior remains unchanged. Full reservation/admission acceptance, other resource dimensions, protocol/plan resolution, JCS and dispatch remain missing. Earlier receipt-only status below is historical.
 

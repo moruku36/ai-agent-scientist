@@ -1,5 +1,8 @@
 # AI Agent Scientist
 
+
+**outbox coordinator検証（2026-11-17）：O01〜O06はofflineで1回成功、0.046秒。必須設計checkerも1回成功（504 links、32言語pair）。元の選択workerは600秒timeout、task_complete／finalなし、完了UNKNOWN、再実行なし。以下の作成済み・未実行はworkerのみの活動履歴で、現在のcoordinator検証状態ではありません。live受入は主張しません。**
+
 日本語 | [English](README.md)
 
 **DOTSを中心に、今使っているChatGPT／Codexで、研究の問いを「検証可能な仮説→再現可能な実験→証拠付きの結論」へ進める研究ハーネスです。**
@@ -33,6 +36,8 @@ DOTSが研究を統括し、Codexが実装・上限付き実験を担当しま�
 [厳密バイト束縛の永続ハンドオフ受領](docs/22-durable-handoff-receipt.ja.md)は、毎回の依頼／payload検証を受信者所有のローカルSQLite保存と未解決CAS遷移1つへ接続します。実装済み、新規D01〜D10の10シナリオが1回オフライン成功（1.172秒）し、coordinatorのソースレビュー完了です。docs11の部分実装で元のenvelopeバイトを使い、全体の論理／JCS同一性は未実装です。元の`record` APIは受付・予約・dispatch権限を付与しません。
 
 ## ローカル予約の前提部品 — 2026-11-17
+
+[transaction内の受信者ローカルstatus outbox](docs/24-local-status-outbox.ja.md)で、予約保持／照合eventとscope内ローカルack CASを追加しました。実装と新規offlineシナリオを正確に6つ作成済み、**未実行**です。sender・transport・遠隔配送・settlementは実装しません。
 
 [ローカルworker-seconds予約の前提部品](docs/23-local-budget-reservation.ja.md)は、現在のcaller所有権限と固定共有envelopeを受領transactionへ接続します。実装済み、R01〜R10の10シナリオは1回オフライン成功（0.082秒）し、coordinatorの差分レビュー完了です。dispatchや完全な受付受入は提供しません。
 

@@ -1,6 +1,11 @@
 # 23 Local Durable Worker-Seconds Reservation Prerequisite
 
+
+**Outbox coordinator verification (2026-11-17): O01–O06 passed once offline, 0.046s; required design checker passed once (504 links, 32 language pairs). Original selected worker timed out at 600s; no task_complete/final, completion UNKNOWN, no replay. Authored/not-executed wording below records worker-only activity, not current coordinator check status. No live acceptance.**
+
 [日本語](23-local-budget-reservation.ja.md) | [Home](../README.md)
+
+**Later local extension:** [24 transactional status outbox](24-local-status-outbox.md) adds retained-reservation events and receiver-local acknowledgement CAS. Implementation and six scenarios authored, not executed. The no-outbox statements below describe this earlier reservation increment; 24 adds no delivery or settlement.
 
 **Status (2026-11-17): implemented; ten R01–R10 scenarios passed once offline (0.082s).** The selected worker authored the files; the coordinator reviewed the full diff and ran the targeted scenarios once. The original worker call timed out at 600 seconds, without task_complete or a durable final; worker completion is unverified and was not replayed. No acceptance, reproduction, independent review or measured durability claim is made.
 
