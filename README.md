@@ -160,3 +160,5 @@ The three repositories remain independently usable. Optional integration follows
 The [new design](docs/13-verified-discovery.md) extends the existing evaluation boundary rather than replacing DOTS or creating a fixed agent team. Candidates cannot rewrite specification dependencies or promote their own claims. Empirical checks, formal proof, reproduction and scientific contribution remain separate. Checked components and reviewed ideas have different reuse rules; final answers stay outside tuning knowledge.
 
 The revision includes additive verification contracts and disabled synthetic fixtures. Existing protocol and handoff versions are unchanged. Run [offline design checks](scripts/README.md); passing them is not runtime acceptance. Implementation still begins with the bounded CPU slice, with an optional formal verifier only for suitable later tasks.
+
+[29 Local recovery console](docs/29-recovery-console.md)
