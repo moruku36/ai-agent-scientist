@@ -37,6 +37,7 @@ __all__ = [
     'LocalStatusEvent', 'LocalStatusEntry',
     'LocalUsageObservation',
     'ReservationAccounting', 'ReservationSnapshot', 'ReservationSnapshotPage',
+    'ReservationStatusHistory',
 ]
 
 _MAX_INT = (1 << 63) - 1
@@ -266,6 +267,15 @@ class ReservationSnapshotPage:
 
     entries: tuple[ReservationSnapshot, ...]
     next_after_request_id: str | None
+
+
+@dataclass(frozen=True, slots=True)
+class ReservationStatusHistory:
+    """One selected snapshot and bounded local ack history, never delivery."""
+
+    snapshot: ReservationSnapshot
+    entries: tuple[LocalStatusEntry, ...]
+    next_after_event_id: int | None
 
 
 def _text(value: object) -> str:
@@ -655,7 +665,7 @@ class DurableHandoffReceipts:
         return LocalStatusEntry(event, row[-2], row[-1])
 
     def _status_rows(self, conn, *, event_id=None, after_event_id=0, limit=1,
-                     pending_only=False):
+                     pending_only=False, request_id=None):
         scope = self._scope
         # Fixed SQL and bound values; no caller-supplied scope or query fragment.
         query = ('SELECT e.event_id, ' + ', '.join('e.' + name.strip()
@@ -665,6 +675,9 @@ class DurableHandoffReceipts:
                  'ON a.event_id=e.event_id WHERE e.principal=? AND e.project_id=? '
                  'AND e.recipient=?')
         values = (scope.principal, scope.project_id, scope.recipient)
+        if request_id is not None:
+            query += ' AND e.request_id=?'
+            values += (request_id,)
         if event_id is not None:
             query += ' AND e.event_id=?'
             values += (event_id,)
@@ -790,6 +803,52 @@ class DurableHandoffReceipts:
                 ' FROM worker_seconds_reservations WHERE ' + _KEY,
                 self._key(request_id)).fetchone()
             return None if row is None else self._reservation_snapshot(conn, row)
+
+    def inspect_reservation_status_history(self, request_id: str, *,
+            after_event_id: int = 0, limit: int = 100) -> ReservationStatusHistory | None:
+        """Selected current snapshot and ACKED/pending history in one read transaction.
+
+        The cursor is an exclusive seek, not a scan lease. Pages are independent;
+        restart at zero to revisit changed acknowledgements. Missing/receipt-only
+        returns None; empty history never means delivered, complete or settled.
+        """
+        _text(request_id)
+        _revision(after_event_id)
+        if type(limit) is not int or not 1 <= limit <= _MAX_STATUS_PAGE:
+            raise ValueError('local status limit must be an exact integer in 1..100')
+        with self._transaction(write=False) as conn:
+            row = conn.execute('SELECT ' + _RES_COLUMNS +
+                ' FROM worker_seconds_reservations WHERE ' + _KEY,
+                self._key(request_id)).fetchone()
+            if row is None:
+                return None
+            snapshot = self._reservation_snapshot(conn, row)
+            rows = self._status_rows(conn, request_id=request_id,
+                after_event_id=after_event_id, limit=limit + 1, pending_only=False)
+            entries = tuple(self._status_entry(row) for row in rows[:limit])
+            reservation, receipt = snapshot.reservation, snapshot.receipt
+            for entry in entries:
+                event = entry.event
+                if ((event.principal, event.project_id, event.recipient,
+                        event.request_id, event.sender, event.request_sha256,
+                        event.budget_reservation_ref, event.worker_seconds) !=
+                        (receipt.principal, receipt.project_id, receipt.recipient,
+                         request_id, receipt.sender, reservation.request_sha256,
+                         reservation.budget_reservation_ref, reservation.worker_seconds) or
+                        type(event.receipt_revision) is not int or
+                        (event.receipt_revision, event.status) not in (
+                            (1, 'reservation_retained'), (2, 'reconciliation_required')) or
+                        event.receipt_revision > receipt.revision):
+                    raise ReceiptConflict('retained status reservation binding differs')
+                if (type(entry.ack_revision) is not int or
+                        entry.ack_revision not in (0, 1) or
+                        (entry.ack_revision == 0 and entry.acknowledged_at is not None) or
+                        (entry.ack_revision == 1 and (
+                            type(entry.acknowledged_at) is not str or
+                            entry.acknowledged_at < event.created_at))):
+                    raise ReceiptConflict('retained local status acknowledgement differs')
+            cursor = entries[-1].event.event_id if len(rows) > limit else None
+            return ReservationStatusHistory(snapshot, entries, cursor)
 
     def inspect_reservations(self, *, after_request_id: str | None = None,
                              limit: int = 100) -> ReservationSnapshotPage:
