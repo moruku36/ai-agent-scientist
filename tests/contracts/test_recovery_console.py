@@ -146,7 +146,7 @@ class RecoveryConsoleContracts(unittest.TestCase):
         first = rc.render_recovery_console(self.receiver, limit=2)
         self.assertEqual((first.entry_count, first.next_after_request_id), (2, 'request-b'))
         self.assertIn('next="request-b"', first.text)
-        self.assertLess(first.text.index('request-a'), first.text.index('request-b'))
+        self.assertLess(first.text.index('request="request-a"'), first.text.index('request="request-b"'))
         last = rc.render_recovery_console(self.receiver, after_request_id='request-b', limit=2)
         self.assertEqual((last.entry_count, last.next_after_request_id), (1, None))
         self.assertIn('after="request-b" next=null', last.text)
