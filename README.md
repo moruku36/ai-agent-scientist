@@ -1,5 +1,9 @@
 # AI Agent Scientist
 
+> Coordinator validation (2026-11-17): six new I01–I06 offline contract methods passed once (0.039s); existing-environment design checker passed once (564 links, 34 language pairs); whitespace passed. Independent pinned full-source review found no implementation defect under documented trust assumptions. Later NOT EXECUTED/pending wording records worker-file-only authorship, not the subsequent coordinator checks. No runtime acceptance.
+
+> Coordinator validation, 2026-11-17 (round3 only): six NEW U01–U06 scenarios passed once (1.183s); existing-venv design checker passed once (534 links, 33 language pairs). Independent review pending. Later authored/NOT EXECUTED wording below is historical worker-file-only status, not current coordinator validation. Round2 original raw check receipts remain unavailable; do not infer their verification from round3.
+
 
 **Outbox coordinator verification (2026-11-17): O01–O06 passed once offline, 0.046s; required design checker passed once (504 links, 32 language pairs). Original selected worker timed out at 600s; no task_complete/final, completion UNKNOWN, no replay. Authored/not-executed wording below records worker-only activity, not current coordinator check status. No live acceptance.**
 
@@ -40,6 +44,10 @@ The [durable byte-bound handoff receipt](docs/22-durable-handoff-receipt.md) con
 The [local worker-seconds reservation prerequisite](docs/23-local-budget-reservation.md) extends the receipt transaction with current caller-owned authority and one fixed shared envelope. Implemented; ten R01–R10 scenarios passed once offline (0.082s); coordinator diff review completed. It provides no dispatch or full admission acceptance.
 
 The [transactional receiver-local status outbox](docs/24-local-status-outbox.md) adds atomic retained-reservation/reconciliation events and scoped local acknowledgement CAS. Implementation and exactly six new offline scenarios authored, **not executed**. No sender, transport, remote delivery or settlement is implemented.
+
+The [immutable receiver-local usage observations](docs/25-local-usage-observations.md) (Scientist round3, based on independently source-reviewed round2 `bf4743970dc48e0e89e2717a2e07c2591c8db129`) connect trusted observations to the existing reservation, reconciliation transition and outbox in one SQLite transaction. Implementation and exactly six new methods authored, **NOT EXECUTED**; coordinator checks pending. All reservations remain fully outstanding, the settled floor is unchanged, and UNKNOWN usage/cleanup never releases budget. This is observation retention only, without settlement, metering or authentication claims.
+
+The [receiver-scoped reservation inspection snapshots](docs/26-reservation-inspection.md) connect retained receipts, reservations, current local outbox state, latest inserted usage observations and fixed allocation accounting in one read transaction. Implementation and exactly six new self-contained test methods authored, **NOT EXECUTED**; all checks for this increment remain pending. Only this reservation's allocation/full outstanding amount is exposed, without shared totals or owner identity. This is the first of three bounded offline increments and grants no continuing authority or settlement.
 
 ## Kaggle competition support — 2026-11-16
 
@@ -124,6 +132,8 @@ The harness is the project/state/experiment/evaluation layer around existing age
 | [22 Durable handoff receipt](docs/22-durable-handoff-receipt.md) | Local SQLite exact-byte receipts and unresolved CAS; ten scenarios passed once offline |
 | [23 Local budget reservation](docs/23-local-budget-reservation.md) | Connected fixed-envelope worker-seconds reservations; implemented, ten scenarios passed once offline |
 | [24 Local status outbox](docs/24-local-status-outbox.md) | Atomic reservation status events and scoped local ack CAS; implementation and six scenarios authored, not executed |
+| [25 Local usage observations](docs/25-local-usage-observations.md) | Immutable trusted observations with existing reconciliation/outbox; six methods authored, NOT EXECUTED; no settlement |
+| [26 Reservation inspection](docs/26-reservation-inspection.md) | Scoped consistent recovery snapshots and full outstanding allocation; six new methods authored, NOT EXECUTED |
 
 Start a project using the [research brief](templates/research-brief.md), [experiment plan](templates/experiment-plan.md), and [run report](templates/run-report.md). For a Kaggle competition, add the [competition brief](templates/competition-brief.md). The [inactive CPU pilot](examples/cpu-pilot.json) illustrates the proposed contract. A [DOTS handoff](examples/dots-handoff.md) shows the minimum assignment.
 

@@ -1,9 +1,13 @@
 # 24 同じtransactionで記録する受信者ローカル予約状態outbox
 
+> Coordinator検証（2026-11-17、round3のみ）：新規U01〜U06の6シナリオが1回成功（1.183秒）、既存venvの設計checkerも1回成功（534リンク、33言語pair）。独立レビューは保留中です。以下の作成済み／未実行の文はworkerのfile-only作成時点の履歴で、現在のcoordinator検証状態ではありません。round2の元の生の検証出力は未入手で、round3からその検証を推測しません。
+
 
 **outbox coordinator検証（2026-11-17）：O01〜O06はofflineで1回成功、0.046秒。必須設計checkerも1回成功（504 links、32言語pair）。元の選択workerは600秒timeout、task_complete／finalなし、完了UNKNOWN、再実行なし。以下の作成済み・未実行はworkerのみの活動履歴で、現在のcoordinator検証状態ではありません。live受入は主張しません。**
 
 日本語 | [English](24-local-status-outbox.md) | [ホーム](../README.ja.md)
+
+**後続の増分：** [25 不変のローカルusage観測](25-local-usage-observations.ja.md)（独立source review済みround2 `bf4743970dc48e0e89e2717a2e07c2591c8db129`基点のround3）は、trusted観測を既存照合／outbox transactionと一緒に保存します。実装と正確に6メソッド作成済み、**未実行（NOT EXECUTED）**でcoordinator検査は保留中です。完了event・settlement・予約releaseは追加せず、全予約とsettled floorは不変です。以下の過去outbox結果・UNKNOWNを変更しません。
 
 **状態（2026-11-17）：実装と新規offline unittestシナリオを正確に6つ作成済み。未実行。** レビュー済みcommit `d3245b42dafb0438ebd5a0065e930a3f759004f5`を基点にしています。ファイル読取・編集のみで、test・checker・実装import実行・build・network・install・service・model・研究・dispatchは行っていません。runtime受入・再現・独立レビュー・遠隔配送・耐久性実測は主張しません。以前の部品の結果は今回の検証ではありません。
 
