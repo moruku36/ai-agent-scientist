@@ -215,6 +215,9 @@ class RecoveryReportContracts(unittest.TestCase):
         for entry in entries.values():
             self.assertEqual(entry['accounting'], {'allocation_worker_seconds': 20,
                                                  'outstanding_worker_seconds': 20})
+        # In this private temporary DB, emulate a legacy missing event through
+        # fixture corruption outside the trusted API.
+        self.sql("DROP TRIGGER reservation_status_no_delete")
         self.sql("DELETE FROM reservation_status_events WHERE request_id='unknown' AND receipt_revision=2")
         missing = next(e for e in self.document()['entries'] if e['receipt']['request_id'] == 'unknown')
         self.assertIsNone(missing['current_status'])
