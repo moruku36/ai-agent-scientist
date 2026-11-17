@@ -161,3 +161,5 @@ flowchart TB
 検証契約と無効な合成例を追加し、既存の計画・受け渡しschema版は維持。[オフライン設計検査](scripts/README.ja.md)の成功は実行時受入ではありません。実装は上限付きCPU一周から始め、形式検証器は適した課題向けの後続選択肢です。
 
 [29 Local recovery console](docs/29-recovery-console.ja.md)
+
+[30 Local recovery queue](docs/30-recovery-queue.ja.md)
