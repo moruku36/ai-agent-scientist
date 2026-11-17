@@ -1,5 +1,7 @@
 # 10 実装計画と設計判断
 
+**増分27：作成済み・未実行（NOT EXECUTED、2026-11-17）。** [保守的な復旧triage](27-recovery-triage.ja.md)は3つの接続された上限付きoffline増分の2番目です。純粋分類でsnapshotの厳密型／束縛を検査し、接続検査は実receiver snapshotを使います。上限付きfrozen reportは全量outstanding予約と明示的な証拠不足／ローカルack reasonを保持し、global合計や受付／readiness／dispatch／settlement権限を持ちません。新規の自己完結unittestメソッドを正確に6つと日英文書を作成済みで、coordinator検査は保留中です。過去の検証bannerは過去の増分だけが対象です。
+
 > Coordinator検証（2026-11-17、round3のみ）：新規U01〜U06の6シナリオが1回成功（1.183秒）、既存venvの設計checkerも1回成功（534リンク、33言語pair）。独立レビューは保留中です。以下の作成済み／未実行の文はworkerのfile-only作成時点の履歴で、現在のcoordinator検証状態ではありません。round2の元の生の検証出力は未入手で、round3からその検証を推測しません。
 
 

@@ -1,5 +1,7 @@
 # AI Agent Scientist
 
+**Recovery triage increment 27 (2026-11-17): source, exactly six NEW self-contained tests and paired docs authored; NOT EXECUTED.** [Conservative receiver-local recovery triage](docs/27-recovery-triage.md) is the second connected offline increment, composing actual reservation inspection snapshots into bounded reason-coded views while retaining every full reservation. It grants no admission, readiness, dispatch or settlement authority. Coordinator checks are pending; earlier validation banners do not cover this increment.
+
 > Coordinator validation, 2026-11-17 (round3 only): six NEW U01–U06 scenarios passed once (1.183s); existing-venv design checker passed once (534 links, 33 language pairs). Independent review pending. Later authored/NOT EXECUTED wording below is historical worker-file-only status, not current coordinator validation. Round2 original raw check receipts remain unavailable; do not infer their verification from round3.
 
 
@@ -132,6 +134,7 @@ The harness is the project/state/experiment/evaluation layer around existing age
 | [24 Local status outbox](docs/24-local-status-outbox.md) | Atomic reservation status events and scoped local ack CAS; implementation and six scenarios authored, not executed |
 | [25 Local usage observations](docs/25-local-usage-observations.md) | Immutable trusted observations with existing reconciliation/outbox; six methods authored, NOT EXECUTED; no settlement |
 | [26 Reservation inspection](docs/26-reservation-inspection.md) | Scoped consistent recovery snapshots and full outstanding allocation; six new methods authored, NOT EXECUTED |
+| [27 Recovery triage](docs/27-recovery-triage.md) | Conservative pure classification and connected receiver inspection; six NEW self-contained methods authored, NOT EXECUTED |
 
 Start a project using the [research brief](templates/research-brief.md), [experiment plan](templates/experiment-plan.md), and [run report](templates/run-report.md). For a Kaggle competition, add the [competition brief](templates/competition-brief.md). The [inactive CPU pilot](examples/cpu-pilot.json) illustrates the proposed contract. A [DOTS handoff](examples/dots-handoff.md) shows the minimum assignment.
 
