@@ -2,12 +2,13 @@
 
 [English](37-run-record.md) | [ホーム](../README.ja.md)
 
-**Scientist26: ソースと4つのテストメソッドを作成済み、NOT EXECUTED（未実行）。**
+**Scientist26: ソースと限定的な4シナリオを作成済み、NOT EXECUTED（未実行）。**
+以下の挙動は静的なソース上の契約記述であり、ランタイム検証ではない。
 [P1 レコード契約](10-roadmap.ja.md) の狭い範囲として、既存の
 [run-record schema](../schemas/run-record.schema.json) 用の純粋なパーサを追加する。
 復旧の確認・操作ツールは研究レコードを実装していない。P1 の他のレコード、永続化、
 権限確認、および P2 の runner・保護された評価・再現は別の未完了作業である。
-既存 schema、wire version、既存ソースは変更しない。
+今回の修正ではパーサのソース、依存関係、schema、wire version を変更しない。
 
 [parse_run_record](../src/ai_agent_scientist/records/run_record.py) は厳密な組込み
 `bytes` と、1..1048576 の厳密な組込み整数 `max_bytes`（既定 1048576）を受け取る。
@@ -55,12 +56,16 @@ usage は非負数または null とする。不明な usage は null のまま�
 や入力値を含むエラー文を保持しない。traceback のフレーム内変数には非公開入力が残り得る
 ため、外部に出さない。バイト・要素上限は CPU・メモリ・深さの完全な隔離ではない。
 
-[自己完結した4つの unittest メソッド](../tests/contracts/test_run_record.py) に
-**316個のラベル付き subcase** を作成した。R01 は26個（status/validity の24組合せ、
-null・空コレクション、異なるバイト表現、不変性の確認を含む）、R02 は30個（厳密 JSON・
-バイト型）、R03 は202個（完全な構造・意味の拒否）、R04 は58個（デコード前の拒否、
-バイト・文字列・要素数の上限と受理する境界値）。全て **NOT EXECUTED・未実行**。
-明示的なファイルのみの指示に従い、テスト、import、build、リンク・言語ペア・JSON・
-状態整合性チェック、[design checker](../scripts/check_design.py) は実行していない。
-ランタイム受入れ、再現、独立レビューは主張しない。runner、モデル/API、研究実行は
-開始しない。
+[自己完結した4つの unittest メソッド](../tests/contracts/test_run_record.py) は
+**合計4シナリオ**で、各メソッドにインライン入力1つとパーサ呼び出し1回のみを置く。
+R01 は負数・null の metrics と null の usage を持つ failed/unchecked レコードで、
+元の正確なバイト列・ハッシュ、入れ子の tuple、dataclass の不変性を確認する。
+R02 はデコード後のキー重複1件で、固定の拒否文と cause/context がないことを確認する。
+R03 は usage の bool 値1件を拒否する。R04 は小さいバイト上限を超える、それ以外は
+有効なレコード1件で、パッチしたデコーダを呼ぶ前の拒否を確認する。
+4件とも作成済みで **NOT EXECUTED・未実行**。より広い status・構造・境界値の挙動は
+静的な契約記述にとどまり、ランタイムでの網羅的な検証は主張しない。
+明示的なファイルのみの指示に従い、テスト、import、build、自動のリンク・言語ペア・
+JSON・状態整合性チェック、[design checker](../scripts/check_design.py) は実行していない。
+ランタイム受入れ、再現、今回の修正の独立レビューは主張しない。runner、モデル/API、
+研究実行は開始しない。

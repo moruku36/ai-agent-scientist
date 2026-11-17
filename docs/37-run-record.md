@@ -2,12 +2,14 @@
 
 [日本語](37-run-record.ja.md) | [Home](../README.md)
 
-**Scientist26: source and four test methods authored, NOT EXECUTED.** This narrow
+**Scientist26: source and four limited test scenarios authored, NOT EXECUTED.**
+The behavior below is a static source-level contract, not runtime verification. This narrow
 [P1 record-contract](10-roadmap.md) increment adds a pure parser for the existing
 [run-record schema](../schemas/run-record.schema.json). Recovery inspection and
 operator tools do not implement research records. P1's other records, persistence
 and authority checks, and P2's runner/protected evaluation/reproduction remain
-separate unfinished work. No existing schema, wire version or source is changed.
+separate unfinished work. This correction leaves parser source, dependencies,
+schemas and wire versions unchanged.
 
 [parse_run_record](../src/ai_agent_scientist/records/run_record.py) accepts exact
 builtin `bytes` and an exact builtin integer `max_bytes` in 1..1048576 (default
@@ -60,11 +62,15 @@ still contain private input: do not export them. Byte/item bounds are not full
 CPU, memory or depth isolation.
 
 [Four self-contained unittest methods](../tests/contracts/test_run_record.py)
-contain **316 labelled subcases**: R01 26 (24 status/validity combinations,
-null/empty values, alternate byte representation, with immutable value checks);
-R02 30 (strict JSON and byte types); R03 202 (complete shape/semantic refusals);
-R04 58 (predecode refusals, byte/string/collection limits and accepted boundaries).
-All are authored **NOT EXECUTED**. Tests, imports, builds, link/language/JSON/status
-checks and the [design checker](../scripts/check_design.py) were not run under
-the explicit file-only instruction. No runtime acceptance, reproduction or
-independent review is claimed; no runner, model/API or research run is started.
+contain **four scenarios total**, with one inline input and one parser call per
+method: R01 a failed/unchecked record with negative/null metrics and null usage,
+checking exact bytes/hash, nested tuples and dataclass immutability; R02 one
+duplicate decoded key, checking fixed refusal text and absent cause/context;
+R03 one boolean usage value refused; R04 one otherwise valid record above a small
+byte cap, checking refusal before the patched decoder is called.
+All four are authored **NOT EXECUTED**. Broader status, shape and boundary behavior
+is documented statically; full runtime coverage is not claimed. Tests, imports,
+builds, automated link/language/JSON/status checks and the
+[design checker](../scripts/check_design.py) were not run under the explicit
+file-only instruction. No runtime acceptance, reproduction or independent review
+of this correction is claimed; no runner, model/API or research run is started.
