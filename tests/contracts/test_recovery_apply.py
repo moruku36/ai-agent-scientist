@@ -40,7 +40,7 @@ class RecoveryApplyContracts(unittest.TestCase):
         self.envelope = dh.WorkerSecondsEnvelope('private-owner', 'private-envelope',
                                                 410, 10, 1, 1, 8, 4)
 
-    def retain(self, rid):
+    def retain(self, rid, *, receipt_only=False):
         s = self.scope
         ref = 'reserve-' + rid
         request = {
@@ -55,6 +55,9 @@ class RecoveryApplyContracts(unittest.TestCase):
             'created_at': '2026-11-17T11:00:00Z', 'expires_at': '2026-11-17T13:00:00Z',
         }
         digest = self.requests.put(json.dumps(request).encode('utf-8'))
+        if receipt_only:
+            return self.receiver.record(self.requests, digest,
+                payload_store=self.payloads, bindings={'object': self.binding}, now=NOW)
         authorities = {(s.principal, s.project_id, s.sender, s.recipient,
             'private-authority', ref): dh.WorkerSecondsAuthority(
                 self.envelope, True, NOW + timedelta(hours=1))}
@@ -186,7 +189,15 @@ class RecoveryApplyContracts(unittest.TestCase):
                                side_effect=build_then_ack):
             receipt = ra.apply_reconciliation_preview(self.receiver, pk, now=LATER)
         self.assertEqual(receipt.revision, 2)
-        self.assertEqual(self.snap('k').current_status.ack_revision, 1)
+        current = self.snap('k').current_status
+        self.assertEqual(current.event.receipt_revision, 2)
+        self.assertEqual(current.ack_revision, 0)
+        events = self.receiver.inspect_status_events(
+            after_event_id=0, limit=100, pending_only=False)
+        retained = [entry for entry in events
+                    if entry.event.request_id == 'k' and entry.event.receipt_revision == 1]
+        self.assertEqual(len(retained), 1)
+        self.assertEqual(retained[0].ack_revision, 1)
 
     def test_a5_time_and_errors_propagate_without_retry(self):
         self.retain('a')
@@ -218,18 +229,18 @@ class RecoveryApplyContracts(unittest.TestCase):
 
     def test_a6_missing_receipt_only_and_marked_refuse_no_construction(self):
         self.retain('a')
+        retained = self.retain('receipt-only', receipt_only=True)
         pa = self.preview('a')
         state = self.state()
         ghost = dataclasses.replace(pa, request_id='missing')
+        receipt_only = dataclasses.replace(pa, request_id=retained.request_id)
         with mock.patch.object(dh.DurableHandoffReceipts, '__init__',
                                side_effect=AssertionError('no receiver construction')), \
              mock.patch.object(ra, 'mark_recovery_for_reconciliation') as mark:
             with self.assertRaises(ra.RecoveryApplyRefused):
                 ra.apply_reconciliation_preview(self.receiver, ghost, now=LATER)
-            with mock.patch.object(ra, 'build_reconciliation_preview',
-                                   return_value=None):  # receipt-only is None
-                with self.assertRaises(ra.RecoveryApplyRefused):
-                    ra.apply_reconciliation_preview(self.receiver, pa, now=LATER)
+            with self.assertRaises(ra.RecoveryApplyRefused):
+                ra.apply_reconciliation_preview(self.receiver, receipt_only, now=LATER)
             mark.assert_not_called()
         self.assertEqual(self.state(), state)
         self.receiver.require_reconciliation('a', expected_revision=1, now=LATER)
