@@ -1,5 +1,7 @@
 # AI Agent Scientist
 
+> Coordinator検証（2026-11-17、round3のみ）：新規U01〜U06の6シナリオが1回成功（1.183秒）、既存venvの設計checkerも1回成功（534リンク、33言語pair）。独立レビューは保留中です。以下の作成済み／未実行の文はworkerのfile-only作成時点の履歴で、現在のcoordinator検証状態ではありません。round2の元の生の検証出力は未入手で、round3からその検証を推測しません。
+
 
 **outbox coordinator検証（2026-11-17）：O01〜O06はofflineで1回成功、0.046秒。必須設計checkerも1回成功（504 links、32言語pair）。元の選択workerは600秒timeout、task_complete／finalなし、完了UNKNOWN、再実行なし。以下の作成済み・未実行はworkerのみの活動履歴で、現在のcoordinator検証状態ではありません。live受入は主張しません。**
 
@@ -40,6 +42,8 @@ DOTSが研究を統括し、Codexが実装・上限付き実験を担当しま�
 [transaction内の受信者ローカルstatus outbox](docs/24-local-status-outbox.ja.md)で、予約保持／照合eventとscope内ローカルack CASを追加しました。実装と新規offlineシナリオを正確に6つ作成済み、**未実行**です。sender・transport・遠隔配送・settlementは実装しません。
 
 [ローカルworker-seconds予約の前提部品](docs/23-local-budget-reservation.ja.md)は、現在のcaller所有権限と固定共有envelopeを受領transactionへ接続します。実装済み、R01〜R10の10シナリオは1回オフライン成功（0.082秒）し、coordinatorの差分レビュー完了です。dispatchや完全な受付受入は提供しません。
+
+[不変の受信者ローカルusage観測](docs/25-local-usage-observations.ja.md)（Scientist round3、独立source review済みround2 `bf4743970dc48e0e89e2717a2e07c2591c8db129`基点）は、trusted観測を既存予約・照合遷移・outboxと同じSQLite transactionへ接続します。実装と新規メソッドを正確に6つ作成済み、**未実行（NOT EXECUTED）**でcoordinator検査は保留中です。全予約を全量outstandingに保ち、settled floorを変更せず、usage／cleanupのUNKNOWNで予算をreleaseしません。観測保存のみで、settlement・計測・認証の主張はありません。
 
 ## Kaggleコンペ対応 — 2026-11-16
 
@@ -123,6 +127,7 @@ flowchart TB
 | [21 ハンドオフpayload束縛](docs/21-handoff-payload-binding.ja.md) | 検証済みpayload読取前に現在の信頼するローカル束縛を確認。新規10シナリオが1回オフライン成功 |
 | [22 永続ハンドオフ受領](docs/22-durable-handoff-receipt.ja.md) | ローカルSQLiteの厳密バイト受領・未解決CAS。10シナリオが1回オフライン成功 |
 | [23 ローカル予算予約](docs/23-local-budget-reservation.ja.md) | 固定envelopeの接続worker-seconds予約。実装済み、10シナリオが1回オフライン成功 |
+| [25 ローカルusage観測](docs/25-local-usage-observations.ja.md) | 既存照合／outboxに接続する不変trusted観測。6メソッド作成済み・未実行、settlementなし |
 
 [研究ブリーフ](templates/research-brief.ja.md)、[実験計画](templates/experiment-plan.ja.md)、[実験レポート](templates/run-report.ja.md)を雛形として使います。Kaggleコンペでは[競技ブリーフ](templates/competition-brief.ja.md)を追加します。[無効のCPU設定例](examples/cpu-pilot.json)と[DOTSへの引継ぎ例](examples/dots-handoff.ja.md)も用意しました。
 

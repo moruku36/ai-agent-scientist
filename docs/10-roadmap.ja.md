@@ -1,9 +1,13 @@
 # 10 実装計画と設計判断
 
+> Coordinator検証（2026-11-17、round3のみ）：新規U01〜U06の6シナリオが1回成功（1.183秒）、既存venvの設計checkerも1回成功（534リンク、33言語pair）。独立レビューは保留中です。以下の作成済み／未実行の文はworkerのfile-only作成時点の履歴で、現在のcoordinator検証状態ではありません。round2の元の生の検証出力は未入手で、round3からその検証を推測しません。
+
 
 **outbox coordinator検証（2026-11-17）：O01〜O06はofflineで1回成功、0.046秒。必須設計checkerも1回成功（504 links、32言語pair）。元の選択workerは600秒timeout、task_complete／finalなし、完了UNKNOWN、再実行なし。以下の作成済み・未実行はworkerのみの活動履歴で、現在のcoordinator検証状態ではありません。live受入は主張しません。**
 
 [English](10-roadmap.md) | [ホーム](../README.ja.md)
+
+[25 不変のローカルusage観測](25-local-usage-observations.ja.md)は独立source review済みround2 `bf4743970dc48e0e89e2717a2e07c2591c8db129`を基点とする狭いScientist round3増分です。実装と自己完結メソッドを正確に6つ作成済み、**未実行（NOT EXECUTED）**でcoordinator検査は保留中です。trusted観測・既存照合CAS・ローカルoutboxを同じSQLite transactionへ接続します。全予約を全量outstandingに保ち、settled floorは不変です。settlement・refund・完了・受付・計測・認証を追加しません。過去のUNKNOWNは変更しません。
 
 [24 ローカルstatus outbox](24-local-status-outbox.ja.md)で予約保持／照合eventとscope内ローカルack CASを同じtransactionへ追加します。実装と正確に6シナリオ作成済み、未実行です。sender・transport・配送受入はありません。以下のoutbox未実装という記述は過去の増分の説明です。
 
