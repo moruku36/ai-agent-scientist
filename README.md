@@ -170,3 +170,23 @@ The revision includes additive verification contracts and disabled synthetic fix
 ## Existing-run evidence import
 
 An additive, offline helper imports already-existing run evidence (candidate, config, log, evidence, environment) with explicit origin identities, three separate result categories, optional measured timing and a documented Windows boundary. Synthetic offline contract checks and the documented example have passed; real-model and Windows/WSL acceptance remain unperformed; see [docs/38-existing-run-import.md](docs/38-existing-run-import.md) ([日本語](docs/38-existing-run-import.ja.md)). Earlier records and text are unchanged.
+
+## Existing-experiment intake (offline sample)
+
+One call takes explicit candidate, config and log paths plus a prepared `existing-run-import/1` manifest and an optional stages file, stores them unchanged, reads every blob back and returns a safe summary. Authored, checks pending; no real model, GPU, Windows or official-score claim. See [docs/39-intake-summary.md](docs/39-intake-summary.md) ([日本語](docs/39-intake-summary.ja.md)) for the manifest profile, stages file and a complete synthetic preparation example. Trusted local operator only; this is not an isolated runner.
+
+Create the blob directory first: an existing, private, non-symlink directory you control, on trusted ancestors with a single writer and separate from the run inputs. Imported evidence persists there; nothing is deleted. Optional `stages_path` is omitted below (stages are then UNKNOWN).
+
+```
+PYTHONPATH=src python3 - <<'PY'
+import json
+from pathlib import Path
+from ai_agent_scientist.evidence.blob_store import BlobStore
+from ai_agent_scientist.evidence.intake import intake_paths
+d = Path('/absolute/path/to/run')  # manifest.json candidate.py config.json train.log
+store = BlobStore(Path('/absolute/private/blobs'), max_blob_bytes=1 << 20)
+r = intake_paths(store, d / 'manifest.json', d / 'candidate.py', d / 'config.json',
+                 {'train': d / 'train.log'})
+print(json.dumps(r.summary, indent=2))
+PY
+```
