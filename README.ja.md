@@ -169,3 +169,23 @@ flowchart TB
 ## 既存run証跡のインポート
 
 すでに存在するrunの証跡（candidate、config、log、evidence、environment）を、明示的なorigin識別、3つの分離した結果カテゴリ、任意の実測時間、文書化したWindowsの境界とともに取り込む、追加のオフラインヘルパーです。合成データによるオフライン契約検査と文書の実行例は通過済みです。実モデルと Windows/WSL の受入れは未実施です。[docs/38-existing-run-import.ja.md](docs/38-existing-run-import.ja.md)（[English](docs/38-existing-run-import.md)）を参照してください。過去のレコードと文章は変更していません。
+
+## 既存実験のintake（オフラインのサンプル）
+
+1回の呼び出しで、明示したcandidate・config・logのpathと用意済みの`existing-run-import/1`manifest、任意のstagesファイルを変更せず保存し、全blobを読み戻して安全なsummaryを返します。作成済みで検査は保留中です。実モデル・GPU・Windows・公式スコアの主張はありません。manifest形式・stagesファイル・完全な合成の準備例は[docs/39-intake-summary.ja.md](docs/39-intake-summary.ja.md)（[English](docs/39-intake-summary.md)）を参照してください。信頼するローカル運用者向けで、隔離runnerではありません。
+
+先にblobディレクトリを作成してください。所有者が管理する既存の非公開・非symlinkのディレクトリで、信頼できる親・単一writerとし、run入力とは別にします。取り込んだ証跡はここに残り、何も削除されません。任意の`stages_path`は下記では省略しています（stagesはUNKNOWNになります）。
+
+```
+PYTHONPATH=src python3 - <<'PY'
+import json
+from pathlib import Path
+from ai_agent_scientist.evidence.blob_store import BlobStore
+from ai_agent_scientist.evidence.intake import intake_paths
+d = Path('/absolute/path/to/run')  # manifest.json candidate.py config.json train.log
+store = BlobStore(Path('/absolute/private/blobs'), max_blob_bytes=1 << 20)
+r = intake_paths(store, d / 'manifest.json', d / 'candidate.py', d / 'config.json',
+                 {'train': d / 'train.log'})
+print(json.dumps(r.summary, indent=2))
+PY
+```
