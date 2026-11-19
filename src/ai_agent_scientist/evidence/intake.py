@@ -16,7 +16,7 @@ import stat
 from dataclasses import dataclass
 from typing import Optional
 
-from .blob_store import BlobStore
+from .blob_store import BlobStore, BlobStoreError, _valid_digest
 from .existing_run import (
     ImportRefused,
     MAX_ITEMS,
@@ -26,10 +26,11 @@ from .existing_run import (
 )
 from .json_blob import InvalidJSONBlob, parse_json_bytes
 
-__all__ = ['SUMMARY_VERSION', 'STAGES_VERSION', 'IntakeResult', 'intake_paths']
+__all__ = ['SUMMARY_VERSION', 'STAGES_VERSION', 'STAGES_VERSION_V2', 'IntakeResult', 'intake_paths']
 
 SUMMARY_VERSION = 'intake-summary/1'
 STAGES_VERSION = 'intake-stages/1'
+STAGES_VERSION_V2 = 'intake-stages/2'
 MAX_STAGES_BYTES = 1 << 16
 MAX_COUNT = 10**9
 
@@ -45,6 +46,10 @@ _RESULTS = {
 _COUNTED = frozenset(('model_launches', 'tests_collected', 'test_bodies_executed'))
 _REASONS = frozenset(('none', 'not_started', 'interrupted', 'unavailable', 'unknown'))
 _E_KEYS = frozenset(('stage', 'result', 'count', 'stop_reason', 'log_ids'))
+_OUTCOME_STAGES = ('startup', 'inference', 'tool_handling', 'output_verification')
+_OUTCOME_RESULTS = ('success', 'failure', 'not_run', 'unknown')
+_OUTCOME_KEYS = frozenset(('stage', 'result', 'log_ids'))
+_VERDICTS = ('exact_match', 'formatting_mismatch', 'numeric_mismatch')
 
 
 @dataclass(frozen=True)
@@ -131,25 +136,42 @@ def _parse_stages(data: bytes, target: dict, logs: set) -> dict:
     _need(
         type(sdoc) is dict
         and set(sdoc) == {'version', 'target', 'stages'}
-        and sdoc['version'] == STAGES_VERSION
-        and type(sdoc['stages']) is list
-        and len(sdoc['stages']) <= len(_RESULTS),
+        and sdoc['version'] in (STAGES_VERSION, STAGES_VERSION_V2)
+        and type(sdoc['stages']) is list,
         'stages shape',
     )
+    outcome_stages = _OUTCOME_STAGES if sdoc['version'] == STAGES_VERSION_V2 else ()
+    _need(len(sdoc['stages']) <= len(_RESULTS) + len(outcome_stages), 'too many stages')
     _need(sdoc['target'] == target, 'stages target differs from manifest target')
     out = {}
     for e in sdoc['stages']:
-        _need(type(e) is dict and set(e) == _E_KEYS, 'stage entry keys')
+        _need(type(e) is dict and type(e.get('stage')) is str, 'stage entry keys')
         name = e['stage']
-        _need(type(name) is str and name in _RESULTS and name not in out, 'stage name')
-        _need(type(e['result']) is str and e['result'] in _RESULTS[name], 'stage result')
-        count = e['count']
-        if name in _COUNTED:
-            _need(count is None or (type(count) is int and 0 <= count <= MAX_COUNT), 'stage count')
+        _need(name not in out and (name in _RESULTS or name in outcome_stages), 'stage name')
+        if name in _RESULTS:
+            _need(set(e) == _E_KEYS, 'stage entry keys')
+            _need(type(e['result']) is str and e['result'] in _RESULTS[name], 'stage result')
+            count = e['count']
+            if name in _COUNTED:
+                _need(count is None or (type(count) is int and 0 <= count <= MAX_COUNT), 'stage count')
+            else:
+                _need(count is None, 'count only for launches and tests')
+            _need(e['result'] != 'unknown' or count is None, 'unknown result has no count')
+            _need(type(e['stop_reason']) is str and e['stop_reason'] in _REASONS, 'stop reason')
         else:
-            _need(count is None, 'count only for launches and tests')
-        _need(e['result'] != 'unknown' or count is None, 'unknown result has no count')
-        _need(type(e['stop_reason']) is str and e['stop_reason'] in _REASONS, 'stop reason')
+            keys = _OUTCOME_KEYS
+            if name == 'output_verification' and 'verdict' in e:
+                keys = keys | {'verdict'}
+            _need(set(e) - {'declared_evidence_sha256'} == keys, 'stage entry keys')
+            _need(e['result'] in _OUTCOME_RESULTS, 'stage result')
+            evidence_sha = e.get('declared_evidence_sha256')
+            _need(evidence_sha is None or _valid_digest(evidence_sha), 'invalid declared evidence digest')
+            verdict = e.get('verdict')
+            _need(
+                verdict is None
+                or (verdict in _VERDICTS and e['result'] in ('success', 'failure')),
+                'invalid output verification verdict',
+            )
         ids = e['log_ids']
         _need(type(ids) is list and len(ids) <= 8, 'stage log ids')
         _need(all(type(i) is str and i in logs for i in ids), 'stage log id is not a target log')
@@ -191,6 +213,16 @@ def _summary(imp, stages: dict, stages_sha: Optional[str]) -> dict:
                           'count': e['count'], 'stop_reason': e['stop_reason'],
                           'logs': [by_id[i].sha256 for i in e['log_ids']]})
     cfg = by_id['config']
+    stage_results = {}
+    for name in _OUTCOME_STAGES:
+        e = stages.get(name, {})
+        result = e.get('result', 'unknown')
+        stage_results[name] = {
+            'result': 'UNKNOWN' if result == 'unknown' else result,
+            'verdict': e.get('verdict'),
+            'declared_evidence_sha256': e.get('declared_evidence_sha256'),
+            'logs': [by_id[i].sha256 for i in e.get('log_ids', ())],
+        }
     return {
         'format': SUMMARY_VERSION,
         'target': _ident(imp.target),
@@ -204,6 +236,7 @@ def _summary(imp, stages: dict, stages_sha: Optional[str]) -> dict:
         ],
         'results': results,
         'stages': shown,
+        'stage_results': stage_results,
         'verified_readback': True,
         'note': 'caller-asserted labels; not authenticated; UNKNOWN is not proof of not run',
     }
@@ -252,3 +285,42 @@ def intake_paths(store, manifest_path, candidate_path, config_path, log_paths, s
     if stages_sha is not None:
         _need(store.get(stages_sha) == stages_bytes, 'readback mismatch')
     return IntakeResult(imp, stages_sha, _summary(imp, stages, stages_sha))
+
+
+def _main() -> None:
+    import argparse
+    import json
+    from pathlib import Path
+
+    class IntakeParser(argparse.ArgumentParser):
+        def error(self, message):
+            self.exit(2, 'intake: invalid arguments (see --help)\n')
+
+    parser = IntakeParser(
+        prog='python -m ai_agent_scientist.evidence.intake',
+        description='Import existing run evidence from explicit paths and print its JSON summary.',
+        allow_abbrev=False,
+    )
+    parser.add_argument('--store', required=True, help='existing private blob directory')
+    parser.add_argument('--manifest', required=True)
+    parser.add_argument('--candidate', required=True)
+    parser.add_argument('--config', required=True)
+    parser.add_argument('--log', action='append', nargs=2, metavar=('ID', 'PATH'), default=[])
+    parser.add_argument('--stages')
+    args = parser.parse_args()
+
+    log_paths = dict(args.log)
+    if not args.store or len(log_paths) != len(args.log):
+        parser.error('empty store path or duplicate log id')
+    try:
+        store = BlobStore(Path(args.store), max_blob_bytes=MAX_TOTAL_BYTES)
+        result = intake_paths(store, args.manifest, args.candidate, args.config, log_paths, args.stages)
+    except ImportRefused as exc:
+        parser.exit(1, f'intake: {exc.reason}\n')
+    except BlobStoreError:
+        parser.exit(1, 'intake: blob storage failed\n')
+    print(json.dumps(result.summary))
+
+
+if __name__ == '__main__':
+    _main()
